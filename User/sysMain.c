@@ -61,6 +61,9 @@ int main(void)
 	PT_TimerDelay(500);
 	LoadParam();//读Flash 系统初始化标志位.
     FRAM_ReadData();
+    FRAM_RecordRead();
+    FRAM_DoRecordRead();
+    FRAM_IndexRead();
 	bsp_InitRN8023();
     USART_Configuration();
 #ifdef _GUILCD_

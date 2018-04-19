@@ -179,6 +179,7 @@ __packed typedef struct {
 /* Exported functions ------------------------------------------------------- */
 void Task_RS232_init(void);
 void Task_RS232_Function(void);
+void vModeBus_SetSoeData(u8 Kind);
 
 
 #endif /* _TASKRS232_H */

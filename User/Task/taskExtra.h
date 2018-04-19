@@ -66,12 +66,23 @@ __packed union AdjustVolState_Reg
     struct  AdjustVolState_Bit  Bit;
 };
 
-// 智能电容器数据
+// SOE 主动报警存储
 __packed typedef struct {
-    u8 SVC_ActStatus[3];               // 3Cap
-    u8 Signal_Status;                   // 信号状态
-    union AdjustVolState_Reg AdjustVolState;
-}Device_DataStruct;
+    TimeYMDHMSStruct SOETime;               // 时间
+    u8 Kind;                                // 种类
+    u8 Index;
+    u8 FormerStatus;
+    u8 NowStatus;
+    u16 WarmIndex;
+}SOE_DataStruct;    //12字节
+
+// SOE 标签页
+__packed typedef struct {
+    u8 DinRecordIndex;
+    u8 DoutRecordIndex;
+    u8 MaxIndex;
+}SOE_IndexStruct;    //12字节
+
 
 typedef enum
 {
@@ -90,8 +101,9 @@ extern u8 RemOutCtrl;
 extern u8 g_Din_Status[DIN_NUM];
 extern u8 g_Din_BIT[DIN_NUM];
 
-
-
+extern SOE_DataStruct DinRecord[40];
+extern SOE_DataStruct DoutRecord[40];
+extern SOE_IndexStruct SoeIndex;
 
 void Task_Extra_Function(void);
 

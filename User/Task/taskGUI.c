@@ -473,7 +473,8 @@ static BOOL g_b1DlyEnable = TRUE;
 static BOOL g_b5DlyEnable = FALSE;
 static BOOL g_bBlackLightEnble = FALSE;  // 背光亮
 BOOL g_LEDEnable = TRUE;
-static BOOL g_bAlarmEnble = TRUE;  // 背光亮
+static BOOL g_bAlarmEnble = TRUE; 
+static BOOL g_TimeSetFlag = FALSE;  // 背光亮
 
 static u16 sg_ReFlashCount = 0;         // 没有按键后的延时值
 static u32 sg_RestoreDlyTick = 0;
@@ -515,11 +516,19 @@ static BOOL g_b4OutOverTurn = FALSE;
 
 SysTimeStruct g_ReadTime;
 SysTimeStruct g_DispReadTime;
+TimeYMDHMSStruct g_SOETime;
+
 
 void Gb_SetSysTime(SysTimeStruct ReadTime)
 {
     g_ReadTime = ReadTime;
     g_DispReadTime = g_ReadTime;
+    g_SOETime.Year = g_ReadTime.Date.Year;
+    g_SOETime.Month     = g_ReadTime.Date.Month;
+    g_SOETime.Day       = g_ReadTime.Date.Day;
+    g_SOETime.Hour      = g_ReadTime.Hour;
+    g_SOETime.Minute    = g_ReadTime.Minute;
+    g_SOETime.Second    = g_ReadTime.Second;
 }
 
 SysTimeStruct Gb_GetSysTime(void)
@@ -1110,6 +1119,7 @@ void GUI_Key_Menu(void)     //菜单键操作
     		break;
     	case KEYFUNC_MENUCODEERR:
     	    KeyFuncIndex = KEYFUNC_MENUCODE;
+    	    g_b5DlyEnable = FALSE;
     		break;
     	case KEYFUNC_MENUSAVE:
     	    KeyFuncIndex = KEYFUNC_MENU2;
@@ -1216,7 +1226,11 @@ void GUI_Key_Ok(void)
                     NVIC_SystemReset();
                 }
                 g_tParam.CtrlParam = DispCtrlParam;
-                Write8025TDateTime(g_ReadTime);
+                if(g_TimeSetFlag == TRUE)
+                {
+                    Write8025TDateTime(g_ReadTime);
+                    g_TimeSetFlag = FALSE;
+                }                
                 SaveParam();
                 DispValueUpDataFlag = FALSE;
             }
@@ -11274,6 +11288,7 @@ void GetSetNewValue(void)
 				    break;
 				case MENU2_3_INDEX_T: // 时间设置 ======  8025T
 			        UpData = TRUE;
+			        g_TimeSetFlag = TRUE;
 				    break;
 				case MENU2_3_INDEX_DISP:
 					DispCtrlParam.DefaultDisp=

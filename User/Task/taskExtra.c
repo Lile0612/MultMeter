@@ -37,16 +37,22 @@
 /* Public variable -----------------------------------------------------------*/
 u8 Out_Rem_Enble[3] = {FALSE,FALSE,FALSE};
 u8 g_Din_Status[DIN_NUM];
+u8 g_Din_Status_Temp[DIN_NUM];
 u8 g_Din_Status_Back[DIN_NUM];
 u8 g_Din_BIT[DIN_NUM] = {0x01,0x02,0x04,0x08};
 u8 DinStatus_Disp;
 
 BOOL g_Out_Status[OUT_NUM];
+BOOL g_Out_Status_Back[OUT_NUM];
+
 u8 g_Out_BIT[DIN_NUM] = {0x01,0x02,0x04,0x08};
 u8 OutStatus_Disp;
 u8 RemOutCtrl;
+SOE_DataStruct DinRecord[40];
+SOE_DataStruct DoutRecord[40];
 
-Device_DataStruct    vg_DeviceData[PH_TH];
+SOE_IndexStruct SoeIndex;
+
 
 typedef enum
 {
@@ -452,12 +458,19 @@ void PwmPercentOutput_Second(void)
 
 void DinStatus(void)
 {
-    u8 i;
+    u8 i,j,k;
 	g_Din_Status[0] = KEY_DIN_STATUS1;
 	g_Din_Status[1] = KEY_DIN_STATUS2;
 	g_Din_Status[2] = KEY_DIN_STATUS3;
 	g_Din_Status[3] = KEY_DIN_STATUS4;
 
+	for(j =0; j<DIN_NUM; j++)
+	{
+        if(g_Din_Status[j] == 0x01)
+            g_Din_Status_Temp[j] = 0x00;
+        else if(g_Din_Status[j] == 0x00)
+            g_Din_Status_Temp[j] = 0x01;
+	}
     for(i = 0; i<DIN_NUM; i++)
     {
         if(!g_Din_Status[i])
@@ -469,8 +482,29 @@ void DinStatus(void)
             DinStatus_Disp &= ~g_Din_BIT[i];
         }
     }
-    if()
-    
+    for(k = 0; k<DIN_NUM; k++)
+    {
+        if(g_Din_Status_Back[k] != g_Din_Status_Temp[k])
+        {
+            DinRecord[SoeIndex.DinRecordIndex].SOETime = g_SOETime;
+            DinRecord[SoeIndex.DinRecordIndex].Index = k;
+            DinRecord[SoeIndex.DinRecordIndex].Kind = 0x00;
+            DinRecord[SoeIndex.DinRecordIndex].FormerStatus = g_Din_Status_Back[k];
+            DinRecord[SoeIndex.DinRecordIndex].NowStatus = g_Din_Status_Temp[k];
+            DinRecord[SoeIndex.DinRecordIndex].WarmIndex = 0x00;
+
+            //主动上传
+            vModeBus_SetSoeData(0x00);
+
+            SoeIndex.DinRecordIndex++;
+            if(SoeIndex.DinRecordIndex >= 40)
+                SoeIndex.DinRecordIndex = 0;
+            FRAM_RecordWrite();
+            FRAM_IndexWrite();
+        }
+        g_Din_Status_Back[k] = g_Din_Status_Temp[k];
+        
+    }
     RtuSecondaryData[Index_2_INS] = DinStatus_Disp;
 }
 
@@ -1100,6 +1134,22 @@ void OutHandler_First(void)
             default:
                 break;
 		}
+		if(g_Out_Status_Back[0] != g_Out_Status[0])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x00;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[0];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[0];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO1_Item;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[0] = g_Out_Status[0];
     }
     else if(g_tParam.CtrlParam.DO1_Mode == DO_MODE_REM)
     {
@@ -1111,6 +1161,22 @@ void OutHandler_First(void)
         {
             g_Out_Status[Dout_ONE] = FALSE;
         }
+        if(g_Out_Status_Back[0] != g_Out_Status[0])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x00;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[0];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[0];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = 0x50;          // 80代表遥控变位
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[0] = g_Out_Status[0];
     }
 }
 
@@ -1594,6 +1660,22 @@ void OutHandler_Second(void)
             default:
                 break;
 		}
+		if(g_Out_Status_Back[1] != g_Out_Status[1])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[1];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[1];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO2_Item;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[1] = g_Out_Status[1];
     }
     else if(g_tParam.CtrlParam.DO2_Mode == DO_MODE_REM)
     {
@@ -1605,6 +1687,22 @@ void OutHandler_Second(void)
         {
             g_Out_Status[Dout_TWO] = FALSE;
         }
+        if(g_Out_Status_Back[1] != g_Out_Status[1])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[1];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[1];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = 0x50;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[1] = g_Out_Status[1];
     }
 }
 
@@ -2088,6 +2186,22 @@ void OutHandler_Thirdly(void)
             default:
                 break;
 		}
+		if(g_Out_Status_Back[2] != g_Out_Status[2])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x02;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[2];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[2];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO3_Item;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[2] = g_Out_Status[2];
     }
     else if(g_tParam.CtrlParam.DO3_Mode == DO_MODE_REM)
     {
@@ -2099,6 +2213,22 @@ void OutHandler_Thirdly(void)
         {
             g_Out_Status[Dout_THREE] = FALSE;
         }
+        if(g_Out_Status_Back[2] != g_Out_Status[2])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x02;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[2];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[2];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = 0x50;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[2] = g_Out_Status[2];
     }
 }
 
@@ -2582,6 +2712,22 @@ void OutHandler_Fourthly(void)
             default:
                 break;
 		}
+		if(g_Out_Status_Back[3] != g_Out_Status[3])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x03;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[3];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[3];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO3_Item;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[3] = g_Out_Status[3];
     }
     else if(g_tParam.CtrlParam.DO4_Mode == DO_MODE_REM)
     {
@@ -2593,7 +2739,23 @@ void OutHandler_Fourthly(void)
         {
             g_Out_Status[Dout_FOUR] = FALSE;
         }
-    }
+        if(g_Out_Status_Back[3] != g_Out_Status[3])
+		{
+            DoutRecord[SoeIndex.DoutRecordIndex].SOETime = g_SOETime;
+            DoutRecord[SoeIndex.DoutRecordIndex].Index = 0x03;
+            DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
+            DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[3];
+            DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[3];
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = 0x50;
+            vModeBus_SetSoeData(0x01);
+            SoeIndex.DoutRecordIndex++;
+            if(SoeIndex.DoutRecordIndex >= 40)
+                SoeIndex.DoutRecordIndex = 0;
+            FRAM_DoRecordWrite();    
+            FRAM_IndexWrite();
+		}
+		g_Out_Status_Back[3] = g_Out_Status[3];
+    }    
 }
 
 

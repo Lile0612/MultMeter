@@ -15,6 +15,13 @@
 
 void FRAM_WriteData(void);
 void FRAM_ReadData(void);
+void FRAM_RecordWrite(void);
+void FRAM_RecordRead(void);
+void FRAM_IndexWrite(void);
+void FRAM_IndexRead(void);
+void FRAM_DoRecordWrite(void);
+void FRAM_DoRecordRead(void);
+
 void MyI2C_Start(void);
 void MyI2C_Stop(void);
 u8   MyI2C_SendByte(u8 ByteData);

@@ -378,6 +378,7 @@ extern BOOL g_fftEnable;
 extern u8 DispMode;
 extern u8 LEDLEVEL;
 extern volatile u8 vg_Display_Value[16]; // œ‘ æ±£¥Êª∫¥Ê
+extern TimeYMDHMSStruct g_SOETime;
 
 void Task_GUI_init(void);
 void Task_Timer_init(void);

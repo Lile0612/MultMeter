@@ -143,12 +143,24 @@ u8 MyI2C_ReceiveByte(u8 last_char)
 #define FRAM_SECTOR_SIZE 32
 #define FRAM_R 1
 #define FRAM_W 0
-#define FRAM_STARTADDR      (0x00000000)   // 第30k
+#define FRAM_STARTADDR      (0x00000000) 
 #define FRAM_DATA_SIZE	              32    // 最大参数长度
 // Addr:11位地址
 #define FRAM_MSBADDRESS(Addr, RW) (0xA0 | ((Addr & 0x0700) >> 7) | RW)
 #define FRAM_LSBADDRESS(Addr) (Addr & 0xFF)
+/********************************************************/
 
+#define FRAM_RECORD_SIZE	             490    // 最大参数长度
+#define FRAM_RECORD_ADDR      (0x00000030)      // DI 记录值地址
+
+#define FRAM_DO_RECORD_ADDR      (0x00000220)      // DO 记录值地址
+
+#define FRAM_Index_ADDR      (0x00000022)    // Di  标签
+#define FRAM_INDEX_SIZE	              8    // 最大参数长度 标签页
+
+
+
+/********************************************************/
 
 u16 FramData_Crc(u8 *pData)
 {
@@ -161,6 +173,32 @@ u16 FramData_Crc(u8 *pData)
     Crc = Crc & 0xff;
 	return Crc;
 }
+
+u16 FramRecord_Crc(u8 *pData)
+{
+	u16 Crc = 0;
+	u16 Counter = 0;
+	for (Counter = 0; Counter < FRAM_RECORD_SIZE-2; Counter++)
+	{
+		Crc += *(pData+Counter);
+	}
+    Crc = Crc & 0xff;
+	return Crc;
+}
+
+u16 FramIndex_Crc(u8 *pData)
+{
+	u16 Crc = 0;
+	u16 Counter = 0;
+	for (Counter = 0; Counter < FRAM_INDEX_SIZE-2; Counter++)
+	{
+		Crc += *(pData+Counter);
+	}
+    Crc = Crc & 0xff;
+	return Crc;
+}
+
+
 /**
   * @brief  写数据
   * @param  -uint16_t phyAddr:物理地址
@@ -217,7 +255,7 @@ u8 FRAM_I2C_ReadData(u16 phyAddr, u8 *pReadData, u16 Length)
 {
 	u8 Addr;
 	u16 NumByteToRead = Length;
-    u8 i;
+    u16 i;
     MyI2C_Start();
 
 	// 发送器件地址 高3位地址
@@ -295,6 +333,144 @@ void FRAM_ReadData(void)
 		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
 	}
 }
+
+
+void FRAM_RecordWrite(void)
+{
+	WRITE_UNPROTECT;
+	u8 FramWriteData[FRAM_RECORD_SIZE];
+	u16 Size = 0;
+	u16 CrcSum = 0;
+	u8 *pData;
+
+	memset((u8 *)&FramWriteData, 0xFF, FRAM_RECORD_SIZE);
+	Size = sizeof(SOE_DataStruct)*40;
+	memcpy((u8 *)&FramWriteData, (u8 *)&DinRecord[0], Size);
+
+	pData = (u8 *)&FramWriteData[0];
+	CrcSum= FramRecord_Crc(pData);
+	pData += (FRAM_RECORD_SIZE-2);
+	memcpy(pData, (u8 *)&CrcSum, 2);
+	FRAM_I2C_WriteData(FRAM_RECORD_ADDR, FramWriteData, FRAM_RECORD_SIZE);
+	WRITE_PROTECT;
+}
+void FRAM_RecordRead(void)
+{
+    u8 FramReadData[FRAM_RECORD_SIZE];
+    for(u16 i =0;i<FRAM_RECORD_SIZE;i++)
+    {
+        FramReadData[i] = 0;
+    }
+	u16 Size = 0;
+	u16 Crc = 0;
+
+	FRAM_I2C_ReadData(FRAM_RECORD_ADDR, FramReadData, FRAM_RECORD_SIZE);
+	Crc = FramRecord_Crc(FramReadData);
+	if (Crc == FLIPW(&FramReadData[FRAM_RECORD_SIZE-2]))  //CRC验证 读取是否出错
+    {
+		Size = sizeof(SOE_DataStruct)*40;
+		memcpy((u8 *)&DinRecord[0], (u8 *)&FramReadData[0], Size);
+
+	}
+	else // 失败，把当前数据写入EEPROM
+	{
+		//Size = sizeof(Energy_Memory);
+		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
+	}
+}
+
+//===================================================================
+//序列号读写
+void FRAM_IndexWrite(void)
+{
+	WRITE_UNPROTECT;
+	u8 FramWriteIndex[FRAM_INDEX_SIZE];
+	u16 Size = 0;
+	u16 CrcSum = 0;
+	u8 *pData;
+
+	memset((u8 *)&FramWriteIndex, 0xFF, FRAM_INDEX_SIZE);
+	Size = sizeof(SOE_IndexStruct);
+	memcpy((u8 *)&FramWriteIndex, (u8 *)&SoeIndex, Size);
+
+	pData = (u8 *)&FramWriteIndex[0];
+	CrcSum= FramIndex_Crc(pData);
+	pData += (FRAM_INDEX_SIZE-2);
+	memcpy(pData, (u8 *)&CrcSum, 2);
+	FRAM_I2C_WriteData(FRAM_Index_ADDR, FramWriteIndex, FRAM_INDEX_SIZE);
+	WRITE_PROTECT;
+}
+void FRAM_IndexRead(void)
+{
+    u8 FramReadIndex[FRAM_INDEX_SIZE];
+    for(u8 i =0;i<FRAM_INDEX_SIZE;i++)
+    {
+        FramReadIndex[i] = 0;
+    }
+	u16 Size = 0;
+	u16 Crc = 0;
+
+	FRAM_I2C_ReadData(FRAM_Index_ADDR, FramReadIndex, FRAM_INDEX_SIZE);
+	Crc = FramIndex_Crc(FramReadIndex);
+	if (Crc == FLIPW(&FramReadIndex[FRAM_INDEX_SIZE-2]))  //CRC验证 读取是否出错
+    {
+		Size = sizeof(SOE_IndexStruct);
+		memcpy((u8 *)&SoeIndex, (u8 *)&FramReadIndex[0], Size);
+
+	}
+	else // 失败，把当前数据写入EEPROM
+	{
+		//Size = sizeof(Energy_Memory);
+		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
+	}
+}
+
+//===================================================================
+//DO 数据写入
+void FRAM_DoRecordWrite(void)
+{
+	WRITE_UNPROTECT;
+	u8 FramWriteDo[FRAM_RECORD_SIZE];
+	u16 Size = 0;
+	u16 CrcSum = 0;
+	u8 *pData;
+
+	memset((u8 *)&FramWriteDo, 0xFF, FRAM_RECORD_SIZE);
+	Size = sizeof(SOE_DataStruct)*40;
+	memcpy((u8 *)&FramWriteDo, (u8 *)&DoutRecord[0], Size);
+
+	pData = (u8 *)&FramWriteDo[0];
+	CrcSum= FramRecord_Crc(pData);
+	pData += (FRAM_RECORD_SIZE-2);
+	memcpy(pData, (u8 *)&CrcSum, 2);
+	FRAM_I2C_WriteData(FRAM_DO_RECORD_ADDR, FramWriteDo, FRAM_RECORD_SIZE);
+	WRITE_PROTECT;
+}
+void FRAM_DoRecordRead(void)
+{
+    u8 FramReadDo[FRAM_RECORD_SIZE];
+    for(u16 i =0;i<FRAM_RECORD_SIZE;i++)
+    {
+        FramReadDo[i] = 0;
+    }
+	u16 Size = 0;
+	u16 Crc = 0;
+
+	FRAM_I2C_ReadData(FRAM_DO_RECORD_ADDR, FramReadDo, FRAM_RECORD_SIZE);
+	Crc = FramRecord_Crc(FramReadDo);
+	if (Crc == FLIPW(&FramReadDo[FRAM_RECORD_SIZE-2]))  //CRC验证 读取是否出错
+    {
+		Size = sizeof(SOE_DataStruct)*40;
+		memcpy((u8 *)&DoutRecord[0], (u8 *)&FramReadDo[0], Size);
+
+	}
+	else // 失败，把当前数据写入EEPROM
+	{
+		//Size = sizeof(Energy_Memory);
+		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
+	}
+}
+
 
 /*
 void FRAM_Erase_Chip(void)

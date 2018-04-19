@@ -368,10 +368,59 @@ void vModeBus_SetFrameData(void)
             rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 1] = Crc & 0xff;
             USART_DMAReConfig(rtu_TxPack.Data, rtu_TxPack.RTU_DataNum + 2);
             break;
+        case 0x20:
+            rtu_TxPack.Data[0] = rtu_TxPack.RTU_Addr;
+            rtu_TxPack.Data[1] = rtu_TxPack.RTU_Func;
+            rtu_TxPack.Data[2] = rtu_TxPack.RTU_DataNum;
+            Crc = usMBCRC16(rtu_TxPack.Data,rtu_TxPack.RTU_DataNum + 3);
+            rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 3] = (Crc>>8)&0xff;
+            rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 4] = Crc & 0xff;
+            USART_DMAReConfig(rtu_TxPack.Data, rtu_TxPack.RTU_DataNum + 5);
+            break;
+        case 0x21:
+            rtu_TxPack.Data[0] = rtu_TxPack.RTU_Addr;
+            rtu_TxPack.Data[1] = rtu_TxPack.RTU_Func;
+            rtu_TxPack.Data[2] = rtu_TxPack.RTU_DataNum;
+            Crc = usMBCRC16(rtu_TxPack.Data,rtu_TxPack.RTU_DataNum + 3);
+            rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 3] = (Crc>>8)&0xff;
+            rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 4] = Crc & 0xff;
+            USART_DMAReConfig(rtu_TxPack.Data, rtu_TxPack.RTU_DataNum + 5);
+            break;
         default:
             break;
     }
 }
+
+void vModeBus_SetSoeData(u8 Kind)
+{
+    u16 Crc = 0;
+    if(Kind == 0x00)
+    {
+        rtu_TxPack.RTU_DataNum = sizeof(SOE_DataStruct);
+        memcpy((u8 *)&rtu_TxPack.Data[0x03], (u8 *)&DinRecord[SoeIndex.DinRecordIndex], rtu_TxPack.RTU_DataNum);
+        rtu_TxPack.Data[0] = g_tParam.CtrlParam.Addr485;
+        rtu_TxPack.Data[1] = 0x20;
+        rtu_TxPack.Data[2] = rtu_TxPack.RTU_DataNum;
+        Crc = usMBCRC16(rtu_TxPack.Data,rtu_TxPack.RTU_DataNum + 3);
+        rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 3] = (Crc>>8)&0xff;
+        rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 4] = Crc & 0xff;
+        USART_DMAReConfig(rtu_TxPack.Data, rtu_TxPack.RTU_DataNum + 5);
+    }
+    else if(Kind == 0x01)
+    {
+		rtu_TxPack.RTU_DataNum = sizeof(SOE_DataStruct);
+        memcpy((u8 *)&rtu_TxPack.Data[0x03], (u8 *)&DoutRecord[SoeIndex.DoutRecordIndex], rtu_TxPack.RTU_DataNum);
+        rtu_TxPack.Data[0] = g_tParam.CtrlParam.Addr485;
+        rtu_TxPack.Data[1] = 0x21;
+        rtu_TxPack.Data[2] = rtu_TxPack.RTU_DataNum;
+        Crc = usMBCRC16(rtu_TxPack.Data,rtu_TxPack.RTU_DataNum + 3);
+        rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 3] = (Crc>>8)&0xff;
+        rtu_TxPack.Data[rtu_TxPack.RTU_DataNum + 4] = Crc & 0xff;
+        USART_DMAReConfig(rtu_TxPack.Data, rtu_TxPack.RTU_DataNum + 5);
+    }
+}
+
+
 void vMSRS232_Query_Param(void) // 查询控制参数
 {
     sg_TxPack.Len = sizeof(SX_PARAM);
@@ -774,6 +823,36 @@ void vModeBus_Set_Ctrl_Parm(void)
     }
 }
 
+void vModeBus_SOE_DinRecord(void)
+{
+    u8 i;
+    SOE_DataStruct DinRecTmp[40];
+    for(i = 0;i<40;i++)
+    {
+        if(i < SoeIndex.DinRecordIndex)
+            DinRecTmp[i] = DinRecord[SoeIndex.DinRecordIndex-1-i];
+        else
+            DinRecTmp[i] = DinRecord[39-i+SoeIndex.DinRecordIndex];
+    }
+    rtu_TxPack.RTU_DataNum = rtu_RxPack.RR_DsNum * 2;
+    memcpy((u8 *)&rtu_TxPack.Data[0x03], (u8 *)&DinRecTmp[0], rtu_TxPack.RTU_DataNum);
+}
+
+void vModeBus_SOE_DoutRecord(void)
+{
+    u8 i;
+    SOE_DataStruct DoutRecTmp[40];
+    for(i = 0;i<40;i++)
+    {
+        if(i < SoeIndex.DoutRecordIndex)
+            DoutRecTmp[i] = DoutRecord[SoeIndex.DoutRecordIndex-1-i];
+        else
+            DoutRecTmp[i] = DoutRecord[39-i+SoeIndex.DoutRecordIndex];
+    }
+    rtu_TxPack.RTU_DataNum = rtu_RxPack.RR_DsNum * 2;
+    memcpy((u8 *)&rtu_TxPack.Data[0x03], (u8 *)&DoutRecTmp[0], rtu_TxPack.RTU_DataNum);
+}
+
 
 /*--------------------------------------------------------------- */
 
@@ -1032,6 +1111,7 @@ void vModeBusRtu_Analysis(void)
 	BOOL bAnswer = TRUE;
 	u8 CtrlType = rtu_RxPack.RR_Func;    // 读取 or 写入
 	u8 i;
+	u8 tmpD;
 //	u8 CmdType = sg_RxPack.Cmd;              // 数据种类 系数 数据 参数
 //	u8 *pData = &sg_RxPack.Data[8];
 
@@ -1040,6 +1120,7 @@ void vModeBusRtu_Analysis(void)
     {
     	rtu_TxPack.RTU_Addr = rtu_RxPack.RR_Addr;
     	rtu_TxPack.RTU_Func = rtu_RxPack.RR_Func;
+		tmpD = rtu_RxPack.RR_DsNum;
         switch(CtrlType)
         {
             case 0x01:
@@ -1047,29 +1128,20 @@ void vModeBusRtu_Analysis(void)
                 rtu_TxPack.RTU_Data = OutStatus_Disp;
                 for(i = 0;i<4;i++)  //增加数量选择
                 {
-                    if(i<rtu_RxPack.RR_DsNum)
+                    if(i >= tmpD)
                     {
-                        rtu_TxPack.RTU_Data |= g_16_BIT[i];
-                    }
-                    else
-                    {
-                        rtu_TxPack.RTU_Data &=~g_16_BIT[i];
+						rtu_TxPack.RTU_Data &=~g_16_BIT[i];
                     }
                 }
-                //vModeBus_Query_Relay();
                 break;
             case 0x02:
                 rtu_TxPack.RTU_DataNum = 0x01;
                 rtu_TxPack.RTU_Data = DinStatus_Disp;
                 for(i = 0;i<12;i++)  //增加数量选择
                 {
-                    if(i<rtu_RxPack.RR_DsNum)
+                    if(i >= tmpD)
                     {
-                        rtu_TxPack.RTU_Data |= g_16_BIT[i];
-                    }
-                    else
-                    {
-                        rtu_TxPack.RTU_Data &=~g_16_BIT[i];
+						rtu_TxPack.RTU_Data &=~g_16_BIT[i];
                     }
                 }
                 break;
@@ -1121,6 +1193,12 @@ void vModeBusRtu_Analysis(void)
                 rtu_TxPack.RTU_DsNum = rtu_RxPack.RR_DsNum;
                 rtu_TxPack.RTU_DataNum = 6;
                 vModeBus_Set_Ctrl_Parm();
+                break;
+            case 0x20:
+                vModeBus_SOE_DinRecord();
+                break;
+            case 0x21:
+                vModeBus_SOE_DoutRecord();
                 break;
             default:
                 break;
@@ -1232,7 +1310,7 @@ BOOL vMSRS232_RxProtocol(void)
         	case RTU_FUNC:
                 if (USART_GetRxString((u8 *)&rtu_RxPack.Data[1], 1))
         		{
-        		    if (rtu_RxPack.Data[1] <= 0x10)
+        		    if (rtu_RxPack.Data[1] <= 0x23)
         			{
                         rtu_RxPack.RR_Func = rtu_RxPack.Data[1];
         				sg_RtuFlag = RTU_DSADDR;
@@ -1301,6 +1379,21 @@ BOOL vMSRS232_RxProtocol(void)
                     			Task_RS232_init();
                     			sg_RtuFlag = RTU_ADDR;
                     		}
+                		}
+        				break;
+        		    case 0x20:
+        		    case 0x21:   // 主动读取SOE信息
+                		rtu_RxPack.RR_DataLen = 2;
+                        if (USART_GetRxString((u8 *)&rtu_RxPack.Data[4], rtu_RxPack.RR_DataLen + 2))
+                		{
+                            rtu_RxPack.RR_CRC = FHIPW(&rtu_RxPack.Data[6]);
+            				if (usMBCRC16(&rtu_RxPack.Data[0], rtu_RxPack.RR_DataLen + 4) == rtu_RxPack.RR_CRC)
+            				{
+            				    rtu_RxPack.RR_DsNum = FHIPW(&rtu_RxPack.Data[4]);
+            					vModeBusRtu_Analysis();
+            				}
+                			Task_RS232_init();
+                			sg_RtuFlag = RTU_ADDR;
                 		}
         				break;
         		    default:

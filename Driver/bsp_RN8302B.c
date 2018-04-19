@@ -1557,7 +1557,7 @@ void RN8032_Updata(void)
         ElectricEnergy.PosEPT += ((float)Fullwave_data.PosEPt.data)/3200 * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
         vg_Power2_Val.PosEPT = (int)(ElectricEnergy.PosEPT*1000);
     }
-     //ElectricEnergy.PosEPT = 12345678;  // test
+     ElectricEnergy.PosEPT = 12345678;  // test
     if(RN8302RD(&Fullwave_data.PosEQt))   // 正向无功电能
     {
         ElectricEnergy.PosEQT += ((float)Fullwave_data.PosEQt.data)/3200 * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
