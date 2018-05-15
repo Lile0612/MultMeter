@@ -26,12 +26,11 @@
 #include "drvLED.h"
 #include "MemDataOperate.h"
 #include "taskGUI.h"
-#include "taskLedGUI.h"
 
 #include "Bsp.h"
 #include "SCH.h"
 #include "taskRS232.h"
-#include "drvFram.h"
+#include "drvFram64.h"
 #include "TimerDef.h"
 #include "taskProtect.h"
 #include "taskExtra.h"

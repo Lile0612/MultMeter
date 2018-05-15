@@ -55,6 +55,7 @@ enum emLCD_DISP_ADDR
 
 
 
+
 // 第0行数字 16段  le
 // 0 1 2 3 4 5 6 7 8 9
 const unsigned char LCD_COM_Row0_Value[][4] =
@@ -97,6 +98,10 @@ const unsigned char LCD_COM_Row3_DotValue[] = {0x80,0x80,0x80};  //P15 P17 P18
 
 // 冒号
 const unsigned char LCD_COM_Row_ColonValue[] = {0x20,0x10};   //P13 P16
+
+// Max Min Avg
+const unsigned char LCD_COM_Row_Max[] = {0x20,0x40,0x80,0x80,0x80};   //Max Min Avg 通讯 报警
+const unsigned char LCD_PIN_Max[] = {12,12,12,30,32};
 
 // 负号 le
 const unsigned char LCD_COM_NegaSign[] = {0x80,0x20,0x20,0x80};
@@ -572,7 +577,7 @@ void HT_WriteDot(unsigned char row,unsigned char col,unsigned char Value)
 }
 
 /**
-  * @brief  写负号
+  * @brief  写冒号
   * @param  unsigned char row:行(0-2)
   *
   * @retval None
@@ -603,6 +608,63 @@ void HT_WriteColon(unsigned char index,unsigned char Value)
 	}
 
 }
+
+/**
+  * @brief  Max Min Avr S1 S2
+  * @param  unsigned char row:行(0-2)
+  *
+  * @retval None
+  */
+void HT_WriteMax(unsigned char index,unsigned char Value)
+{
+    if (Value == CHAR_NONE)
+	{
+        switch (index)
+        {
+            case IndexMax:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Max[IndexMax]], LCD_COM_Row_Max[IndexMax]);
+                break;
+            case IndexMin:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Max[IndexMin]], LCD_COM_Row_Max[IndexMin]);
+                break;
+            case IndexAvg:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Max[IndexAvg]], LCD_COM_Row_Max[IndexAvg]);
+                break;
+            case IndexCom:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Max[IndexCom]], LCD_COM_Row_Max[IndexCom]);
+                break;
+            case IndexWarm:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Max[IndexWarm]], LCD_COM_Row_Max[IndexWarm]);
+                break;
+            default:
+                break;
+        }
+	}
+	else
+	{
+        switch (index)
+        {
+            case IndexMax:
+                g_Display_Data[LCD_PIN_Max[IndexMax]] |= LCD_COM_Row_Max[IndexMax];
+                break;
+            case IndexMin:
+                g_Display_Data[LCD_PIN_Max[IndexMin]] |= LCD_COM_Row_Max[IndexMin];
+                break;
+            case IndexAvg:
+                g_Display_Data[LCD_PIN_Max[IndexAvg]] |= LCD_COM_Row_Max[IndexAvg];
+                break;
+            case IndexCom:
+                g_Display_Data[LCD_PIN_Max[IndexCom]] |= LCD_COM_Row_Max[IndexCom];
+                break;
+            case IndexWarm:
+                g_Display_Data[LCD_PIN_Max[IndexWarm]] |= LCD_COM_Row_Max[IndexWarm];
+                break;
+            default:
+                break;
+        }
+	}
+}
+
 /**
   * @brief  写负号
   * @param  unsigned char row:行(0-2)

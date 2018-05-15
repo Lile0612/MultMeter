@@ -1,30 +1,32 @@
 /*! @file
 ********************************************************************************
 <PRE>
-模块名       : 硬件驱动模块
-文件名       : drvI2C.h
-相关文件     :
-文件实现功能 : I2C总线驱动
-作者         : <--->
-版本         : 1.0
+ģ����       : Ӳ������ģ��
+�ļ���       : bsp_RN8302B.h
+����ļ�     :
+�ļ�ʵ�ֹ��� : RN8302B����
+����         : <--->
+�汾         : 1.0
 --------------------------------------------------------------------------------
-备注         :
+��ע         :
 --------------------------------------------------------------------------------
-修改记录 :
-日 期        版本   修改人         修改内容
-2010/10/05   1.0    <xxxx>         创建
+�޸ļ�¼ :
+�� ��          �汾     �޸���          �޸�����
+2018/04/21   1.0    <xxxx>         ����
 </PRE>
 ********************************************************************************
 
-  * 版权所有(c) YYYY, <xxx>, 保留所有权利
+  * ��Ȩ����(c) YYYY, <xxx>, ��������Ȩ��
 
 *******************************************************************************/
+
 
 #ifndef _RN8302B_H
 #define _RN8302B_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "Macro.h"
+#include "TimerDef.h"
 /* Exported types ------------------------------------------------------------*/
 
 /* Exported constants --------------------------------------------------------*/
@@ -39,30 +41,30 @@
 #define bank4                                   0x04
 #define WRENABLE                                0xE5
 #define WRDISABLE                               0xDC
-#define SAMPTEMPCLR                             0x10                // 50Hz采样，缓冲区清零
-#define CLREMMIFH                               0xFF                // 清采样缓冲中断标志
+#define SAMPTEMPCLR                             0x10        // 50Hz����������������
+#define CLREMMIFH                               0xFF        // ����������жϱ�־
 #define CLREMMIFL                               0xFF
 #define SAMPSTART                               0x20
 #define SOFTRST                                 0xFA
-#define EMMOD                                   0xA2                // EMM模式
+#define EMMOD                                   0xA2        // EMMģʽ
 #define SLPMOD                                  0x18
 #define NVM1MOD                                 0xE1
 #define NVM2MOD                                 0x5C
 #define CHANNELEN                               0xFF
-#define ADCGAINVAL                              0x00                //ADC 通道增益设定。电压通道1倍增益。
-//#define HF6400                            0x031F                        //6400常数
-#define EGYRDMODVAL                             0x40                //视在电能读取后清零。
-#define LNWIREMODE                              0x00        //三相四线接线模式。
-#define LLWIREMODE                              0x33        //三相三线接线模式。
+#define ADCGAINVAL                              0x00        // ADC ͨ�������趨����ѹͨ��1������?
+//#define HF6400                                0x031F                  
+#define EGYRDMODVAL                             0x40        // ���ڵ��ܶ�ȡ�����㡣
+#define LNWIREMODE                              0x00        // �������߽���ģʽ��
+#define LLWIREMODE                              0x33        // �������߽���ģʽ��
 #define GAIN_1                                  0x00
-//#define GAIN_2                                  0x01
-//#define GAIN_4                                  0x10
-//#define GAIN_8                                  0x11
+//#define GAIN_2                                0x01
+//#define GAIN_4                                0x10
+//#define GAIN_8                                0x11
 #define CALIB_UIE                               0xb0
 #define CALIB_ANGLE                             0xe8        //??
 #define CALIB_IOFFSET                           0x1f        // 电流offset 校正
 #define CALIB_SECTION_I                         0xa0        //设置电流分段
-#define CALIB_AnoPwm                            0xc0        //设置模拟#量校准
+#define CALIB_AnoPwm                            0xc0        //设置模拟#量校�?
 #define CALIB_SetPwm							0xc1
 #define CALIB_SET_DEFAULT                       0xf9
 #define CALIB_SET_ZERO                          0x04
@@ -72,35 +74,35 @@
 //#define HFCONST1                                      0xCE
 
 
-// 一次侧采样数据
+// ������������ һ�β�
 __packed typedef struct
 {
-    // 单位:0.01V
-    float U;          // 电压
-    // 单位:0.01V
-    float UH;         // 谐波电压
-    // 单位:0.01V
-    float LineU;      // 线电压
-    // 单位:0.0001A
-    float I;          // 电流
-    // 单位:0.0001A
-    float IH;         // 谐波电流
-    // 单位:0.00001kW=0.1w
-    float P;          // 有功功率
-    // 单位:0.00001kvar
-    float Q;          // 无功功率
-    // 单位:0.00001kVA
-    float S;          // 视在功率
-    // 单位:0.001
-    float PF;         // 功率因数
-    // 单位:0.1
-    float U_Phase;    // 电压相角
-    // 单位:0.1
-    float I_Phase;    // 电流相角
-    // 单位:0.1
-    float THDU;       // 谐波畸变率
-    // 单位:0.1
-    float THDI;       // 谐波畸变率
+    // ��λ:0.01V
+    float U;         
+    // ��λ:0.01V
+    float UH;         
+    // ��λ:0.01V
+    float LineU;    
+    // ��λ:0.0001A
+    float I;         
+    // ��λ:0.0001A
+    float IH;         
+    // ��λ:0.00001kW=0.1w
+    float P;         
+    // ��λ:0.00001kvar
+    float Q;          
+    // ��λ:0.00001kVA
+    float S;         
+    // ��λ:0.001
+    float PF;        
+    // ��λ:0.1
+    float U_Phase;  
+    // ��λ:0.1
+    float I_Phase;    
+    // ��λ:0.1
+    float THDU;       
+    // ��λ:0.1
+    float THDI;     
 }POWER_Real2_ValStruct;
 
 __packed typedef struct
@@ -121,35 +123,35 @@ __packed typedef struct
     float Freq;
 }POWER2_ValStruct;
 
-// 二次侧采样数据
+// ���β�
 __packed typedef struct
 {
-    // 单位:0.01V
-    int U;              // 相电压
-    // 单位:0.01V
-    int UH;             // 谐波电压
-    // 单位:0.01V
-    int LineU;          // 线电压
-    // 单位:0.0001A
-    int I;              // 相电流
-    // 单位:0.0001A
-    int IH;             // 谐波电流
-    // 单位:0.00001kW=0.1w
-    int P;              // 有功功率
-    // 单位:0.00001kvar
-    int Q;              // 无功功率
-    // 单位:0.00001kVA
-    int S;              // 视在功率
-    // 单位:0.001
-    int PF;             // 功率因数
-    // 单位:0.1
-    int U_Phase;        // 电压相角
-    // 单位:0.1
-    int I_Phase;        // 电流相角
-    // 单位:0.1
-    int THDU;           // 谐波畸变率
-    // 单位:0.1
-    int THDI;           // 谐波畸变率
+    // ��λ:0.01V
+    int U;             
+    // ��λ:0.01V
+    int UH;             
+    // ��λ:0.01V
+    int LineU;         
+    // ��λ:0.0001A
+    int I;              
+    // ��λ:0.0001A
+    int IH;             
+    // ��λ:0.00001kW=0.1w
+    int P;              
+    // ��λ:0.00001kvar
+    int Q;              
+    // ��λ:0.00001kVA
+    int S;              
+    // ��λ:0.001
+    int PF;             
+    // ��λ:0.1
+    int U_Phase;
+    // ��λ:0.1
+    int I_Phase;
+    // ��λ:0.1
+    int THDU;           
+    // ��λ:0.1
+    int THDI;           
 }POWER_Real22_ValStruct;
 
 __packed typedef struct
@@ -169,33 +171,33 @@ __packed typedef struct
     int Savr;
     int U_Imb;
     int I_Imb;
-    int PosEPT;
-    int PosEQT;
-    int EPT;
-    int EQT;
+    u32 PosEPT;
+    u32 PosEQT;
+    u32 EPT;
+    u32 EQT;
+    u32 EST;
     int Freq;
     int UTHavr;
     int ITHavr;
 }POWER22_ValStruct;
 
-// 交流采样数据(读取数据用)
+// ���ݶ�ȡ
 __packed typedef struct
 {
-    //单位:0.01V
-    u16 U;          //二次侧电压 AC
-    //单位:0.0001A
-    u32 I;          //二次侧电流 B
-    //单位:0.00001kW=0.1w
-    s32 P;          //二次侧有功功率 A/B/C/总
-    //单位:0.00001kvar
-    s32 Q;          //二次侧无功功率 A/B/C/总
-    //单位:0.00001kVA
-    u32 S;          //二次侧视在功率
-    //单位:0.001
-    u16 PF;         //功率因数值
+    //��λ:0.01V
+    u16 U;          
+    //��λ:0.0001A
+    u32 I;          
+    //��λ:0.00001kW=0.1w
+    s32 P;          
+    //��λ:0.00001kvar
+    s32 Q;         
+    //��λ:0.00001kVA
+    u32 S;        
+    //��λ:0.001
+    u16 PF;        
 }POWER_Read_ValStruct;
 
-// 校表可读
 __packed typedef struct
 {
     POWER_Read_ValStruct Real_Read_Val[PH_TH];
@@ -212,7 +214,31 @@ typedef struct
     unsigned int  data;
 } RegStructure;
 
-// rn8302b 配置
+// ���������ֵ
+typedef struct
+{
+    u16 Max_U;
+    TimeYMDHMSStruct mUTime; 
+    u16 Max_UL;
+    TimeYMDHMSStruct mULTime; 
+    u16 Max_I;
+    TimeYMDHMSStruct mITime; 
+    u16 Max_P;
+    TimeYMDHMSStruct mPTime; 
+    u16 Max_Q;
+    TimeYMDHMSStruct mQTime; 
+    u16 Max_S;
+    TimeYMDHMSStruct mSTime; 
+    u16 Dem_P;
+    TimeYMDHMSStruct mDemPTime; 
+    u16 Dem_Q;
+    TimeYMDHMSStruct mDemQTime; 
+    u16 Dem_S;
+    TimeYMDHMSStruct mDemSTime; 
+} DemMaxStructure;
+
+
+// rn8302b ����
 typedef struct
 {
     RegStructure        Ua_wave;
@@ -278,13 +304,13 @@ typedef struct
 //    RegStructure        ESa;
 //    RegStructure        ESb;
 //    RegStructure        ESc;
-//    RegStructure        ESt;
+    RegStructure        ESt;
 //    RegStructure        STV;
 //    RegStructure        PfTV;
 //    RegStructure            STFVCnt;
 //    RegStructure        ESTV;
 } Full_wave_data;
-//???????????
+
 typedef struct
 {
 
@@ -367,7 +393,7 @@ typedef struct
     RegStructure        IStart_Q;
     RegStructure        LostVoltT;
     RegStructure        ZXOT;
-    RegStructure        PRTH1L;   // ·???D￡?y
+    RegStructure        PRTH1L;   
     RegStructure        PRTH1H;
     RegStructure        PRTH2L;
     RegStructure        PRTH2H;
@@ -637,6 +663,7 @@ extern int Phase_I[3];
 extern POWER2_ValStruct vg_Power_Val;
 extern POWER22_ValStruct vg_Power2_Val;
 extern POWER2_Read_ValStruct vg_Read_Val;
+extern DemMaxStructure vg_DemMax_Val[4];        // ���� ���ֵ
 extern u32 CheckSum;
 extern u8 RN8302RDBUFF(u16 addr, u8 *pReadWaveData);
 extern void bsp_InitRN8023(void);
@@ -652,23 +679,23 @@ typedef struct
 {
 	float iRealArray[NUM_FFT];
 	float iMageArray[NUM_FFT];
-	u16	FU[3];			//---?ù2¨μ??1---NNN.N6
-	u32	FI[4];			//---?ù2¨μ?á÷NNNN.NNNN
+	u16	FU[3];			
+	u32	FI[4];			
 	float HarmonicpercentU[3][51];
-	float HarmonicpercentI[3][51];			//---D32¨o?óD?ê--NNN.N6
+	float HarmonicpercentI[3][51];			
 }sDl645FftHarmonicData_TypeDef;
 
 typedef struct
 {
-    u8  Channel;					 // μ±?°2é?ùí¨μà
-    u16  ReadAdress;				 // ?áè?μ??·
-    u8  StarFlag;					 // ?aê???DDD32¨êy?Y·???
-    u8  ADSPIBusy;					 // ??DDD32¨·????2ê±?μêy?Y2é?ù
-    u16 DataCount;					 // μ±?°2é?ùμ?êy
-    u16 ReadAddres;				 	 // 2é?ùμ?êy?Yμ??·
-    u16	dwFreq;					 	 // 2é?ù?ü?úμ±?°?μ?ê
-    u16 TimeOutStamp;				 // 2é?ù?óê±í?3?
-    u8 InstantaneousData[384];      // μ±?°2é?ù128μ??2ê±êy?Y
+    u8  Channel;					 // 
+    u16  ReadAdress;				 // 
+    u8  StarFlag;					 // 
+    u8  ADSPIBusy;					 // 
+    u16 DataCount;					 // 
+    u16 ReadAddres;				 	 // 
+    u16	dwFreq;					 	 // 
+    u16 TimeOutStamp;				 // 
+    u8 InstantaneousData[384];       // 
 }sADE_Instantaneous_TypeDef;
 
 typedef enum
@@ -681,6 +708,7 @@ typedef enum
 	ICChannel		= 0x05
 }eADEChannelFlag_TypeDef;
 
+extern BOOL MaxFramWriteEnble;
 extern BOOL FFTEnble;
 extern sDl645FftHarmonicData_TypeDef HarmonicData;
 extern void fnDl645Fft_Harmonic_Exec(void);
@@ -688,7 +716,7 @@ extern void fnDl645Fft_init(void);
 extern void Int_FFT(s16 ReArray[], s16 ImArray[]);
 extern void Bit_Reverse(s16 BR_Array[]);
 
-#endif /* _DRVI2C_H */
+#endif /* _BSP_RN8302B_H */
 
 //===========================================================================
 // No more.

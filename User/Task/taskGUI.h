@@ -374,6 +374,7 @@ enum EMLCD_AO_ITEM
 
 /* Exported functions ------------------------------------------------------- */
 extern BOOL g_AoOutEnable;
+extern BOOL g_MaxDemEnable;        //  Max Dem º∆À„∑¿∂∂
 extern BOOL g_fftEnable;
 extern u8 DispMode;
 extern u8 LEDLEVEL;

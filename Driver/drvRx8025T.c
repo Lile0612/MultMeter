@@ -145,7 +145,8 @@ void Write8025TDateTime(SysTimeStruct WriteTime)
    Timebuf[0] = WriteTime.Second;
    Timebuf[1] = WriteTime.Minute;
    Timebuf[2] = WriteTime.Hour;
-   Timebuf[3] = (0x01)<<(WriteTime.Date.Week);
+   //Timebuf[3] = (0x01)<<(WriteTime.Date.Week);
+   Timebuf[3] = WriteTime.Date.Week;
    Timebuf[4] = WriteTime.Date.Day;
    Timebuf[5] = WriteTime.Date.Month;
    Timebuf[6] = WriteTime.Date.Year;

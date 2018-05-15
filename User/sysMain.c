@@ -14,6 +14,8 @@
   日 期        版本      修改人         修改内容
 2018/02/01   1.0    < 612 >        创建
 2018/03/17   1.1    < 612 >      LED显示开机画面黑屏问题
+2018/05/16   1.2    < 612 >      增加电能查询功能
+
 </PRE>
 ********************************************************************************
 
@@ -60,10 +62,7 @@ int main(void)
 	Task_GUI_init();
 	PT_TimerDelay(500);
 	LoadParam();//读Flash 系统初始化标志位.
-    FRAM_ReadData();
-    FRAM_RecordRead();
-    FRAM_DoRecordRead();
-    FRAM_IndexRead();
+    FramInit();
 	bsp_InitRN8023();
     USART_Configuration();
 #ifdef _GUILCD_

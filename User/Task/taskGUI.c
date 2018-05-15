@@ -149,60 +149,72 @@ enum emMENU_MAIN_INDEX
     MENU_INDEX_HarmI27   = 0x2C,
     MENU_INDEX_HarmI29   = 0x2D,
     MENU_INDEX_HarmI31   = 0x2E,
-	MENU_INDEX_MAX	 = MENU_INDEX_HarmI31,
+    MENU_INDEX_Time   = 0x2F,
+	MENU_INDEX_MAX	 = MENU_INDEX_Time,
 };
 #else
 enum emMENU_MAIN_INDEX
 {
-    MENU_INDEX_U     = 0x00, // 电压
+    MENU_INDEX_U     = 0, // 电压
 	MENU_INDEX_MIN	 = MENU_INDEX_U,
-	MENU_INDEX_LineU = 0x01, // 线电压
-	MENU_INDEX_I	 = 0x02, // 电流
-	MENU_INDEX_P	 = 0x03, // 有功功率
-	MENU_INDEX_Q     = 0x04, // 无功功率
-	MENU_INDEX_S     = 0x05, // 视在功率
-	MENU_INDEX_PF    = 0x06, // 分相功因
-	MENU_INDEX_F     = 0x07, // 功因频率
-	MENU_INDEX_PosEPT    = 0x08, // +有功电能
-	MENU_INDEX_NegEPT    = 0x09, // -有功电能
-	MENU_INDEX_PosEQT    = 0x0A, // +无功电能
-	MENU_INDEX_NegEQT    = 0x0B, // -无功电能
-	MENU_INDEX_UAngle    = 0x0C,
-    MENU_INDEX_IAngle    = 0x0D,
-    MENU_INDEX_Uimb      = 0x0E,
-    MENU_INDEX_HarmU     = 0x0F,
-    MENU_INDEX_HarmI     = 0x10,
-    MENU_INDEX_HarmU3    = 0x11,
-    MENU_INDEX_HarmU5    = 0x12,
-    MENU_INDEX_HarmU7    = 0x13,
-    MENU_INDEX_HarmU9    = 0x14,
-    MENU_INDEX_HarmU11   = 0x15,
-    MENU_INDEX_HarmU13   = 0x16,
-    MENU_INDEX_HarmU15   = 0x17,
-    MENU_INDEX_HarmU17   = 0x18,
-    MENU_INDEX_HarmU19   = 0x19,
-    MENU_INDEX_HarmU21   = 0x1A,
-    MENU_INDEX_HarmU23   = 0x1B,
-    MENU_INDEX_HarmU25   = 0x1C,
-    MENU_INDEX_HarmU27   = 0x1D,
-    MENU_INDEX_HarmU29   = 0x1E,
-    MENU_INDEX_HarmU31   = 0x1F,
-    MENU_INDEX_HarmI3    = 0x20,
-    MENU_INDEX_HarmI5    = 0x21,
-    MENU_INDEX_HarmI7    = 0x22,
-    MENU_INDEX_HarmI9    = 0x23,
-    MENU_INDEX_HarmI11   = 0x24,
-    MENU_INDEX_HarmI13   = 0x25,
-    MENU_INDEX_HarmI15   = 0x26,
-    MENU_INDEX_HarmI17   = 0x27,
-    MENU_INDEX_HarmI19   = 0x28,
-    MENU_INDEX_HarmI21   = 0x29,
-    MENU_INDEX_HarmI23   = 0x2A,
-    MENU_INDEX_HarmI25   = 0x2B,
-    MENU_INDEX_HarmI27   = 0x2C,
-    MENU_INDEX_HarmI29   = 0x2D,
-    MENU_INDEX_HarmI31   = 0x2E,
-	MENU_INDEX_MAX	 = MENU_INDEX_IAngle,
+	MENU_INDEX_LineU = 1, // 线电压
+	MENU_INDEX_I	 = 2, // 电流
+	MENU_INDEX_P	 = 3, // 有功功率
+	MENU_INDEX_Q     = 4, // 无功功率
+	MENU_INDEX_S     = 5, // 视在功率
+	MENU_INDEX_PF    = 6, // 分相功因
+	MENU_INDEX_F     = 7, // 功因频率
+	MENU_INDEX_PosEPT    = 8, // +有功电能
+	MENU_INDEX_NegEPT    = 9, // -有功电能
+	MENU_INDEX_PosEQT    = 10, // +无功电能
+	MENU_INDEX_NegEQT    = 11, // -无功电能
+	MENU_INDEX_UAngle    = 12,
+    MENU_INDEX_IAngle    = 13,
+    MENU_INDEX_Umax      = 14,
+    MENU_INDEX_ULmax     = 15,
+    MENU_INDEX_Imax      = 16,
+    MENU_INDEX_Pmax      = 17,
+    MENU_INDEX_Qmax      = 18,
+    MENU_INDEX_Smax      = 19,
+    MENU_INDEX_Time      = 20,
+    MENU_INDEX_DemP      = 21,
+    MENU_INDEX_DemQ      = 22,
+    MENU_INDEX_DemS      = 23,
+    
+    MENU_INDEX_Uimb      = 0x51,
+    MENU_INDEX_HarmU     = 0x52,
+    MENU_INDEX_HarmI     = 0x53,
+    MENU_INDEX_HarmU3    = 0x54,
+    MENU_INDEX_HarmU5    = 0x55,
+    MENU_INDEX_HarmU7    = 0x56,
+    MENU_INDEX_HarmU9    = 0x57,
+    MENU_INDEX_HarmU11   = 0x58,
+    MENU_INDEX_HarmU13   = 0x59,
+    MENU_INDEX_HarmU15   = 0x60,
+    MENU_INDEX_HarmU17   = 0x61,
+    MENU_INDEX_HarmU19   = 0x62,
+    MENU_INDEX_HarmU21   = 0x63,
+    MENU_INDEX_HarmU23   = 0x64,
+    MENU_INDEX_HarmU25   = 0x65,
+    MENU_INDEX_HarmU27   = 0x66,
+    MENU_INDEX_HarmU29   = 0x67,
+    MENU_INDEX_HarmU31   = 0x68,
+    MENU_INDEX_HarmI3    = 0x69,
+    MENU_INDEX_HarmI5    = 0x70,
+    MENU_INDEX_HarmI7    = 0x71,
+    MENU_INDEX_HarmI9    = 0x72,
+    MENU_INDEX_HarmI11   = 0x73,
+    MENU_INDEX_HarmI13   = 0x74,
+    MENU_INDEX_HarmI15   = 0x75,
+    MENU_INDEX_HarmI17   = 0x76,
+    MENU_INDEX_HarmI19   = 0x77,
+    MENU_INDEX_HarmI21   = 0x78,
+    MENU_INDEX_HarmI23   = 0x79,
+    MENU_INDEX_HarmI25   = 0x80,
+    MENU_INDEX_HarmI27   = 0x81,
+    MENU_INDEX_HarmI29   = 0x82,
+    MENU_INDEX_HarmI31   = 0x83,
+	MENU_INDEX_MAX	 = MENU_INDEX_DemS,
 };
 #endif
 
@@ -264,7 +276,8 @@ enum emMENU_SETMENU2_3_INDEX
 	MENU2_3_INDEX_DISP	= 0x03, // 默认显示
 	MENU2_3_INDEX_ALR	= 0x04, // 闪烁报警
 	MENU2_3_INDEX_CLRE	= 0x05, // 电能清零
-	MENU2_3_INDEX_CODE	= 0x06, // 编程密码
+	MENU2_3_INDEX_DEMCLRE	= 0x06, // 电能清零
+	MENU2_3_INDEX_CODE	= 0x07, // 编程密码
 	MENU2_3_INDEX_MAX	= MENU2_3_INDEX_CODE,
 	MENU2_3_INDEX_RMAX  = MENU2_3_INDEX_ALR,
 };
@@ -439,6 +452,7 @@ typedef struct
 Disp_FocusStruct Disp_Focus;
 Disp_FocusStruct Disp_FocusT;
 
+u8 sg_MaxDemIndex = 0;
 static u8 sg_CurrentDispChar[13];			// 要显示的字符
 static s16 sg_CurrentDispNumber;			// 要显示的数据
 static s32 sg_DispSetValue = 0;				// 要显示的设置数据
@@ -465,6 +479,7 @@ static BOOL g_bUpdataDefault = FALSE;	// 显示默认
 static BOOL g_bBlackLightDefault = FALSE;  // 背光亮
 BOOL g_fftEnable = FALSE;        //
 BOOL g_AoOutEnable = FALSE;        //
+BOOL g_MaxDemEnable = FALSE;        //  Max Dem 计算防抖
 
 static BOOL g_bCycleDefault = FALSE;  // 背光亮
 
@@ -516,9 +531,22 @@ static BOOL g_b4OutOverTurn = FALSE;
 
 SysTimeStruct g_ReadTime;
 SysTimeStruct g_DispReadTime;
+SysTimeStruct g_SetTimeOnce;
 TimeYMDHMSStruct g_SOETime;
 
+u8 WeekBack;    // 周备份，需量、最大值
+u8 HourBack;    // 小时备份，电能记录使用 365 一年记录
 
+/*-------------------------------实时需量------------------------------------*/
+u16 RealTimeDemP = 0;
+u16 RealTimeDemQ = 0;
+u16 RealTimeDemS = 0;
+
+int sg_MaxDemP[16];
+int sg_MaxDemQ[16];
+int sg_MaxDemS[16];
+
+/*----------------------------------------------------------------------------*/
 void Gb_SetSysTime(SysTimeStruct ReadTime)
 {
     g_ReadTime = ReadTime;
@@ -529,6 +557,33 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
     g_SOETime.Hour      = g_ReadTime.Hour;
     g_SOETime.Minute    = g_ReadTime.Minute;
     g_SOETime.Second    = g_ReadTime.Second;
+
+    if(WeekBack !=  g_DispReadTime.Date.Week)
+    {
+        if((WeekBack == 0x40) && (g_DispReadTime.Date.Week == 0x01))
+        {
+            SoeIndex.MaxIndex++;
+            if(SoeIndex.MaxIndex >3)
+            {
+                SoeIndex.MaxIndex = 0;
+            }
+            FRAM_IndexWrite();
+        }   
+    }
+	WeekBack = g_DispReadTime.Date.Week;
+
+	if(HourBack != g_DispReadTime.Hour)
+	{
+        if((HourBack == 23) && (g_DispReadTime.Hour == 0x00))
+        {
+            SoeIndex.EnergyRecordIndex++;
+            if(SoeIndex.EnergyRecordIndex > 366)
+            {
+                SoeIndex.EnergyRecordIndex = 0;
+            }
+            FRAM_IndexWrite();
+        }
+	}
 }
 
 SysTimeStruct Gb_GetSysTime(void)
@@ -728,6 +783,7 @@ void GUI_Timer_On(void)
 	static u32 s_Dly1sTick = 0;
 	static u32 s_Dly5sTick = 0;
 	static u16 s_FlashNum = 0;
+	static u32 s_MaxDemNum = 0;
 	u32 TimerDlyNum = 0;
 
 	sg_ReFlashCount++;
@@ -989,7 +1045,8 @@ void GUI_Timer_On(void)
 		if (g_AoOutDelyTick ++ >= TIMER_DELAY_5S)
 		{
 			g_AoOutDelyTick = 0;
-			g_AoOutEnable = TRUE;
+			g_AoOutEnable = TRUE;  
+			g_MaxDemEnable = TRUE;      // Max 计量时间延时，开机防抖
 			sg_AoOutDely = FALSE;
 		}
 	}
@@ -1013,6 +1070,52 @@ void GUI_Timer_On(void)
 	{
 		s_FlashNum = 0;
 		sg_bSetFlashEnable = !sg_bSetFlashEnable;
+	}
+	/**************************需量计算******************************/
+	s_MaxDemNum++;
+	if (s_MaxDemNum >= TIMER_DELAY_60S)
+	{
+		s_MaxDemNum = 0;
+
+		sg_MaxDemP[sg_MaxDemIndex] = vg_Power2_Val.PosEPT;
+		sg_MaxDemQ[sg_MaxDemIndex] = vg_Power2_Val.PosEQT;
+		sg_MaxDemS[sg_MaxDemIndex] = vg_Power2_Val.EST;
+		
+		sg_MaxDemIndex++;
+        if(sg_MaxDemIndex == 16)
+        {
+            RealTimeDemP = (sg_MaxDemP[15] - sg_MaxDemP[0])/0.25;
+            RealTimeDemQ = (sg_MaxDemQ[15] - sg_MaxDemQ[0])/0.25;
+            RealTimeDemS = (sg_MaxDemS[15] - sg_MaxDemS[0])/0.25;
+            for(u8 i = 0; i<15; i++)
+            {
+                sg_MaxDemP[i] = sg_MaxDemP[i+1];
+                sg_MaxDemQ[i] = sg_MaxDemQ[i+1];
+                sg_MaxDemS[i] = sg_MaxDemS[i+1];
+            }
+            sg_MaxDemIndex = 15;
+            // Max
+            if(RealTimeDemP > vg_DemMax_Val[SoeIndex.MaxIndex].Dem_P)
+            {
+                vg_DemMax_Val[SoeIndex.MaxIndex].Dem_P = RealTimeDemP;
+                vg_DemMax_Val[SoeIndex.MaxIndex].mDemPTime = g_SOETime;
+                MaxFramWriteEnble = TRUE;
+            }
+            // Max
+            if(RealTimeDemQ > vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q)
+            {
+                vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q = RealTimeDemQ;
+                vg_DemMax_Val[SoeIndex.MaxIndex].mDemQTime = g_SOETime;
+                MaxFramWriteEnble = TRUE;
+            }
+            // Max
+            if(RealTimeDemS > vg_DemMax_Val[SoeIndex.MaxIndex].Dem_S)
+            {
+                vg_DemMax_Val[SoeIndex.MaxIndex].Dem_S = RealTimeDemS;
+                vg_DemMax_Val[SoeIndex.MaxIndex].mDemSTime = g_SOETime;
+                MaxFramWriteEnble = TRUE;
+            }
+        }
 	}
     /**************************通讯*****无****************************/
 	if (sg_ComFlag)
@@ -1136,13 +1239,13 @@ void GUI_Key_Menu(void)     //菜单键操作
 
 void GUI_Key_Ok(void)
 {
+    u8 size;
 	switch (KeyFuncIndex)
 	{
 		case KEYFUNC_MAIN:
 			break;
 		case KEYFUNC_MENU1:
 		    DispCtrlParam = g_tParam.CtrlParam;
-		    GetSetTime();
 		    if( sg_DispSubMainMenuIndex == MENUSUB_INDEX_PROG)
 		    {
                 DispMode = ProgMode;  // 显示模式标志位
@@ -1168,6 +1271,7 @@ void GUI_Key_Ok(void)
 		    if(DispMode == ProgMode)
 		    {
 		        GetSetOldValue();
+		        g_SetTimeOnce = g_ReadTime;
     			KeyFuncIndex = KEYFUNC_MENUVALUE;
     			if(sg_DispSetMenu1Index == MENU1_INDEX_VER)
     				KeyFuncIndex = KEYFUNC_MENU3;
@@ -1182,6 +1286,13 @@ void GUI_Key_Ok(void)
                     ElectricEnergy.PosEQT = 0;
                     ElectricEnergy.NegEPT = 0;
                     ElectricEnergy.NegEQT = 0;
+                    ElectricEnergy.EST = 0;
+                    KeyFuncIndex = KEYFUNC_MENU3;
+		        }
+		        else if((sg_DispSetValue == SaveYes) && (sg_DispSetMenu2_3_Index == MENU2_3_INDEX_DEMCLRE))
+		        {
+	                size = sizeof(DemMaxStructure);
+	                memset((u8 *)&vg_DemMax_Val[SoeIndex.MaxIndex], 0x00, size);
                     KeyFuncIndex = KEYFUNC_MENU3;
 		        }
 		        else
@@ -1228,7 +1339,7 @@ void GUI_Key_Ok(void)
                 g_tParam.CtrlParam = DispCtrlParam;
                 if(g_TimeSetFlag == TRUE)
                 {
-                    Write8025TDateTime(g_ReadTime);
+                    Write8025TDateTime(g_SetTimeOnce);
                     g_TimeSetFlag = FALSE;
                 }                
                 SaveParam();
@@ -1576,8 +1687,11 @@ void GUI_Key_Up(void)       //左按键 实质:减去
                             case MENU2_3_INDEX_CLRE:
                                 UpdataOrSetValue(Select_Save,UPDATA_SUB);
                                 break;
+                            case MENU2_3_INDEX_DEMCLRE:
+                                UpdataOrSetValue(Select_Save,UPDATA_SUB);
+                                break;
                             case MENU2_3_INDEX_T:
-                                if(Disp_FocusT.CurrentFocus == 11)
+                                if(Disp_FocusT.CurrentFocus == 12)
                                 {
                                     Disp_FocusT.CurrentFocus = 0;
                                 }
@@ -2072,6 +2186,9 @@ void GUI_Key_Down(void)  //右按键
                             case MENU2_3_INDEX_CLRE:
                                 UpdataOrSetValue(Select_Save,UPDATA_ADD);
                                 break;
+                            case MENU2_3_INDEX_DEMCLRE:
+                                UpdataOrSetValue(Select_Save,UPDATA_ADD);
+                                break;
                             case MENU2_3_INDEX_CODE:
                                 UpdataSetValue(UPDATA_ADD);
                                 break;
@@ -2360,6 +2477,7 @@ void GUI_Main(void)
 
 void Task_GUI_Function(void)
 {
+    GetSetTime();
 	GUI_Main();
 	HT_Write_Four_Quadrant(TRUE);
 	Disp_IO_Status(DinStatus_Disp,OutStatus_Disp);
@@ -3032,6 +3150,49 @@ void DispValuePower(u8 num,s64 DispNum, u8 Decimal, u8 DispWidth, BOOL bFlash, u
     DispValue(num,(s32)DispNum,Decimal, 4, FALSE,0, TRUE, FALSE);
 }
 
+// 显示电能
+void DispValueEnergy(float DispNum)
+{
+    u32 DispValTmp;
+    u32 DispMSBValTmp;
+    u32 DispLSBValTmp;
+    if(DispNum < 1000000)  // 123.4w
+    {
+        DispValTmp =  DispNum * 100;
+        DispMSBValTmp = DispValTmp/10000;
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(1,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(2,DispLSBValTmp,2,4, FALSE, 0, TRUE, FALSE);
+    }
+    else if((DispNum >= 1000000) && (DispNum < 10000000))
+    {
+        DispValTmp =  DispNum * 10;
+        DispMSBValTmp = DispValTmp/10000;
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(1,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(2,DispLSBValTmp,1,4, FALSE, 0, TRUE, FALSE);
+    }
+    else if((DispNum >= 10000000) && (DispNum < 100000000))
+    {
+        DispValTmp =  DispNum * 1;
+        DispMSBValTmp = DispValTmp/10000;
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(1,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(2,DispLSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+    }
+    else
+    {
+        HT_WriteValue(1,0,DISP_FU);
+        HT_WriteValue(1,1,DISP_FU);
+        HT_WriteValue(1,2,DISP_FU);
+        HT_WriteValue(1,3,DISP_FU);
+        HT_WriteValue(2,0,DISP_FU);
+        HT_WriteValue(2,1,DISP_FU);
+        HT_WriteValue(2,2,DISP_FU);
+        HT_WriteValue(2,3,DISP_FU);
+    }
+}
+
 /**
   * @brief	显示数字
   * @param	s16 DispNum-要显示的数字
@@ -3355,15 +3516,15 @@ void DispBitChar(u8 Index, u8 ch)
     }
 }
 
-void DispTime(u8 Select)
+void DispTime(void)
 {
-	u8 temp8[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
-	u8 BitChar[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+	u8 temp8[13] = {0,0,0,0,0,0,0,0,0,0,0,0};
+	u8 BitChar[13] = {0,0,0,0,0,0,0,0,0,0,0,0};
 	u8 i = 0;
 
 	SysTimeStruct calendar;
 
-    calendar.Second = 0;
+    /*calendar.Second = 0;
     calendar.Minute = 0;
     calendar.Hour = 0;
     calendar.Date.Week = 0;
@@ -3371,7 +3532,9 @@ void DispTime(u8 Select)
     calendar.Date.Day = 0;
     calendar.Date.Year = 0;
     Read8025TDateTime(&calendar);
-    Gb_SetSysTime(calendar);
+    Gb_SetSysTime(calendar);*/
+
+    calendar = g_ReadTime;
 
     BitChar[0] = calendar.Second /16;
 	BitChar[1] = calendar.Second %16;
@@ -3387,7 +3550,32 @@ void DispTime(u8 Select)
 	BitChar[10] = calendar.Date.Year /16;
 	BitChar[11] = calendar.Date.Year %16;
 
-    for (i = 0 ; i < 12; i++)
+    switch (calendar.Date.Week)
+    {
+        case 0x01:
+            BitChar[12] = 8;
+            break;
+        case 0x02:
+            BitChar[12] = 1;
+            break;
+        case 0x04:
+            BitChar[12] = 2;
+            break;
+        case 0x08:
+            BitChar[12] = 3;
+            break;
+        case 0x10:
+            BitChar[12] = 4;
+            break;
+        case 0x20:
+            BitChar[12] = 5;
+            break;
+        case 0x40:
+            BitChar[12] = 6;
+            break;
+    }
+
+    for (i = 0 ; i < 13; i++)
 	{
 	    if (sg_CurrentDispChar[i] != POS_NUM && sg_CurrentDispChar[i] != NEG_NUM)
     	{
@@ -3395,28 +3583,30 @@ void DispTime(u8 Select)
     	}
     	temp8[i] = HT_Data_Index( BitChar[i]);
 	}
-    if(Select == DisTime)
-    {
-        HT_WriteValue(3, 0, temp8[4]);
-        HT_WriteValue(3, 1, temp8[5]);
-        HT_WriteValue(3, 2, CHAR_FU);
-        HT_WriteValue(3, 3, temp8[2]);
-        HT_WriteValue(4, 0, temp8[3]);
-        HT_WriteValue(4, 1, CHAR_FU);
-        HT_WriteValue(4, 2, temp8[0]);
-        HT_WriteValue(4, 3, temp8[1]);
-    }
-    else if(Select == DisData)
-    {
-        HT_WriteValue(3, 0, temp8[10]);
-        HT_WriteValue(3, 1, temp8[11]);
-        HT_WriteValue(3, 2, CHAR_FU);
-        HT_WriteValue(3, 3, temp8[8]);
-        HT_WriteValue(4, 0, temp8[9]);
-        HT_WriteValue(4, 1, CHAR_FU);
-        HT_WriteValue(4, 2, temp8[6]);
-        HT_WriteValue(4, 3, temp8[7]);
-    }
+    HT_WriteValue(0, 0, CHAR_2);
+    HT_WriteValue(0, 1, CHAR_0);
+    HT_WriteValue(0, 2, temp8[10]);
+    HT_WriteValue(0, 3, temp8[11]);     // 第一行
+    
+    HT_WriteValue(1, 0, temp8[8]);
+    HT_WriteValue(1, 1, temp8[9]);
+    HT_WriteDot(1,1,TRUE);
+    HT_WriteValue(1, 2, temp8[6]);
+    HT_WriteValue(1, 3, temp8[7]);      // 第二行
+    
+    HT_WriteValue(2, 0, DISP_NC);
+    HT_WriteValue(2, 1, DISP_NC);
+    HT_WriteValue(2, 2, DISP_FU);
+    HT_WriteValue(2, 3, temp8[12]);    
+    
+    HT_WriteValue(3, 0, temp8[4]);    // 时分秒
+    HT_WriteValue(3, 1, temp8[5]);
+    HT_WriteValue(3, 2, CHAR_FU);
+    HT_WriteValue(3, 3, temp8[2]);
+    HT_WriteValue(4, 0, temp8[3]);
+    HT_WriteValue(4, 1, CHAR_FU);
+    HT_WriteValue(4, 2, temp8[0]);
+    HT_WriteValue(4, 3, temp8[1]);
     
 }
 
@@ -3436,8 +3626,8 @@ void GetSetTime(void)
 
 void DispSetTime(SysTimeStruct calendar)
 {
-    u8 temp8[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
-	u8 BitChar[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    u8 temp8[13] = {0,0,0,0,0,0,0,0,0,0,0,0};
+	u8 BitChar[13] = {0,0,0,0,0,0,0,0,0,0,0,0};
 	u8 i = 0;
 
     BitChar[0] = calendar.Second/16;
@@ -3453,7 +3643,32 @@ void DispSetTime(SysTimeStruct calendar)
 	BitChar[10] = calendar.Date.Year/16;
 	BitChar[11] = calendar.Date.Year%16;
 
-    for (i = 0 ; i < 12; i++)
+	switch (calendar.Date.Week)
+    {
+        case 0x01:
+            BitChar[12] = 8;
+            break;
+        case 0x02:
+            BitChar[12] = 1;
+            break;
+        case 0x04:
+            BitChar[12] = 2;
+            break;
+        case 0x08:
+            BitChar[12] = 3;
+            break;
+        case 0x10:
+            BitChar[12] = 4;
+            break;
+        case 0x20:
+            BitChar[12] = 5;
+            break;
+        case 0x40:
+            BitChar[12] = 6;
+            break;
+    }
+
+    for (i = 0 ; i < 13; i++)
 	{
 	    if (sg_CurrentDispChar[i] != POS_NUM && sg_CurrentDispChar[i] != NEG_NUM)
     	{
@@ -3485,21 +3700,24 @@ void DispSetTime(SysTimeStruct calendar)
                 temp8[4] = CHAR_NONE;
                 break;
             case 6:
-                temp8[7] = DISP1_NC;
+                temp8[12] = DISP1_NC;
                 break;
             case 7:
-                temp8[6] = DISP1_NC;
+                temp8[7] = DISP1_NC;
                 break;
             case 8:
-                temp8[9] = DISP1_NC;
+                temp8[6] = DISP1_NC;
                 break;
             case 9:
-                temp8[8] = DISP1_NC;
+                temp8[9] = DISP1_NC;
                 break;
             case 10:
-                temp8[11] = DISP1_NC;
+                temp8[8] = DISP1_NC;
                 break;
             case 11:
+                temp8[11] = DISP1_NC;
+                break;
+            case 12:
                 temp8[10] = DISP1_NC;
                 break;
             default:
@@ -3510,15 +3728,18 @@ void DispSetTime(SysTimeStruct calendar)
     HT_WriteValue(0, 0, CHAR_2);
     HT_WriteValue(0, 1, CHAR_0);
     HT_WriteValue(0, 2, temp8[10]);
-    HT_WriteValue(0, 3, temp8[11]);
-    HT_WriteValue(1, 0, DISP_NC);
-    HT_WriteValue(1, 1, DISP_FU);
-    HT_WriteValue(1, 2, temp8[8]);
-    HT_WriteValue(1, 3, temp8[9]);
+    HT_WriteValue(0, 3, temp8[11]);     // 第一行
+    
+    HT_WriteValue(1, 0, temp8[8]);
+    HT_WriteValue(1, 1, temp8[9]);
+    HT_WriteDot(1,1,TRUE);
+    HT_WriteValue(1, 2, temp8[6]);
+    HT_WriteValue(1, 3, temp8[7]);      // 第二行
+    
     HT_WriteValue(2, 0, DISP_NC);
-    HT_WriteValue(2, 1, DISP_FU);
-    HT_WriteValue(2, 2, temp8[6]);
-    HT_WriteValue(2, 3, temp8[7]);    
+    HT_WriteValue(2, 1, DISP_NC);
+    HT_WriteValue(2, 2, DISP_FU);
+    HT_WriteValue(2, 3, temp8[12]);    
     
     HT_WriteValue(3, 0, temp8[4]);    // 时分秒
     HT_WriteValue(3, 1, temp8[5]);
@@ -3604,7 +3825,7 @@ void DispMenu_Main(void)
 		    }
 		    HT_WritePhase(TRUE,PH_TH);
             /***********************************下一屏*******************************************/
-            DispTime(DisTime);
+            DispValueVoltage(4,vg_Power_Val.Uavr*0.1, 0, 4, FALSE,0, TRUE, Leve_1_DispNUM);
 			break;
 	    case MENU_INDEX_LineU:// 单位V 1位小数点
 	        /***********************************标签页*******************************************/
@@ -3655,7 +3876,7 @@ void DispMenu_Main(void)
 		    }
 		    HT_WritePhaseDouble(TRUE,PH_TH);
 		    /***********************************下一屏*****************************************/
-            DispTime(DisData);
+            DispValueVoltage(4,vg_Power_Val.ULavr*0.1, 0, 4, FALSE,0, TRUE, Leve_1_DispNUM);
 			break;
 		case MENU_INDEX_I://单位A 3位小数点
             /***********************************标签页******************************************/
@@ -3739,7 +3960,8 @@ void DispMenu_Main(void)
 		    }
 		    HT_WritePhase(TRUE,PH_TH);
 		    /***********************************下一屏*******************************************/
-            DispTime(DisTime);
+            HT_WriteValue(3,R4_L0,CHAR_NONE);
+            DispValueCurrent(4,vg_Power_Val.Iavr*0.1, 0, 4, FALSE,0, TRUE, Leve_1_DispNUM);
 			break;
        	case MENU_INDEX_P:// 有功
        	    /***********************************标签页*******************************************/
@@ -4182,27 +4404,15 @@ void DispMenu_Main(void)
 		    HT_WriteValue(Line_R5,2,CHAR_NONE);
 
 		    /***********************************上三屏*******************************************/
-
+            // 上限9999 9999 度电
             HT_WriteValue(0,0,DISP1_E);
             HT_WriteValue(0,1,DISP1_p);
 		    HT_WriteValue(0,2,CHAR_NONE);
 		    HT_WriteValue(0,3,DISP1_ZHENG);
 
-            if(ElectricEnergy.PosEPT > 999999)
-            {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.PosEPT * 10);
-                DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-                DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-                DispValue(2,DispValTmpPQS[2],1,4, FALSE, 0, TRUE, FALSE);
-            }
-            else
-            {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.PosEPT * 100);
-                DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-                DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-                DispValue(2,DispValTmpPQS[2],2,4, FALSE, 0, TRUE, FALSE);
-            }
-            DispValue(1,DispValTmpPQS[1],0,4, FALSE, 0, TRUE, FALSE);
+            ElectricEnergy.PosEPT = 123456789.99;
+
+            DispValueEnergy(ElectricEnergy.PosEPT);
             HT_WriteUnit(TRUE,PH_ALL,0);
 			break;
 	    case MENU_INDEX_NegEPT://单位k
@@ -4220,21 +4430,7 @@ void DispMenu_Main(void)
 		    HT_WriteValue(0,2,CHAR_NONE);
 		    HT_WriteValue(0,3,DISP1_FU);
 
-	        if(ElectricEnergy.NegEPT > 999999)
-            {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.NegEPT * 10);
-                DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-                DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-                DispValue(2,DispValTmpPQS[2],1,4, FALSE, 0, TRUE, FALSE);
-            }
-            else
-            {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.NegEPT * 100);
-                DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-                DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-                DispValue(2,DispValTmpPQS[2],2,4, FALSE, 0, TRUE, FALSE);
-            }
-            DispValue(1,DispValTmpPQS[1],0,4, FALSE, 0, TRUE, FALSE);
+            DispValueEnergy(ElectricEnergy.NegEPT);
             HT_WriteUnit(TRUE,PH_ALL,0);
 			break;
 	    case MENU_INDEX_PosEQT://单位k
@@ -4250,21 +4446,7 @@ void DispMenu_Main(void)
 		    HT_WriteValue(0,2,CHAR_NONE);
 		    HT_WriteValue(0,3,DISP1_ZHENG);
 
-	        if(ElectricEnergy.PosEQT > 999999)
-	        {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.PosEQT * 10);
-		        DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-		        DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-		        DispValue(2,DispValTmpPQS[2],1,4, FALSE, 0, TRUE, FALSE);
-	        }
-	        else
-	        {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.PosEQT * 100);
-		        DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-		        DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-		        DispValue(2,DispValTmpPQS[2],2,4, FALSE, 0, TRUE, FALSE);
-	        }
-            DispValue(1,DispValTmpPQS[1],0,4, FALSE, 0, TRUE, FALSE);
+	        DispValueEnergy(ElectricEnergy.PosEQT);
             HT_WriteUnit(TRUE,PH_ALL,1);
 			break;
 	    case MENU_INDEX_NegEQT://单位k
@@ -4279,21 +4461,7 @@ void DispMenu_Main(void)
 		    HT_WriteValue(0,2,CHAR_NONE);
 		    HT_WriteValue(0,3,DISP1_FU);
 
-	        if(ElectricEnergy.NegEQT > 999999)
-	        {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.NegEQT * 10);
-		        DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-		        DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-		        DispValue(2,DispValTmpPQS[2],1,4, FALSE, 0, TRUE, FALSE);
-	        }
-	        else
-	        {
-                DispValTmpPQS[0] = (s32)(ElectricEnergy.NegEQT * 100);
-		        DispValTmpPQS[1] = DispValTmpPQS[0]/10000;
-		        DispValTmpPQS[2] = DispValTmpPQS[0]%10000;
-		        DispValue(2,DispValTmpPQS[2],2,4, FALSE, 0, TRUE, FALSE);
-	        }
-            DispValue(1,DispValTmpPQS[1],0,4, FALSE, 0, TRUE, FALSE);
+	        DispValueEnergy(ElectricEnergy.NegEQT);
             HT_WriteUnit(TRUE,PH_ALL,1);
 			break;
 	    case MENU_INDEX_Uimb:
@@ -4497,6 +4665,92 @@ void DispMenu_Main(void)
             HT_WriteValue(4,R4_L2,CHAR_U);
             HT_WriteValue(4,R4_L3,CHAR_R);
             break;
+        //=================================================================
+        // 需量 Max 显示
+        case MENU_INDEX_Umax:
+            Reset_Screen();
+		    HT_WriteValue(Line_R1,0,DISP1_U);
+		    DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_U,1,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_V);
+		    HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_ULmax:
+		    HT_WriteValue(Line_R1,0,DISP1_U);
+		    HT_WriteValue(Line_R1,1,DISP1_L);
+		    DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_UL,1,4, FALSE, 0, TRUE, FALSE);
+		    HT_WriteUnit(TRUE,PH_B,DISP_UNIT_V);
+		    HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_Imax:
+            HT_WriteValue(Line_R1,0,DISP1_I);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_I,3,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_A);
+            HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_Pmax:
+            HT_WriteValue(Line_R1,0,DISP1_p);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_P,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_w);
+            HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_Qmax:
+            HT_WriteValue(Line_R1,0,DISP1_q);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_Q,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_var);
+            HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_Smax:
+            HT_WriteValue(Line_R1,0,DISP1_s);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Max_S,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_VA);
+            HT_WriteMax(IndexMax, TRUE);
+            break;
+        case MENU_INDEX_Time:
+            DispTime();
+            break;
+        case MENU_INDEX_DemP:
+            Reset_Screen();
+            /**************标签页********************************************************/
+		    HT_WriteValue(Line_R5,0,DISP1_d);           // 需量
+            HT_WriteValue(Line_R5,1,DISP1_E);
+		    HT_WriteValue(Line_R5,2,DISP1_M);
+		    /*****************************************************************************/
+            HT_WriteValue(Line_R1,0,DISP1_p);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Dem_P,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_w);
+            HT_WriteMax(IndexMax, TRUE);
+            DispValue(4,RealTimeDemP,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteValue(Line_R41,R4_L0,CHAR_R);
+            HT_WriteValue(Line_R41,R4_L1,CHAR_P);
+            break;
+        case MENU_INDEX_DemQ:
+            /**************标签页********************************************************/
+		    HT_WriteValue(Line_R5,0,DISP1_d);           // 需量
+            HT_WriteValue(Line_R5,1,DISP1_E);
+		    HT_WriteValue(Line_R5,2,DISP1_M);
+		    /*****************************************************************************/
+            HT_WriteValue(Line_R1,0,DISP1_q);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_var);
+            HT_WriteMax(IndexMax, TRUE);
+            DispValue(4,RealTimeDemQ,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteValue(Line_R41,R4_L0,CHAR_R);
+            HT_WriteValue(Line_R41,R4_L1,CHAR_q);
+            break;
+        case MENU_INDEX_DemS:
+            /**************标签页********************************************************/
+		    HT_WriteValue(Line_R5,0,DISP1_d);           // 需量
+            HT_WriteValue(Line_R5,1,DISP1_E);
+		    HT_WriteValue(Line_R5,2,DISP1_M);
+		    /*****************************************************************************/
+            HT_WriteValue(Line_R1,0,DISP1_s);
+            DispValue(1,vg_DemMax_Val[SoeIndex.MaxIndex].Dem_S,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteUnit(TRUE,PH_B,DISP_UNIT_VA);
+            HT_WriteMax(IndexMax, TRUE);
+            DispValue(4,RealTimeDemS,0,4, FALSE, 0, TRUE, FALSE);
+            HT_WriteValue(Line_R41,R4_L0,CHAR_R);
+            HT_WriteValue(Line_R41,R4_L1,CHAR_S);
+            break;
 		default :
 			break;
 	}
@@ -4669,6 +4923,10 @@ void DispMenu_Menu3(void) //三级界面
     				    break;
     				case MENU2_3_INDEX_CLRE:
     					HT_Write4Value(1,DISP_C,DISP_L,DISP_r,DISP_E);
+    					HT_WriteDot(1,2,TRUE);
+    				    break;
+    				case MENU2_3_INDEX_DEMCLRE:
+    					HT_Write4Value(1,DISP_C,DISP_L,DISP_r,DISP_d);
     					HT_WriteDot(1,2,TRUE);
     				    break;
     				case MENU2_3_INDEX_CODE:
@@ -8016,7 +8274,7 @@ void DispMenu_MenuValue(void) //4级菜单
 					CharToNumber();
 				    break;
 				case MENU2_3_INDEX_T:
-				    DispSetTime(g_ReadTime);
+				    DispSetTime(g_SetTimeOnce);
 				    break;
 				case MENU2_3_INDEX_DISP:
 					HT_Write4Value(1,DISP_d,DISP_I,DISP_s,DISP_p);
@@ -8052,6 +8310,25 @@ void DispMenu_MenuValue(void) //4级菜单
 				    break;
 				case MENU2_3_INDEX_CLRE:
 					HT_Write4Value(1,DISP_C,DISP_L,DISP_r,DISP_E);
+					HT_WriteDot(1,2,TRUE);
+
+                    if(sg_DispSetValue == SaveYes)
+					{
+                        if(!sg_bSetFlashEnable)
+                			HT_Write4Value(2,DISP_NC,DISP_Y,DISP_E,DISP_s);
+                		else
+                			HT_Write4Value(2,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+					}
+					else if( sg_DispSetValue == SaveNO)
+					{
+                        if(!sg_bSetFlashEnable)
+                			HT_Write4Value(2,DISP_NC,DISP_NC,DISP_n,DISP_o);
+                		else
+                			HT_Write4Value(2,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+					}
+				    break;
+				case MENU2_3_INDEX_DEMCLRE:
+					HT_Write4Value(1,DISP_C,DISP_L,DISP_r,DISP_d);
 					HT_WriteDot(1,2,TRUE);
 
                     if(sg_DispSetValue == SaveYes)
@@ -10504,7 +10781,7 @@ void DispMenu_MenuValue(void) //4级菜单
                                 HT_Write4Value(2,DISP_p,DISP_F,DISP_NC,DISP_NC);
                                 break;
                             case AO_ITEM_F:
-                                HT_Write4Value(2,DISP_d,DISP_3,DISP_FU,DISP_1);
+                                HT_Write4Value(2,DISP_F,DISP_NC,DISP_NC,DISP_NC);
                                 break;
                             default:
                                 break;
@@ -10721,7 +10998,7 @@ void DispMenu_MenuValue(void) //4级菜单
                                 HT_Write4Value(2,DISP_p,DISP_F,DISP_NC,DISP_NC);
                                 break;
                             case AO_ITEM_F:
-                                HT_Write4Value(2,DISP_d,DISP_3,DISP_FU,DISP_1);
+                                HT_Write4Value(2,DISP_F,DISP_NC,DISP_NC,DISP_NC);
                                 break;
                             default:
                                 break;
@@ -11566,20 +11843,21 @@ void UpdataSetValue(UPDATA_DIR Updata_Dir)  //更新数值
 
 void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //更新数值
 {
-	u16 tmpData[12] = {0};
+	u16 tmpData[13] = {0};
 
-    tmpData[0] = g_ReadTime.Second/16;
-    tmpData[1] = g_ReadTime.Second%16;
-    tmpData[2] = g_ReadTime.Minute/16;
-    tmpData[3] = g_ReadTime.Minute%16;
-    tmpData[4] = g_ReadTime.Hour/16;
-    tmpData[5] = g_ReadTime.Hour%16;
-    tmpData[6] = g_ReadTime.Date.Day/16;
-    tmpData[7] = g_ReadTime.Date.Day%16;
-    tmpData[8] = g_ReadTime.Date.Month/16;
-    tmpData[9] = g_ReadTime.Date.Month%16;
-    tmpData[10] = g_ReadTime.Date.Year/16;
-    tmpData[11] = g_ReadTime.Date.Year%16;
+    tmpData[0] = g_SetTimeOnce.Second/16;
+    tmpData[1] = g_SetTimeOnce.Second%16;
+    tmpData[2] = g_SetTimeOnce.Minute/16;
+    tmpData[3] = g_SetTimeOnce.Minute%16;
+    tmpData[4] = g_SetTimeOnce.Hour/16;
+    tmpData[5] = g_SetTimeOnce.Hour%16;
+    tmpData[6] = g_SetTimeOnce.Date.Day/16;
+    tmpData[7] = g_SetTimeOnce.Date.Day%16;
+    tmpData[8] = g_SetTimeOnce.Date.Month/16;
+    tmpData[9] = g_SetTimeOnce.Date.Month%16;
+    tmpData[10] = g_SetTimeOnce.Date.Year/16;
+    tmpData[11] = g_SetTimeOnce.Date.Year%16;
+    tmpData[12] = g_SetTimeOnce.Date.Week;
 
     switch(Disp_FocusT.CurrentFocus)
     {
@@ -11604,63 +11882,92 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //更新数值
     			tmpData[3] = 0;
     		}
     		break;
-        case 3:                    //分 十位
+        case 3:                     //分 十位
             tmpData[2] += 1;
     		if (tmpData[2] == 6)
     		{
     			tmpData[2] = 0;
     		}
     		break;
-        case 4:                    //时 个位
+        case 4:                     // 时 个位
             tmpData[5] += 1;
     		if (tmpData[5] == 10)
     		{
     			tmpData[5] = 0;
     		}
     		break;
-        case 5:                    //时 十位
+        case 5:                     // 时 十位
             tmpData[4] += 1;
-    		if (tmpData[4] == 3)
+    		if (tmpData[4] >= 3)    // 时 的 十位 在默认情况下可能大于3
     		{
     			tmpData[4] = 0;
     		}
     		break;
-        case 6:                    //日 个位
+        case 6:                     // 星期 个位
+            switch(tmpData[12])
+            {
+                case 0x01:
+                    tmpData[12] = 0x02;     // 周一
+                    break;
+                case 0x02:
+                    tmpData[12] = 0x04;     // 周二
+                    break;
+                case 0x04:
+                    tmpData[12] = 0x08;     // 周三
+                    break;
+                case 0x08:
+                    tmpData[12] = 0x10;     // 周四
+                    break;
+                case 0x10:
+                    tmpData[12] = 0x20;     // 周五
+                    break;
+                case 0x20:
+                    tmpData[12] = 0x40;     // 周六     
+                    break;
+                case 0x40:
+                    tmpData[12] = 0x01;     // 周日
+                    break;
+                default:
+                    tmpData[12] = 0x01;
+                    break;
+            }
+    		break;
+        case 7:                    //日 个位
             tmpData[7] += 1;
     		if (tmpData[7] == 10)
     		{
     			tmpData[7] = 0;
     		}
     		break;
-        case 7:                    //日 十位
+        case 8:                    //日 十位
             tmpData[6] += 1;
     		if (tmpData[6] == 4)
     		{
     			tmpData[6] = 0;
     		}
     		break;
-    	case 8:                    //月 个位
+    	case 9:                    //月 个位
             tmpData[9] += 1;
     		if (tmpData[9] == 10)
     		{
     			tmpData[9] = 0;
     		}
     		break;
-        case 9:                    //月 十位
+        case 10:                    //月 十位
             tmpData[8] += 1;
     		if (tmpData[8] == 2)
     		{
     			tmpData[8] = 0;
     		}
     		break;
-    	case 10:                    //年 个位
+    	case 11:                    //年 个位
             tmpData[11] += 1;
     		if (tmpData[11] == 10)
     		{
     			tmpData[11] = 0;
     		}
     		break;
-        case 11:                    //年 十位
+        case 12:                    //年 十位
             tmpData[10] += 1;
     		if (tmpData[10] == 10)
     		{
@@ -11671,12 +11978,13 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //更新数值
     	    break;
     }
 
-	g_ReadTime.Second = tmpData[0]*16 + tmpData[1];
-    g_ReadTime.Minute = tmpData[2]*16 + tmpData[3];
-    g_ReadTime.Hour   = tmpData[4]*16 + tmpData[5];
-    g_ReadTime.Date.Day   = tmpData[6]*16 + tmpData[7];
-    g_ReadTime.Date.Month = tmpData[8]*16 + tmpData[9];
-    g_ReadTime.Date.Year  = tmpData[10]*16 + tmpData[11];
+	g_SetTimeOnce.Second = tmpData[0]*16 + tmpData[1];
+    g_SetTimeOnce.Minute = tmpData[2]*16 + tmpData[3];
+    g_SetTimeOnce.Hour   = tmpData[4]*16 + tmpData[5];
+    g_SetTimeOnce.Date.Week = tmpData[12];
+    g_SetTimeOnce.Date.Day   = tmpData[6]*16 + tmpData[7];
+    g_SetTimeOnce.Date.Month = tmpData[8]*16 + tmpData[9];
+    g_SetTimeOnce.Date.Year  = tmpData[10]*16 + tmpData[11];
 }
 
 void UpdataOrSetValue(SELECT_CATE Cate,UPDATA_DIR Updata_Dir)//更新数值 or

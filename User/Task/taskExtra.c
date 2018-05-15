@@ -1141,7 +1141,7 @@ void OutHandler_First(void)
             DoutRecord[SoeIndex.DoutRecordIndex].Kind = 0x01;
             DoutRecord[SoeIndex.DoutRecordIndex].FormerStatus = g_Out_Status_Back[0];
             DoutRecord[SoeIndex.DoutRecordIndex].NowStatus = g_Out_Status[0];
-            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO1_Item;
+            DoutRecord[SoeIndex.DoutRecordIndex].WarmIndex = g_tParam.CtrlParam.DO1_Item << 8;
             vModeBus_SetSoeData(0x01);
             SoeIndex.DoutRecordIndex++;
             if(SoeIndex.DoutRecordIndex >= 40)

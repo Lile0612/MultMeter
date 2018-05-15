@@ -249,6 +249,16 @@ enum EMLCD_DISP_CAPTYPE
 	DISP_CAPTYPE_DELTA = 2,
 	DISP_CAPTYPE_STAR = 3,
 };
+
+enum emLCD_DISP_Max
+{
+	IndexMax = 0x00,
+	IndexMin = 0x01,
+	IndexAvg = 0x02,
+	IndexCom = 0x03,
+	IndexWarm = 0x04,
+};
+
 /* Exported functions ------------------------------------------------------- */
 u8 HT_Data_Index(unsigned char data);
 void HT_LedStatus(BOOL bStatus);
@@ -258,6 +268,7 @@ void HT_WriteValue(unsigned char row,unsigned char col,unsigned char Value);
 void HT_Write4Value(u8 row,u8 tmp1,u8 tmp2,u8 tmp3,u8 tmp4);
 void HT_WriteDot(unsigned char row,unsigned char col,unsigned char Value);
 void HT_WriteColon(unsigned char index,unsigned char Value);
+void HT_WriteMax(unsigned char index,unsigned char Value);
 void HT_TEST(void);
 void HT_WriteNegative(unsigned char row,unsigned char Value);
 void HT_WriteTimeDot(BOOL bDisp, unsigned char Row_Value);

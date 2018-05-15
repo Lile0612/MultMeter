@@ -1,3 +1,26 @@
+/*! @file
+********************************************************************************
+<PRE>
+模 块 名     : 铁电读取写入程序（MB85RC16/04）
+文 件 名     : drvFram.c
+相关文件      :
+文件实现功能 :
+作者         : < 612 >
+版本         : 1.0
+--------------------------------------------------------------------------------
+备注         : 数显表
+--------------------------------------------------------------------------------
+修改记录 :
+  日 期        版本      修改人         修改内容
+2018/05/22   1.0    < 612 >        创建
+
+</PRE>
+********************************************************************************
+
+  * 版权所有(c) YYYY, <xxxx>, 保留所有权利
+
+*******************************************************************************/
+
 
 /* Includes--------------------------------------------------------------*/
 #include "Include.h"
@@ -158,7 +181,8 @@ u8 MyI2C_ReceiveByte(u8 last_char)
 #define FRAM_Index_ADDR      (0x00000022)    // Di  标签
 #define FRAM_INDEX_SIZE	              8    // 最大参数长度 标签页
 
-
+#define FRAM_MaxDem_SIZE	             300    // 最大值参数长度
+#define FRAM_MaxDem_ADDR      (0x00000410)      // 最大值记录地址
 
 /********************************************************/
 
@@ -198,6 +222,17 @@ u16 FramIndex_Crc(u8 *pData)
 	return Crc;
 }
 
+u16 FramMax_Crc(u8 *pData)
+{
+	u16 Crc = 0;
+	u16 Counter = 0;
+	for (Counter = 0; Counter < FRAM_MaxDem_SIZE-2; Counter++)
+	{
+		Crc += *(pData+Counter);
+	}
+    Crc = Crc & 0xff;
+	return Crc;
+}
 
 /**
   * @brief  写数据
@@ -471,6 +506,50 @@ void FRAM_DoRecordRead(void)
 	}
 }
 
+//===================================================================
+//Max 需量数据写入
+void FRAM_MaxDemWrite(void)
+{
+	WRITE_UNPROTECT;
+	u8 FramWriteMax[FRAM_MaxDem_SIZE];
+	u16 Size = 0;
+	u16 CrcSum = 0;
+	u8 *pData;
+
+	memset((u8 *)&FramWriteMax, 0xFF, FRAM_MaxDem_SIZE);
+	Size = sizeof(DemMaxStructure)*4;                       // 每周记录一次 四周 
+	memcpy((u8 *)&FramWriteMax, (u8 *)&vg_DemMax_Val[0], Size);
+
+	pData = (u8 *)&FramWriteMax[0];
+	CrcSum= FramMax_Crc(pData);
+	pData += (FRAM_MaxDem_SIZE-2);
+	memcpy(pData, (u8 *)&CrcSum, 2);
+	FRAM_I2C_WriteData(FRAM_MaxDem_ADDR, FramWriteMax, FRAM_MaxDem_SIZE);
+	WRITE_PROTECT;
+}
+void FRAM_MaxDemRead(void)
+{
+    u8 FramReadMax[FRAM_MaxDem_SIZE];
+    for(u16 i =0;i<FRAM_MaxDem_SIZE;i++)
+    {
+        FramReadMax[i] = 0;
+    }
+	u16 Size = 0;
+	u16 Crc = 0;
+
+	FRAM_I2C_ReadData(FRAM_MaxDem_ADDR, FramReadMax, FRAM_MaxDem_SIZE);
+	Crc = FramMax_Crc(FramReadMax);
+	if (Crc == FLIPW(&FramReadMax[FRAM_MaxDem_SIZE-2]))  //CRC验证 读取是否出错
+    {
+		Size = sizeof(DemMaxStructure)*4;
+		memcpy((u8 *)&vg_DemMax_Val[0], (u8 *)&FramReadMax[0], Size);
+	}
+	else // 失败，把当前数据写入EEPROM
+	{
+		//Size = sizeof(Energy_Memory);
+		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
+	}
+}
 
 /*
 void FRAM_Erase_Chip(void)

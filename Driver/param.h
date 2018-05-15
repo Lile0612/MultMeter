@@ -125,6 +125,7 @@ __packed typedef struct
     float NegEPT;
     float PosEQT;
     float NegEQT;
+    float EST;
 }Energy_Memory;
 
 /* 全局参数 */

@@ -12,9 +12,12 @@ static u8 RN8302WR(RegStructure *dat);
 static u8 RN8302RD(RegStructure *dat);
 static void RN8302Init(void);
 u32 CheckSum;
+BOOL MaxFramWriteEnble = FALSE;
 POWER2_ValStruct vg_Power_Val;
 POWER22_ValStruct vg_Power2_Val;
 POWER2_Read_ValStruct vg_Read_Val;
+DemMaxStructure vg_DemMax_Val[4];        // 需量 最大值
+
 
 //struct RN_AnalogData g_AnalogData;
 /******************************************************************************
@@ -67,6 +70,7 @@ Full_wave_data Fullwave_data =
     .EQt = {bank0, 0x3F, 3, RO, 0},
     .PosEQt = {bank0, 0x43, 3, RO, 0},
     .NegEQt = {bank0, 0x47, 3, RO, 0},
+    .ESt = {bank0, 0x4B, 3, RO, 0},
 };
 /******************************************************************************
 
@@ -991,6 +995,13 @@ void RN8032_Updata(void)
 
             RtuPrimaryData[Index_1_Ua + ph] = vg_Power_Val.Real2_Val[ph].U/100;
             RtuSecondaryData[Index_2_Ua + ph] = vg_Power2_Val.Real22_Val[ph].U;
+            // Max
+            if((vg_Power2_Val.Real22_Val[ph].U > vg_DemMax_Val[SoeIndex.MaxIndex].Max_U) && (g_MaxDemEnable == TRUE))
+            {
+                vg_DemMax_Val[SoeIndex.MaxIndex].Max_U = vg_Power2_Val.Real22_Val[ph].U;
+                vg_DemMax_Val[SoeIndex.MaxIndex].mUTime = g_SOETime;
+                MaxFramWriteEnble = TRUE;
+            }
         }
         /*------ 相电流 ------*/
         if(RN8302RD(&Fullwave_data.I[ph]))
@@ -1010,6 +1021,13 @@ void RN8032_Updata(void)
 
             RtuPrimaryData[Index_1_Ia + ph] = vg_Power_Val.Real2_Val[ph].I/10000;
             RtuSecondaryData[Index_2_Ia + ph] = vg_Power2_Val.Real22_Val[ph].I;
+            // Max
+            if((vg_Power2_Val.Real22_Val[ph].I > vg_DemMax_Val[SoeIndex.MaxIndex].Max_I) && (g_MaxDemEnable == TRUE))
+            {
+                vg_DemMax_Val[SoeIndex.MaxIndex].Max_I = vg_Power2_Val.Real22_Val[ph].I;
+                vg_DemMax_Val[SoeIndex.MaxIndex].mITime = g_SOETime;
+                MaxFramWriteEnble = TRUE;
+            }
         }
         /*------ 功率因数 ------*/
         if(RN8302RD(&Fullwave_data.Pf[ph]))  //最高位为有功功率符号位
@@ -1246,10 +1264,18 @@ void RN8032_Updata(void)
     vg_Power2_Val.Real22_Val[1].LineU = (int)(vg_Power2_Val.Real22_Val[1].LineU /g_tParam.CtrlParam.PTNum);
     vg_Power2_Val.Real22_Val[2].LineU = (int)(vg_Power2_Val.Real22_Val[2].LineU /g_tParam.CtrlParam.PTNum);
 
-    for(u8 j=0; j<3; j++)
+    for(u8 jIndex=0; jIndex<3; jIndex++)
     {
-        RtuPrimaryData[Index_1_Uab + j] = vg_Power_Val.Real2_Val[j].LineU/100;
-        RtuSecondaryData[Index_2_Uab + j] = vg_Power2_Val.Real22_Val[j].LineU;
+        RtuPrimaryData[Index_1_Uab + jIndex] = vg_Power_Val.Real2_Val[jIndex].LineU/100;
+        RtuSecondaryData[Index_2_Uab + jIndex] = vg_Power2_Val.Real22_Val[jIndex].LineU;
+
+        // Max
+        if((vg_Power2_Val.Real22_Val[jIndex].LineU > vg_DemMax_Val[SoeIndex.MaxIndex].Max_UL) && (g_MaxDemEnable == TRUE))
+        {
+            vg_DemMax_Val[SoeIndex.MaxIndex].Max_UL = vg_Power2_Val.Real22_Val[jIndex].LineU;
+            vg_DemMax_Val[SoeIndex.MaxIndex].mULTime = g_SOETime;
+            MaxFramWriteEnble = TRUE;
+        }
     }
 
     /*if(vg_Power_Val.Real2_Val[PH_B].I < 50)
@@ -1412,6 +1438,13 @@ void RN8032_Updata(void)
             vg_Power_Val.St = ftemp * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
             vg_Power2_Val.St = (int)(ftemp/10);
         }
+        // Max
+        if((vg_Power2_Val.St > vg_DemMax_Val[SoeIndex.MaxIndex].Max_S) && (g_MaxDemEnable == TRUE))
+        {
+            vg_DemMax_Val[SoeIndex.MaxIndex].Max_S = vg_Power2_Val.St;
+            vg_DemMax_Val[SoeIndex.MaxIndex].mSTime = g_SOETime;
+            MaxFramWriteEnble = TRUE;
+        }
     }
     /*------ 总功率因素 ------*/
     if(RN8302RD(&Fullwave_data.Pft))
@@ -1442,11 +1475,25 @@ void RN8032_Updata(void)
             vg_Power_Val.Pt = -vg_Power_Val.Pt;
             vg_Power2_Val.Pt = -vg_Power2_Val.Pt;
         }
+		// Max
+		if((vg_Power2_Val.Pt > vg_DemMax_Val[SoeIndex.MaxIndex].Max_P) && (g_MaxDemEnable == TRUE))
+		{
+			vg_DemMax_Val[SoeIndex.MaxIndex].Max_P = vg_Power2_Val.Pt;
+			vg_DemMax_Val[SoeIndex.MaxIndex].mPTime = g_SOETime;
+			MaxFramWriteEnble = TRUE;
+		}
         if(Direct & (0x0001 << 7)) // 无功为负
         {
             vg_Power_Val.Qt = -vg_Power_Val.Qt;
             vg_Power2_Val.Qt = -vg_Power2_Val.Qt;
         }
+		// Max
+		if((vg_Power2_Val.Qt > vg_DemMax_Val[SoeIndex.MaxIndex].Max_Q) && (g_MaxDemEnable == TRUE))
+		{
+			vg_DemMax_Val[SoeIndex.MaxIndex].Max_Q = vg_Power2_Val.Qt;
+			vg_DemMax_Val[SoeIndex.MaxIndex].mQTime = g_SOETime;
+			MaxFramWriteEnble = TRUE;
+		}
         /*==========================N33 计算================================*/
         if(g_tParam.CtrlParam.NetMode == N33)
         {
@@ -1555,23 +1602,28 @@ void RN8032_Updata(void)
     if(RN8302RD(&Fullwave_data.PosEPt))   // 正向有功电能
     {
         ElectricEnergy.PosEPT += ((float)Fullwave_data.PosEPt.data)/3200 * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
-        vg_Power2_Val.PosEPT = (int)(ElectricEnergy.PosEPT*1000);
+        vg_Power2_Val.PosEPT = (u32)(ElectricEnergy.PosEPT*1000/g_tParam.CtrlParam.CTNum / g_tParam.CtrlParam.PTNum);
     }
-     ElectricEnergy.PosEPT = 12345678;  // test
     if(RN8302RD(&Fullwave_data.PosEQt))   // 正向无功电能
     {
         ElectricEnergy.PosEQT += ((float)Fullwave_data.PosEQt.data)/3200 * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
-        vg_Power2_Val.PosEQT = (int)(ElectricEnergy.PosEQT*1000);
+        vg_Power2_Val.PosEQT = (u32)(ElectricEnergy.PosEQT*1000/g_tParam.CtrlParam.CTNum / g_tParam.CtrlParam.PTNum);
     }
     if(RN8302RD(&Fullwave_data.NegEPt))   // 反向有功电能
     {
         ElectricEnergy.NegEPT += ((float)Fullwave_data.NegEPt.data/3200) * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
-        vg_Power2_Val.EPT = (int)(ElectricEnergy.NegEPT * 1000);
+        vg_Power2_Val.EPT = (u32)(ElectricEnergy.NegEPT * 1000/g_tParam.CtrlParam.CTNum / g_tParam.CtrlParam.PTNum);
     }
     if(RN8302RD(&Fullwave_data.NegEQt))   // 反向无功电能
     {
         ElectricEnergy.NegEQT += ((float)Fullwave_data.NegEQt.data/3200) * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
-        vg_Power2_Val.EQT = (int)(ElectricEnergy.NegEQT * 1000);
+        vg_Power2_Val.EQT = (u32)(ElectricEnergy.NegEQT * 1000/g_tParam.CtrlParam.CTNum / g_tParam.CtrlParam.PTNum);
+    }
+
+    if(RN8302RD(&Fullwave_data.ESt))   // S电能
+    {
+        ElectricEnergy.EST += ((float)Fullwave_data.ESt.data)/3200 * g_tParam.CtrlParam.CTNum * g_tParam.CtrlParam.PTNum;
+        vg_Power2_Val.EST = (u32)(ElectricEnergy.EST*1000/g_tParam.CtrlParam.CTNum / g_tParam.CtrlParam.PTNum);
     }
 
     RtuPrimaryData[Index_1_PEPT] = ElectricEnergy.PosEPT;
@@ -1590,6 +1642,15 @@ void RN8032_Updata(void)
 
     RtuSecondaryData[Index_2_NEQT] = DWORD_HI(vg_Power2_Val.EQT);
     RtuSecondaryData[Index_2_NEQT + 1] = DWORD_LO(vg_Power2_Val.EQT);
+
+    RtuSecondaryData[Index_2_EST] = DWORD_HI(vg_Power2_Val.EST);
+    RtuSecondaryData[Index_2_EST + 1] = DWORD_LO(vg_Power2_Val.EST);
+
+    if(MaxFramWriteEnble == TRUE)
+    {
+        FRAM_MaxDemWrite();
+        MaxFramWriteEnble = FALSE;
+    }
 
     if(g_tParam.CtrlParam.AdjustFinishFlag == TRUE)
     {
@@ -2308,7 +2369,7 @@ u8 fnDl645Fft_DataCmp(u8 Channel)
 			break;
 		case 0x02:
 			if(vg_Power_Val.Real2_Val[2].U< 100)
-			{
+			{ 
 			    Btemp=0;
 			    for(i = 0;i<51;i++)
 			    {
