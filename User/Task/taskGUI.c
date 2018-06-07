@@ -220,10 +220,11 @@ enum emMENU_MAIN_INDEX
 
 enum emMENU_SUBMAIN_INDEX
 {
-	MENUSUB_INDEX_READ	= 0x00, // µÁ¡˜
+	MENUSUB_INDEX_READ	= 0x00, // ‘ƒ∂¡
 	MENUSUB_INDEX_MIN	= MENUSUB_INDEX_READ,
-	MENUSUB_INDEX_PROG	= 0x01, // ∆µ¬ 
-	MENUSUB_INDEX_MAX	= MENUSUB_INDEX_PROG,
+	MENUSUB_INDEX_PROG	= 0x01, // …Ë÷√
+	MENUSUB_INDEX_RECO	= 0x02, // µÁƒ‹º«¬º
+	MENUSUB_INDEX_MAX	= MENUSUB_INDEX_RECO,
 
 };
 
@@ -245,6 +246,16 @@ enum emMENU_SETMENU1_INDEX
 	MENU1_INDEX_RMAX    = MENU1_INDEX_VER,
 };
 
+// Record_MENU1≤Àµ•À˜“˝
+enum emMENU_Record_1_INDEX
+{
+	MENU1_RECORD_MONTH_LOG	  = 0x00,         // ∞¥‘¬≤È—Ø 
+	MENU1_RECORD_MIN	      = MENU1_RECORD_MONTH_LOG,
+	MENU1_RECORD_USER_DEFINED	= 0x01,       // ◊‘∂®“Â
+	MENU1_RECORD_MAX	      = MENU1_RECORD_USER_DEFINED,
+};
+
+
 // MENU2_1≤Àµ•À˜“˝
 enum emMENU_SETMENU2_1_INDEX
 {
@@ -255,16 +266,49 @@ enum emMENU_SETMENU2_1_INDEX
 	MENU2_1_INDEX_MAX	= MENU2_1_INDEX_CT,
 };
 
+// Record_MENU2_1≤Àµ•À˜“˝
+enum emMENU_Record_2_1_INDEX
+{
+    MENU2_1_RECORD_THIS_MONTH    = 0x00, // ±æ‘¬
+    MENU2_1_RECORD_MIN	= MENU2_1_RECORD_THIS_MONTH,
+    MENU2_1_RECORD_LAST_MONTH	= 0x01, // …œ‘¬
+    MENU2_1_RECORD_LAST_2_MONTH	= 0x02,          // …œ…œ‘¬
+	MENU2_1_RECORD_MAX	= MENU2_1_RECORD_LAST_2_MONTH,
+};
+
 // MENU2_2≤Àµ•À˜“˝
 enum emMENU_SETMENU2_2_INDEX
 {
 	MENU2_2_INDEX_ADD	= 0x00, // Õ®—∂µÿ÷∑
 	MENU2_2_INDEX_MIN	= MENU2_2_INDEX_ADD,
 	MENU2_2_INDEX_BAUD	= 0x01, // ≤®Ãÿ¬ 
-	MENU2_2_INDEX_DATA  = 0x02, //  ˝æ›∏Ò Ω
-	MENU2_2_INDEX_COMS  = 0x03, //  ˝æ›∏Ò Ω
+	MENU2_2_INDEX_DATA   = 0x02, //  ˝æ›∏Ò Ω
+	MENU2_2_INDEX_COMS   = 0x03, //  ˝æ›∏Ò Ω
 	MENU2_2_INDEX_MAX	= MENU2_2_INDEX_COMS,
 };
+
+// Record_MENU2_2≤Àµ•À˜“˝
+enum emMENU_Record_2_2_INDEX
+{
+	MENU2_2_RECORD_SA_TIME    = 0x00, // ∆ º ±º‰
+    MENU2_2_RECORD_MIN	= MENU2_2_RECORD_SA_TIME,
+    MENU2_2_RECORD_SP_TIME    = 0x01, // ÷’÷π ±º‰
+    MENU2_2_RECORD_Diff   = 0x02, // ≤Ó÷µ
+	MENU2_2_RECORD_MAX	= MENU2_2_RECORD_Diff,
+};
+
+// Record_MENU3_2≤Àµ•À˜“˝
+enum emMENU_Record_3_2_INDEX
+{
+	MENU3_2_RECORD_EPT   = 0x00, 
+    MENU3_2_RECORD_MIN	= MENU3_2_RECORD_EPT,
+    MENU3_2_RECORD_NPT   = 0x01, 
+    MENU3_2_RECORD_EQT = 0x02, 
+    MENU3_2_RECORD_NQT = 0x03, 
+	MENU3_2_RECORD_MAX	= MENU3_2_RECORD_NQT,
+};
+
+
 
 // MENU2_3≤Àµ•À˜“˝
 enum emMENU_SETMENU2_3_INDEX
@@ -385,7 +429,18 @@ void DispMenu_MenuCode(void);     // √‹¬Îœ‘ æ
 void DispMenu_MenuCodeErr(void);  // √‹¬Î¥ÌŒÛœ‘ æ
 void DispMenu_MenuSave(void);      // ƒ£ Ω—°‘ÒΩÁ√Ê
 void GetSetTime(void);
+void SetRecordTime(TimeYMDStruct ReData,UPDATA_DIR Updata_Dir,u8 kind);
 void UpdataSetTimeValue(UPDATA_DIR Updata_Dir);
+u8 JudgeNewRecordData(u8 pNewValue,u8 MinValue, u8 MaxValue);
+
+
+
+// ≤È—Øƒ£ Ωœ‘ æ∫Ø ˝
+void DispMenu_Record_1(void); // —°‘Ò≤È—Øƒ£ Ω
+void DispMenu_Record_2(void); // œ‘ æ‘¬ …œ‘¬ …œ…œ‘¬            // ∆ º»’∆⁄       ÷’µ„»’∆⁄
+void DispMenu_Record_3(void); // …Ë÷√∆ º»’∆⁄         …Ë÷√÷’µ„»’∆⁄
+void DispMenu_Record_4(void);           // œ‘ æ≤È—Ø≤Ó÷µ
+u8 CalculateMonthEnergy(u8 ThisMonth);
 
 // ”Î±‰¡øKey_Tab––∂‘”¶
 #define KEYFUNC_MAIN        0 // œ‘ æ÷˜≤Àµ•
@@ -396,6 +451,13 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir);
 #define KEYFUNC_MENUCODE	5 // √‹¬Î ‰»ÎΩÁ√Ê
 #define KEYFUNC_MENUCODEERR	6 // √‹¬Î ‰»Î¥ÌŒÛΩÁ√Ê
 #define KEYFUNC_MENUSAVE	7 // ÕÀ≥ˆ±£¥ÊΩÁ√Ê
+
+#define KEYFUNC_Record_1        8   // —°‘Ò≤È—Øƒ£ Ω
+#define KEYFUNC_Record_2	    9   // œ‘ æ‘¬ …œ‘¬ …œ…œ‘¬            // ∆ º»’∆⁄       ÷’µ„»’∆⁄
+#define KEYFUNC_Record_3	    10  // …Ë÷√∆ º»’∆⁄         …Ë÷√÷’µ„»’∆⁄
+#define KEYFUNC_Record_4		11  // œ‘ æ≤Ó÷µ
+
+
 
 void (*KeyFuncPtr)();			// ∞¥º¸π¶ƒ‹÷∏’Î
 
@@ -415,15 +477,18 @@ const KbdTabStruct Key_Tab[]={
 //    |  |  |  Menu
 //    |  |  |  |  Ok   --->π¶ƒ‹∫Ø ˝
 //    |  |  |  |  |       |
-    { 0, 0, 0, 0, 0,(*DispMenu_Main)},  // ¥˝ª˙ª≠√Ê œ‘ æ÷˜≤Àµ•ª≠√Ê
-    { 1, 1, 1, 0, 2,(*DispMenu_Menu1)}, // œ‘ æMENUº¸≥§∞¥…Ë÷√÷µ
-    { 2, 2, 2, 0, 3,(*DispMenu_Menu2)}, // œ‘ æOK…Ë÷√÷µ
-    { 3, 3, 3, 2, 4,(*DispMenu_Menu3)}, // œ‘ æOK…Ë÷√÷µ
-    { 4, 4, 4, 3, 4,(*DispMenu_MenuValue)}, // œ‘ æOK…Ë÷√÷µ
-    { 5, 5, 5, 1, 5,(*DispMenu_MenuCode)},  // œ‘ æ√‹¬Î ‰»ÎΩÁ√Ê
-    { 6, 6, 6, 6, 6,(*DispMenu_MenuCodeErr)}, // œ‘ æ√‹¬Î ‰»ÎΩÁ√Ê
-    { 7, 7, 7, 7, 7,(*DispMenu_MenuSave)}, // ±£¥ÊΩÁ√Ê
-
+    { 0, 0, 0, 0, 0,(*DispMenu_Main)},          // ÷˜ΩÁ√Ê
+    { 1, 1, 1, 0, 2,(*DispMenu_Menu1)},         // read / prog
+    { 2, 2, 2, 0, 3,(*DispMenu_Menu2)},         // ◊”≤Àµ•µ⁄“ª≤„
+    { 3, 3, 3, 2, 4,(*DispMenu_Menu3)},         // ◊”≤Àµ•µ⁄∂˛≤„
+    { 4, 4, 4, 3, 4,(*DispMenu_MenuValue)},         // …Ë÷√÷µ
+    { 5, 5, 5, 1, 5,(*DispMenu_MenuCode)},          // √‹¬Î ‰»ÎΩÁ√Ê
+    { 6, 6, 6, 6, 6,(*DispMenu_MenuCodeErr)},   // √‹¬Î ‰¥ÌΩÁ√Ê
+    { 7, 7, 7, 7, 7,(*DispMenu_MenuSave)},          // ±£¥ÊΩÁ√Ê
+    { 8, 8, 8, 8, 8,(*DispMenu_Record_1)},          // —°‘Ò≤È—Øƒ£ Ω
+    { 9, 9, 9, 9, 9,(*DispMenu_Record_2)},          // œ‘ æ‘¬ …œ‘¬ …œ…œ‘¬            // ∆ º»’∆⁄       ÷’µ„»’∆⁄
+    { 10, 10, 10, 10, 10,(*DispMenu_Record_3)},          // …Ë÷√∆ º»’∆⁄         …Ë÷√÷’µ„»’∆⁄
+    { 11, 11, 11, 11, 11,(*DispMenu_Record_4)},          // œ‘ æ≤Ó÷µ
 };
 
 static u8 DispValueUpDataFlag = FALSE;
@@ -431,9 +496,9 @@ u8 DispMode = ReadMode;
 u8 LEDLEVEL = 0;
 
 static u8 KeyFuncIndex = KEYFUNC_MAIN;
-static u8 sg_DispMainMenuIndex = MENU_INDEX_MIN;              // “™œ‘ æµƒ÷˜≤Àµ•À˜“˝∫≈
+static u8 sg_DispMainMenuIndex = MENU_INDEX_MIN;                // “™œ‘ æµƒ÷˜≤Àµ•À˜“˝∫≈
 static u8 sg_DispSubMainMenuIndex = MENUSUB_INDEX_READ;     // “™œ‘ æµƒ÷˜≤Àµ•À˜“˝∫≈
-static u8 sg_DispSetMenu1Index = MENU1_INDEX_INPT;		    // “™œ‘ æµƒ…Ë÷√“ªº∂À˜“˝∫≈
+static u8 sg_DispSetMenu1Index = MENU1_INDEX_INPT;	        // “™œ‘ æµƒ…Ë÷√“ªº∂À˜“˝∫≈
 static u8 sg_DispSetMenu2_1_Index = MENU2_1_INDEX_MIN;		// “™œ‘ æµƒ2-1≤Àµ•À˜“˝∫≈
 static u8 sg_DispSetMenu2_2_Index = MENU2_2_INDEX_ADD;		// “™œ‘ æµƒ2-2≤Àµ•À˜“˝∫≈
 static u8 sg_DispSetMenu2_3_Index = MENU2_3_INDEX_CYC;		// “™œ‘ æµƒ2-3≤Àµ•À˜“˝∫≈
@@ -443,6 +508,13 @@ static u8 sg_DispSetMenu2_6_Index = MENU2_6_INDEX_MODE;		// “™œ‘ æµƒ2-6≤Àµ•À˜“˝∫
 static u8 sg_DispSetMenu2_7_Index = MENU2_7_INDEX_MODE;		// “™œ‘ æµƒ2-7≤Àµ•À˜“˝∫≈
 static u8 sg_DispSetMenu2_8_Index = MENU2_8_INDEX_MODE;		// “™œ‘ æµƒ2-8≤Àµ•À˜“˝∫≈
 static u8 sg_DispSetMenu2_9_Index = MENU2_9_INDEX_MODE;		// “™œ‘ æµƒ2-9≤Àµ•À˜“˝∫≈
+
+// µÁƒ‹º«¬º
+static u8 sg_DispSetMenu1Record = MENU1_RECORD_MIN;                // µÁƒ‹º«¬º≤È—Ø“ªº∂  ≤Àµ•
+static u8 sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;             // µÁƒ‹º«¬º≤È—Ø∂˛º∂ 1≤Àµ•
+static u8 sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;             // µÁƒ‹º«¬º≤È—Ø∂˛º∂ 2≤Àµ•
+static u8 sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;             // µÁƒ‹º«¬º≤È—Ø»˝º∂ ◊‘∂®“Â1≤Àµ•
+
 
 typedef struct
 {
@@ -463,12 +535,32 @@ static u8 key_status[KEY_NUM];				// µ±«∞∞¥º¸◊¥Ã¨
 static u8 key_Surestatus[KEY_NUM];		    // µ±«∞∞¥º¸◊¥Ã¨
 static u16 key_LongPress_Tick[KEY_NUM];	    // º¸≥§∞¥º∆ ˝÷µ
 
+EnergyRecordStructure FrontEnergyRecord[31];
+EnergyRecordStructure RearEnergyRecord[31];
+EnergyRecordStructure NowEnergyRecord[31];
+
+/* º«¬º≤È—Øœ‘ æ”√ */
+typedef struct
+{ 
+    float ePosEPt;
+    float eNegEPt;
+    float ePosEQt;
+    float eNegEQt;
+} EnReLLLStructure;
+
+EnReLLLStructure L0M_Record;
+EnReLLLStructure L1M_Record;
+EnReLLLStructure L2M_Record;
+EnReLLLStructure DiffEnergy;
+
+
 u8 KeyDiff(void); // ∞¥º¸◊¥Ã¨≈–∂œ
 void DispChar(u8 num,u8 ch1, u8 ch2, u8 ch3, u8 ch4);
 u16 CharToNumber(void);	// ‘⁄œ‘ æ…Ë÷√≤Àµ•÷–µƒ◊÷∑˚ ˝æ›◊™ªªŒ™ ÆΩ¯÷∆ ˝æ›
 void GetSetOldValue(void);
 void UpdataSetValue(UPDATA_DIR Updata_dir);
-void UpdataOrSetValue(SELECT_CATE Cate,UPDATA_DIR Updata_Dir);  //∏¸–¬ ˝÷µ
+void UpdataOrSetValue(SELECT_CATE Cate,UPDATA_DIR Updata_Dir); 
+
 
 volatile u8 vg_Display_Value[16];   // œ‘ æ±£¥Êª∫¥Ê
 
@@ -534,6 +626,22 @@ SysTimeStruct g_DispReadTime;
 SysTimeStruct g_SetTimeOnce;
 TimeYMDHMSStruct g_SOETime;
 
+TimeYMDStruct setDataOne;
+TimeYMDStruct setDataTwo;
+
+TimeYMDStruct setDataOneCalc;
+TimeYMDStruct setDataTwoCalc;
+
+static u8 setDataOneFlag = TRUE;
+static u8 setDataTwoFlag = TRUE;
+static u8 setDataCalcFlag = TRUE;
+static u8 ReadReEnergyFlag = 0x00;
+
+static u8 r_CalcThisMonthFlag = TRUE;
+static u8 r_CalcLastMonthFlag = TRUE;
+static u8 r_CalcLastTwoMonthFlag = TRUE;
+
+u8 DayBack;    // ÃÏ±∏∑›£¨–Ë¡ø°¢◊Ó¥Û÷µ
 u8 WeekBack;    // ÷‹±∏∑›£¨–Ë¡ø°¢◊Ó¥Û÷µ
 u8 HourBack;    // –° ±±∏∑›£¨µÁƒ‹º«¬º π”√ 365 “ªƒÍº«¬º
 
@@ -546,6 +654,8 @@ int sg_MaxDemP[16];
 int sg_MaxDemQ[16];
 int sg_MaxDemS[16];
 
+
+
 /*----------------------------------------------------------------------------*/
 void Gb_SetSysTime(SysTimeStruct ReadTime)
 {
@@ -557,6 +667,14 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
     g_SOETime.Hour      = g_ReadTime.Hour;
     g_SOETime.Minute    = g_ReadTime.Minute;
     g_SOETime.Second    = g_ReadTime.Second;
+
+    g_SetTimeOnce = g_ReadTime;
+    // ≤‚ ‘≥Ã–Ú
+    /* if(g_SOETime.Second == 0x09)
+    {
+        UpdataSetTimeValue(UPDATA_ADD);
+        Write8025TDateTime(g_SetTimeOnce);
+    }*/
 
     if(WeekBack !=  g_DispReadTime.Date.Week)
     {
@@ -572,18 +690,44 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
     }
 	WeekBack = g_DispReadTime.Date.Week;
 
+	// ≤‚ ‘ƒ⁄»›
+	ElectricEnergy.PosEPT = g_ReadTime.Date.Month*1000 + 100 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16; //TEST
+	ElectricEnergy.NegEPT = g_ReadTime.Date.Month*1000 + 200 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+	ElectricEnergy.PosEQT = g_ReadTime.Date.Month*1000 + 300 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+	ElectricEnergy.NegEQT = g_ReadTime.Date.Month*1000 + 400 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+
 	if(HourBack != g_DispReadTime.Hour)
 	{
-        if((HourBack == 23) && (g_DispReadTime.Hour == 0x00))
+        if((HourBack == 0x23) && (g_DispReadTime.Hour == 0x00))
         {
-            SoeIndex.EnergyRecordIndex++;
-            if(SoeIndex.EnergyRecordIndex > 366)
+            DayBack = g_DispReadTime.Date.Day/16*10 + g_DispReadTime.Date.Day%16 -1;
+            NowEnergyRecord[DayBack].EnergyDay.Year = g_DispReadTime.Date.Year;
+            NowEnergyRecord[DayBack].EnergyDay.Month = g_DispReadTime.Date.Month;
+            NowEnergyRecord[DayBack].EnergyDay.Day = g_DispReadTime.Date.Day;
+            NowEnergyRecord[DayBack].ePosEPt = ElectricEnergy.PosEPT;
+            NowEnergyRecord[DayBack].ePosEQt = ElectricEnergy.PosEQT;
+            NowEnergyRecord[DayBack].eNegEPt = ElectricEnergy.NegEPT;
+            NowEnergyRecord[DayBack].eNegEQt = ElectricEnergy.NegEQT;
+            
+            if(SoeIndex.BackMonth != g_DispReadTime.Date.Month)
             {
-                SoeIndex.EnergyRecordIndex = 0;
+                for(u8 k=1; k<31; k++)
+                {
+                    NowEnergyRecord[k].EnergyDay.Year = 0;
+                    NowEnergyRecord[k].EnergyDay.Month = 0;
+                    NowEnergyRecord[k].EnergyDay.Day = 0;
+                    NowEnergyRecord[k].ePosEPt = 0;
+                    NowEnergyRecord[k].ePosEQt = 0;
+                    NowEnergyRecord[k].eNegEPt = 0;
+                    NowEnergyRecord[k].eNegEQt = 0;                             
+                }
             }
+            SoeIndex.BackMonth = g_DispReadTime.Date.Month;
             FRAM_IndexWrite();
+            FRAM_EnergyRecordWrite();
         }
 	}
+	HourBack = g_DispReadTime.Hour;
 }
 
 SysTimeStruct Gb_GetSysTime(void)
@@ -1145,7 +1289,7 @@ void GUI_Timer_On(void)
         }
         else
         {
-            sg_ComFlashNum = 0;
+            sg_AlarmDlyTick = 0;
         }
      }
 }
@@ -1228,6 +1372,24 @@ void GUI_Key_Menu(void)     //≤Àµ•º¸≤Ÿ◊˜
     	    KeyFuncIndex = KEYFUNC_MENU2;
 			sg_DispSetMenu1Index = MENU1_INDEX_INPT;  // √‹¬Î’˝»∑ Ω¯»Î…Ë÷√≤Àµ•
     	    break;
+    	case KEYFUNC_Record_1:
+            KeyFuncIndex = KEYFUNC_MENU1;
+            sg_DispSetMenu1Record = MENU1_RECORD_MIN;                
+            sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;             
+            sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;
+    	    break;
+    	case KEYFUNC_Record_2:
+            KeyFuncIndex = KEYFUNC_Record_1;           
+            sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;             
+            sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;      
+    	    break;
+    	case KEYFUNC_Record_3:
+    	    Disp_FocusT.CurrentFocus = 0;
+            KeyFuncIndex = KEYFUNC_Record_2;
+    	    break;
+    	case KEYFUNC_Record_4:
+            KeyFuncIndex = KEYFUNC_Record_3;      
+    	    break;
         default:
             g_bUpdataDefault = TRUE;
             break;
@@ -1236,10 +1398,15 @@ void GUI_Key_Menu(void)     //≤Àµ•º¸≤Ÿ◊˜
     KeyFuncPtr=Key_Tab[KeyFuncIndex].CurrentOperate;
 }
 
-
 void GUI_Key_Ok(void)
 {
     u8 size;
+    u8 ThisMonthDay1 = 0;
+    u8 ThisMonthDay2 = 0;
+    u8 LastOneMonthDay = 0;
+    u8 LastTwoMonthDay = 0;
+    u8 calcDay1;
+    u8 calcDay2;
 	switch (KeyFuncIndex)
 	{
 		case KEYFUNC_MAIN:
@@ -1258,6 +1425,11 @@ void GUI_Key_Ok(void)
 		    {
 		        DispMode = ReadMode;  // œ‘ æƒ£ Ω±Í÷æŒª
                 KeyFuncIndex = KEYFUNC_MENU2;
+		    }
+		    else if( sg_DispSubMainMenuIndex == MENUSUB_INDEX_RECO)
+		    {
+		        DispMode = RecoMode;  // œ‘ æƒ£ Ω±Í÷æŒª
+                KeyFuncIndex = KEYFUNC_Record_1;
 		    }
 			break;
 		case KEYFUNC_MENU2:
@@ -1348,6 +1520,545 @@ void GUI_Key_Ok(void)
             g_bUpdataDefault = TRUE;
             DispMode = ReadMode;
 		    break;
+		case KEYFUNC_Record_1:
+		    
+  		    ReadReEnergyFlag = 0x00;
+		    KeyFuncIndex = KEYFUNC_Record_2;        //∂¡»°»˝∏ˆ‘¬º«¬º
+		    if(sg_DispSetMenu1Record == MENU1_RECORD_MONTH_LOG)
+		    {
+                for(u8 i = 0; i<31; i++)
+                {
+                    if(NowEnergyRecord[i].EnergyDay.Day == 0)
+                    {
+                        ThisMonthDay1++;    
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                ThisMonthDay2 = g_ReadTime.Date.Day;
+                for(u8 j = g_ReadTime.Date.Day; j>0; j--)
+                {
+                    if(NowEnergyRecord[j].EnergyDay.Day == 0)
+                    {
+                        ThisMonthDay2--;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if(ThisMonthDay1 > ThisMonthDay2)
+                {
+                    r_CalcThisMonthFlag = FALSE;
+                }
+                else
+                {
+                    if(NowEnergyRecord[ThisMonthDay2].ePosEPt >= NowEnergyRecord[ThisMonthDay1].ePosEPt)
+                    {
+                        L0M_Record.ePosEPt = NowEnergyRecord[ThisMonthDay2].ePosEPt - NowEnergyRecord[ThisMonthDay1].ePosEPt;
+                    }
+                    else
+                    {
+                        L0M_Record.ePosEPt = 0;
+                        r_CalcThisMonthFlag = FALSE;
+                    }
+                }
+
+                ReadReEnergyFlag = CalculateMonthEnergy(g_ReadTime.Date.Month);
+                if(ReadReEnergyFlag   & 0x05) // º∆À„…œ‘¬ µÁƒ‹
+                {
+                    L1M_Record.ePosEPt = 0;
+                    L1M_Record.eNegEPt = 0;
+                    L1M_Record.ePosEQt = 0;
+                    L1M_Record.eNegEQt = 0;
+                    r_CalcLastMonthFlag = FALSE;
+                }
+                else 
+                {
+                    for(u8 i = 0; i<31; i++)
+                    {
+                        if(FrontEnergyRecord[i].EnergyDay.Day == 0)
+                        {
+                            LastOneMonthDay++;    
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if(FrontEnergyRecord[LastOneMonthDay].EnergyDay.Day == 0)
+                    {
+                        r_CalcLastMonthFlag = FALSE;
+                    }
+                    else
+                    {
+                        if(r_CalcThisMonthFlag == TRUE)
+                        {
+                            if(NowEnergyRecord[ThisMonthDay1].ePosEPt >= FrontEnergyRecord[LastOneMonthDay].ePosEPt)
+                            {
+                                L1M_Record.ePosEPt = NowEnergyRecord[ThisMonthDay1].ePosEPt - FrontEnergyRecord[LastOneMonthDay].ePosEPt;
+                            }
+                            else
+                            {
+                                L1M_Record.ePosEPt = 0;
+                                r_CalcLastMonthFlag = FALSE;
+                            }
+                        }
+                    }
+                }
+
+                if(ReadReEnergyFlag   & 0x50) // º∆À„…œ…œ‘¬ µÁƒ‹
+                {
+                    L2M_Record.ePosEPt = 0;
+                    L2M_Record.eNegEPt = 0;
+                    L2M_Record.ePosEQt = 0;
+                    L2M_Record.eNegEQt = 0;
+                    r_CalcLastTwoMonthFlag = FALSE;
+                }
+                else // º∆À„…œ…œ‘¬ µÁƒ‹
+                {
+                    for(u8 k = 0; k<31; k++)
+                    {
+                        if(FrontEnergyRecord[k].EnergyDay.Day == 0)
+                        {
+                            LastTwoMonthDay++;    
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if(FrontEnergyRecord[LastTwoMonthDay].EnergyDay.Day == 0)
+                    {
+                        r_CalcLastTwoMonthFlag = FALSE;
+                    }
+                    else
+                    {
+                        if(r_CalcLastMonthFlag == TRUE)
+                        {
+                            if(FrontEnergyRecord[LastOneMonthDay].ePosEPt >= RearEnergyRecord[LastTwoMonthDay].ePosEPt)
+                            {
+                                L2M_Record.ePosEPt = FrontEnergyRecord[LastOneMonthDay].ePosEPt - RearEnergyRecord[LastTwoMonthDay].ePosEPt;
+                            }
+                            else
+                            {
+                                L2M_Record.ePosEPt = 0;
+                                r_CalcLastTwoMonthFlag = FALSE;
+                            }
+                        }
+                    }
+                }            
+		    }
+		    else if(sg_DispSetMenu1Record == MENU1_RECORD_USER_DEFINED)
+		    {
+                __nop();
+                setDataOne.Year = g_ReadTime.Date.Year;
+    		    setDataOne.Month = g_ReadTime.Date.Month;
+    		    setDataOne.Day = g_ReadTime.Date.Day;
+    		    setDataTwo.Year = g_ReadTime.Date.Year;
+    		    setDataTwo.Month = g_ReadTime.Date.Month;
+    		    setDataTwo.Day = g_ReadTime.Date.Day;
+		    }
+		    break;
+		case KEYFUNC_Record_2:
+		    
+		    KeyFuncIndex = KEYFUNC_Record_3; 
+		    if(sg_DispSetMenu1Record == MENU1_RECORD_MONTH_LOG)
+		    {
+                __nop();
+		    }
+		    else if(sg_DispSetMenu1Record == MENU1_RECORD_USER_DEFINED)
+		    {
+		        if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_Diff)
+		        {
+                    setDataCalcFlag  = TRUE;
+                    
+                    calcDay1 = setDataOneCalc.Day/16*10 + setDataOneCalc.Day%16 -1;
+                    calcDay2 = setDataTwoCalc.Day/16*10 + setDataTwoCalc.Day%16 -1;
+                    if((setDataTwoFlag == TRUE) && (setDataOneFlag == TRUE))
+                    {
+                        FRAM_EnergyRecordSeek(FRONTMONTH,setDataOne.Month);
+                        FRAM_EnergyRecordSeek(REARMONTH,setDataTwo.Month);
+
+                        for(u8 i = calcDay1; i<31; i++)
+                        {
+                            if(FrontEnergyRecord[calcDay1].EnergyDay.Day == 0)
+                            {
+                                calcDay1++;    
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if(FrontEnergyRecord[calcDay1].EnergyDay.Day == 0)
+                        {
+                            setDataCalcFlag   = FALSE;
+                        }
+                        for(u8 i = calcDay2; i>0; i--)
+                        {
+                            if(RearEnergyRecord[calcDay2].EnergyDay.Day == 0)
+                            {
+                                calcDay2--;    
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if(RearEnergyRecord[calcDay2].EnergyDay.Day == 0)
+                        {
+                            setDataCalcFlag   = FALSE;
+                        }
+                    }
+                    if(setDataCalcFlag == TRUE)
+                    {
+                        
+                        DiffEnergy.ePosEPt = RearEnergyRecord[calcDay2].ePosEPt 
+                                                    - FrontEnergyRecord[calcDay1].ePosEPt;
+                        DiffEnergy.ePosEQt = RearEnergyRecord[calcDay2].ePosEQt 
+                                                    - FrontEnergyRecord[calcDay1].ePosEQt;
+                        DiffEnergy.eNegEPt = RearEnergyRecord[calcDay2].eNegEPt 
+                                                    - FrontEnergyRecord[calcDay1].eNegEPt;
+                        DiffEnergy.eNegEQt = RearEnergyRecord[calcDay2].eNegEQt 
+                                                    - FrontEnergyRecord[calcDay1].eNegEQt;
+                    }
+                    else
+                    {
+                        DiffEnergy.ePosEPt = 0;
+                        DiffEnergy.eNegEPt = 0;
+                        DiffEnergy.ePosEQt = 0;
+                        DiffEnergy.eNegEQt = 0;
+                    }
+                    break;
+		        }
+		    }
+		    break;
+        case KEYFUNC_Record_3:
+            Disp_FocusT.CurrentFocus = 0;
+            switch(sg_DispSetMenu1Record)
+        	{
+        		case MENU1_RECORD_MONTH_LOG:
+        			switch(sg_DispSetMenu2_1_Record)
+        			{
+        			    case MENU2_1_RECORD_THIS_MONTH:
+                            break;
+        				case MENU2_1_RECORD_LAST_MONTH:
+        				    break;
+        				case MENU2_1_RECORD_LAST_2_MONTH:
+        				    break;
+        				default:
+        				    break;
+        			}
+        		    break;
+                case MENU1_RECORD_USER_DEFINED:
+        			switch(sg_DispSetMenu2_2_Record)
+        			{
+        			    case MENU2_2_RECORD_SA_TIME:
+        			        setDataOneFlag = TRUE;
+        			        KeyFuncIndex = KEYFUNC_Record_2; 
+        			        if(setDataOne.Year < g_ReadTime.Date.Year)
+                            {
+                                setDataOneCalc.Year = JudgeNewRecordData(setDataOne.Year, MIN_Year, MAX_Year);
+                                setDataOneCalc.Month = JudgeNewRecordData(setDataOne.Month, MIN_Month, MAX_Month);
+                                switch(setDataOneCalc.Month)
+                                {
+                                    case 0x01:
+                                    case 0x03:
+                                    case 0x05:
+                                    case 0x07:
+                                    case 0x08:
+                                    case 0x10:
+                                    case 0x12:
+                                        setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day);
+                                        break;
+                                    case 0x04:
+                                    case 0x06:
+                                    case 0x09:
+                                    case 0x11:
+                                        setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day30);
+                                        break;
+                                    case 0x02:
+                                        if((setDataOneCalc.Year%4) ==   0)
+                                        {
+                                            setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day29);
+                                        }
+                                        else
+                                        {
+                                            setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day28);
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            else if(setDataOne.Year == g_ReadTime.Date.Year)
+                            {
+                                if(setDataOne.Month < g_ReadTime.Date.Month)
+                                {
+                                    setDataOneCalc.Year = JudgeNewRecordData(setDataOne.Year, MIN_Year, MAX_Year);
+                                    setDataOneCalc.Month = JudgeNewRecordData(setDataOne.Month, MIN_Month, MAX_Month);
+                                    switch(setDataOneCalc.Month)
+                                    {
+                                        case 0x01:
+                                        case 0x03:
+                                        case 0x05:
+                                        case 0x07:
+                                        case 0x08:
+                                        case 0x10:
+                                        case 0x12:
+                                            setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day);
+                                            break;
+                                        case 0x04:
+                                        case 0x06:
+                                        case 0x09:
+                                        case 0x11:
+                                            setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day30);
+                                            break;
+                                        case 0x02:
+                                            if((setDataOneCalc.Year%4) ==   0)
+                                            {
+                                                setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day29);
+                                            }
+                                            else
+                                            {
+                                                setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day28);
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                else if(setDataOne.Month == g_ReadTime.Date.Month)
+                                {
+                                    if(setDataOne.Day < g_ReadTime.Date.Day)
+                                    {
+                                        setDataOneCalc.Year = JudgeNewRecordData(setDataOne.Year, MIN_Year, MAX_Year);
+                                        setDataOneCalc.Month = JudgeNewRecordData(setDataOne.Month, MIN_Month, MAX_Month);
+                                        switch(setDataOneCalc.Month)
+                                        {
+                                            case 0x01:
+                                            case 0x03:
+                                            case 0x05:
+                                            case 0x07:
+                                            case 0x08:
+                                            case 0x10:
+                                            case 0x12:
+                                                setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day);
+                                                break;
+                                            case 0x04:
+                                            case 0x06:
+                                            case 0x09:
+                                            case 0x11:
+                                                setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day30);
+                                                break;
+                                            case 0x02:
+                                                if((setDataOneCalc.Year%4) ==   0)
+                                                {
+                                                    setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day29);
+                                                }
+                                                else
+                                                {
+                                                    setDataOneCalc.Day = JudgeNewRecordData(setDataOne.Day, MIN_Day, MAX_Day28);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        setDataOneFlag = FALSE;
+                                    }
+                                }
+                                else
+                                {
+                                    setDataOneFlag = FALSE;
+                                }
+                            }
+                            else
+                            {
+                                setDataOneFlag = FALSE;
+                            }
+                            if(setDataOneCalc.Day == 0xff | setDataOneCalc.Month == 0xff | setDataOneCalc.Year == 0xff)
+                            {
+                                setDataOneFlag = FALSE;
+                            }
+                            break;
+        				case MENU2_2_RECORD_SP_TIME:
+        				    setDataTwoFlag = TRUE;
+        				    KeyFuncIndex = KEYFUNC_Record_2; 
+                            if(setDataTwo.Year < g_ReadTime.Date.Year)
+                            {
+                                setDataTwoCalc.Year = JudgeNewRecordData(setDataTwo.Year, MIN_Year, MAX_Year);
+                                setDataTwoCalc.Month = JudgeNewRecordData(setDataTwo.Month, MIN_Month, MAX_Month);
+                                switch(setDataTwoCalc.Month)
+                                {
+                                    case 0x01:
+                                    case 0x03:
+                                    case 0x05:
+                                    case 0x07:
+                                    case 0x08:
+                                    case 0x10:
+                                    case 0x12:
+                                        setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day);
+                                        break;
+                                    case 0x04:
+                                    case 0x06:
+                                    case 0x09:
+                                    case 0x11:
+                                        setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day30);
+                                        break;
+                                    case 0x02:
+                                        if((setDataTwoCalc.Year%4) ==   0)
+                                        {
+                                            setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day29);
+                                        }
+                                        else
+                                        {
+                                            setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day28);
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            else if(setDataTwo.Year == g_ReadTime.Date.Year)
+                            {
+                                if(setDataTwo.Month < g_ReadTime.Date.Month)
+                                {
+                                    setDataTwoCalc.Year = JudgeNewRecordData(setDataTwo.Year, MIN_Year, MAX_Year);
+                                    setDataTwoCalc.Month = JudgeNewRecordData(setDataTwo.Month, MIN_Month, MAX_Month);
+                                    switch(setDataTwoCalc.Month)
+                                    {
+                                        case 0x01:
+                                        case 0x03:
+                                        case 0x05:
+                                        case 0x07:
+                                        case 0x08:
+                                        case 0x10:
+                                        case 0x12:
+                                            setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day);
+                                            break;
+                                        case 0x04:
+                                        case 0x06:
+                                        case 0x09:
+                                        case 0x11:
+                                            setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day30);
+                                            break;
+                                        case 0x02:
+                                            if((setDataTwoCalc.Year%4) ==   0)
+                                            {
+                                                setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day29);
+                                            }
+                                            else
+                                            {
+                                                setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day28);
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                else if(setDataTwo.Month == g_ReadTime.Date.Month)
+                                {
+                                    if(setDataTwo.Day <= g_ReadTime.Date.Day)
+                                    {
+                                        setDataTwoCalc.Year = JudgeNewRecordData(setDataTwo.Year, MIN_Year, MAX_Year);
+                                        setDataTwoCalc.Month = JudgeNewRecordData(setDataTwo.Month, MIN_Month, MAX_Month);
+                                        switch(setDataTwoCalc.Month)
+                                        {
+                                            case 0x01:
+                                            case 0x03:
+                                            case 0x05:
+                                            case 0x07:
+                                            case 0x08:
+                                            case 0x10:
+                                            case 0x12:
+                                                setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day);
+                                                break;
+                                            case 0x04:
+                                            case 0x06:
+                                            case 0x09:
+                                            case 0x11:
+                                                setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day30);
+                                                break;
+                                            case 0x02:
+                                                if((setDataTwoCalc.Year%4) ==   0)
+                                                {
+                                                    setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day29);
+                                                }
+                                                else
+                                                {
+                                                    setDataTwoCalc.Day = JudgeNewRecordData(setDataTwo.Day, MIN_Day, MAX_Day28);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        setDataTwoFlag = FALSE;
+                                    }
+                                }
+                                else
+                                {
+                                    setDataTwoFlag = FALSE;
+                                }
+                            }
+                            else
+                            {
+                                setDataTwoFlag = FALSE;
+                            }
+                            if(setDataTwoCalc.Day == 0xff | setDataTwoCalc.Month == 0xff | setDataTwoCalc.Year == 0xff)
+                            {
+                                setDataTwoFlag = FALSE;
+                            }
+                            // ”Î≤È—Ø ±º‰1∂‘±» »Ù±»1–° ‘Ú∑¢…˙¥ÌŒÛ Err
+                            if(setDataTwo.Year < setDataOne.Year)
+                            {
+                                setDataTwoFlag = FALSE;
+                            }
+                            else if(setDataTwo.Year == setDataOne.Year)
+                            {
+                                if(setDataTwo.Month < setDataOne.Month)
+                                {
+                                    setDataTwoFlag = FALSE;
+                                }
+                                else if(setDataTwo.Month == setDataOne.Month)
+                                {
+                                    if(setDataTwo.Day <= setDataOne.Day)
+                                    {
+                                        setDataTwoFlag = FALSE;
+                                    }
+                                    else
+                                    {
+                                        __nop();
+                                    }
+                                }
+                                else
+                                {
+                                    __nop();
+                                }
+                            }
+                            else
+                            {
+                                __nop();
+                            }
+                            break;
+        				case MENU2_2_RECORD_Diff:
+        				    break;
+        				default:
+        				    break;
+        			}
+        		    break;
+        		default:
+        		    break;
+            }
+            break;
 		default:
             g_bUpdataDefault = TRUE;
 		    break;
@@ -1372,7 +2083,7 @@ void GUI_Key_Up(void)       //◊Û∞¥º¸  µ÷ :ºı»•
 {
     switch (KeyFuncIndex)
 	{
-		case KEYFUNC_MAIN:      //‘⁄÷˜≤Àµ•
+		case KEYFUNC_MAIN:      // ‘⁄÷˜≤Àµ•
             if(g_tParam.CtrlParam.NetMode == N34)
 			{
                 sg_DispMainMenuIndex--;
@@ -1857,6 +2568,85 @@ void GUI_Key_Up(void)       //◊Û∞¥º¸  µ÷ :ºı»•
     	case KEYFUNC_MENUSAVE:
     	    UpdataOrSetValue(Select_Save,UPDATA_ADD);
     	    break;
+    	case KEYFUNC_Record_1:
+            sg_DispSetMenu1Record--;
+			if(sg_DispSetMenu1Record > MENU1_RECORD_MAX)
+			{
+			    sg_DispSetMenu1Record = MENU1_RECORD_MAX;
+            }
+            break;
+        case KEYFUNC_Record_2:
+            if(sg_DispSetMenu1Record == MENU1_RECORD_MONTH_LOG)
+			{
+				sg_DispSetMenu2_1_Record--;
+				if(sg_DispSetMenu2_1_Record > MENU2_1_RECORD_MAX)
+				{
+				    sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MAX;
+                }
+			}
+			else if(sg_DispSetMenu1Record == MENU1_RECORD_USER_DEFINED)
+			{
+				sg_DispSetMenu2_2_Record--;
+				if(sg_DispSetMenu2_2_Record > MENU2_2_RECORD_MAX)
+				{
+				    sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MAX;
+				}
+			}
+            break;
+        case KEYFUNC_Record_3:
+            switch(sg_DispSetMenu1Record)
+        	{
+        		case MENU1_RECORD_MONTH_LOG:
+        			switch(sg_DispSetMenu2_1_Record)
+        			{
+        			    case MENU2_1_RECORD_THIS_MONTH:
+                            break;
+        				case MENU2_1_RECORD_LAST_MONTH:
+        				    break;
+        				case MENU2_1_RECORD_LAST_2_MONTH:
+        				    break;
+        				default:
+        				    break;
+        			}
+        		    break;
+                case MENU1_RECORD_USER_DEFINED:
+        			switch(sg_DispSetMenu2_2_Record)
+        			{
+        			    case MENU2_2_RECORD_SA_TIME:
+                            if(Disp_FocusT.CurrentFocus == 5)
+                            {
+                                Disp_FocusT.CurrentFocus = 0;
+                            }
+                            else
+                            {
+                                Disp_FocusT.CurrentFocus++;
+                            }
+                            break;
+        				case MENU2_2_RECORD_SP_TIME:
+        				    if(Disp_FocusT.CurrentFocus == 5)
+                            {
+                                Disp_FocusT.CurrentFocus = 0;
+                            }
+                            else
+                            {
+                                Disp_FocusT.CurrentFocus++;
+                            }
+        				    break;
+        				case MENU2_2_RECORD_Diff:
+        				    sg_DispSetMenu3_2_Record--;
+                			if(sg_DispSetMenu3_2_Record > MENU3_2_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MAX;
+                			}
+        				    break;
+        				default:
+        				    break;
+        			}
+        		    break;
+        		default:
+        		    break;
+            }
+            break;
 	    default: //∞¥º¸¥ÌŒÛµƒ¥¶¿Ì
             g_bUpdataDefault = TRUE;
     		break;
@@ -2346,6 +3136,45 @@ void GUI_Key_Down(void)  //”“∞¥º¸
 		    break;
     	case KEYFUNC_MENUSAVE:
     	    UpdataOrSetValue(Select_Save,UPDATA_SUB);
+            break;
+        case KEYFUNC_Record_1:
+            sg_DispSetMenu1Record++;
+			if(sg_DispSetMenu1Record > MENU1_RECORD_MAX)
+			{
+			    sg_DispSetMenu1Record = MENU1_RECORD_MIN;
+            }
+            break;
+        case KEYFUNC_Record_2:
+            if(sg_DispSetMenu1Record == MENU1_RECORD_MONTH_LOG)
+			{
+				sg_DispSetMenu2_1_Record++;
+				if(sg_DispSetMenu2_1_Record > MENU2_1_RECORD_MAX)
+				{
+				    sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;
+                }
+			}
+			else if(sg_DispSetMenu1Record == MENU1_RECORD_USER_DEFINED)
+			{
+				sg_DispSetMenu2_2_Record++;
+				if(sg_DispSetMenu2_2_Record > MENU2_2_RECORD_MAX)
+				{
+				    sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;
+				}
+			}
+            break;
+        case KEYFUNC_Record_3:
+            if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_SA_TIME)
+                SetRecordTime(setDataOne,UPDATA_ADD,0x00);
+            else if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_SP_TIME)
+                SetRecordTime(setDataTwo,UPDATA_ADD,0x01);
+            else if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_Diff)
+            {
+                sg_DispSetMenu3_2_Record++;
+    			if(sg_DispSetMenu3_2_Record > MENU3_2_RECORD_MAX)
+    			{
+    			    sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;
+    			}
+            }
             break;
         default: //∞¥º¸¥ÌŒÛµƒ¥¶¿Ì
             g_bUpdataDefault = TRUE;
@@ -3156,7 +3985,7 @@ void DispValueEnergy(float DispNum)
     u32 DispValTmp;
     u32 DispMSBValTmp;
     u32 DispLSBValTmp;
-    if(DispNum < 1000000)  // 123.4w
+    if(DispNum < 1000000)  //
     {
         DispValTmp =  DispNum * 100;
         DispMSBValTmp = DispValTmp/10000;
@@ -3192,6 +4021,49 @@ void DispValueEnergy(float DispNum)
         HT_WriteValue(2,3,DISP_FU);
     }
 }
+
+void DispRecordEnergy(float DispNum)
+{
+    u32 DispValTmp;
+    u32 DispMSBValTmp;
+    u32 DispLSBValTmp;
+    if(DispNum < 1000000)  //
+    {
+        DispValTmp =  DispNum * 100;
+        DispMSBValTmp = DispValTmp/10000;
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(3,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(4,DispLSBValTmp,2,4, FALSE, 0, TRUE, FALSE);
+    }
+    else if((DispNum >= 1000000) && (DispNum < 10000000))
+    {
+        DispValTmp =  DispNum * 10;
+        DispMSBValTmp = DispValTmp/10000;
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(3,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(4,DispLSBValTmp,1,4, FALSE, 0, TRUE, FALSE);
+    }
+    else if((DispNum >= 10000000) && (DispNum < 100000000))
+    {
+        DispValTmp =  DispNum * 1;
+        DispMSBValTmp = DispValTmp/10000; 
+        DispLSBValTmp = DispValTmp%10000;
+        DispValue(3,DispMSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+        DispValue(4,DispLSBValTmp,0,4, FALSE, 0, TRUE, FALSE);
+    }
+    else
+    {
+        HT_WriteValue(3,0,DISP_FU);
+        HT_WriteValue(3,1,DISP_FU);
+        HT_WriteValue(3,2,DISP_FU);
+        HT_WriteValue(3,3,DISP_FU);
+        HT_WriteValue(4,0,DISP_FU);
+        HT_WriteValue(4,1,DISP_FU);
+        HT_WriteValue(4,2,DISP_FU);
+        HT_WriteValue(4,3,DISP_FU);
+    }
+}
+
 
 /**
   * @brief	œ‘ æ ˝◊÷
@@ -3747,6 +4619,97 @@ void DispSetTime(SysTimeStruct calendar)
     HT_WriteValue(3, 3, temp8[2]);
     HT_WriteValue(4, 0, temp8[3]);
     HT_WriteValue(4, 1, CHAR_FU);
+    HT_WriteValue(4, 2, temp8[0]);
+    HT_WriteValue(4, 3, temp8[1]);
+}
+
+void DispRecordSetTime(TimeYMDStruct calendar)
+{
+    u8 temp8[6] = {0,0,0,0,0,0};
+	u8 BitChar[6] = {0,0,0,0,0,0};
+	u8 i = 0;
+
+	BitChar[0] = calendar.Day/16;
+	BitChar[1] = calendar.Day%16;
+	BitChar[2] = calendar.Month/16;
+	BitChar[3] = calendar.Month%16;
+	BitChar[4] = calendar.Year/16;
+	BitChar[5] = calendar.Year%16;
+
+    for (i = 0 ; i < 6; i++)
+	{
+	    if (sg_CurrentDispChar[i] != POS_NUM && sg_CurrentDispChar[i] != NEG_NUM)
+    	{
+    		sg_CurrentDispChar[i] = BitChar[i];
+    	}
+    	temp8[i] = HT_Data_Index( BitChar[i]);
+	}
+
+    if(sg_bSetFlashEnable)
+    {
+        switch(Disp_FocusT.CurrentFocus)
+        {
+            case 0:
+                temp8[1] = CHAR_NONE;
+                break;
+            case 1:
+                temp8[0] = CHAR_NONE;
+                break;
+            case 2:
+                temp8[3] = CHAR_NONE;
+                break;
+            case 3:
+                temp8[2] = CHAR_NONE;
+                break;
+            case 4:
+                temp8[5] = CHAR_NONE;
+                break;
+            case 5:
+                temp8[4] = CHAR_NONE;
+                break;
+            default:
+                break;
+
+        }
+    }   
+       
+    HT_WriteValue(3, 0, temp8[4]);
+    HT_WriteValue(3, 1, temp8[5]);
+    HT_WriteValue(3, 2, CHAR_FU); 
+    HT_WriteValue(3, 3, temp8[2]);
+    HT_WriteValue(4, 0, temp8[3]);
+    HT_WriteValue(4, 1, CHAR_FU); 
+    HT_WriteValue(4, 2, temp8[0]);
+    HT_WriteValue(4, 3, temp8[1]);
+}
+
+void DispErrSetTime(TimeYMDStruct calendar)
+{
+    u8 temp8[6] = {0,0,0,0,0,0};
+	u8 BitChar[6] = {0,0,0,0,0,0};
+	u8 i = 0;
+
+	BitChar[0] = calendar.Day/16;
+	BitChar[1] = calendar.Day%16;
+	BitChar[2] = calendar.Month/16;
+	BitChar[3] = calendar.Month%16;
+	BitChar[4] = calendar.Year/16;
+	BitChar[5] = calendar.Year%16;
+
+    for (i = 0 ; i < 6; i++)
+	{
+	    if (sg_CurrentDispChar[i] != POS_NUM && sg_CurrentDispChar[i] != NEG_NUM)
+    	{
+    		sg_CurrentDispChar[i] = BitChar[i];
+    	}
+    	temp8[i] = HT_Data_Index( BitChar[i]);
+	}
+    HT_WriteValue(3, 0, temp8[4]);
+    HT_WriteValue(3, 1, temp8[5]);
+    HT_WriteValue(3, 2, CHAR_FU); 
+    HT_WriteValue(3, 3, temp8[2]);
+    HT_WriteValue(4, 0, temp8[3]);
+    HT_WriteValue(4, 1, CHAR_FU); 
     HT_WriteValue(4, 2, temp8[0]);
     HT_WriteValue(4, 3, temp8[1]);
 }
@@ -4410,8 +5373,6 @@ void DispMenu_Main(void)
 		    HT_WriteValue(0,2,CHAR_NONE);
 		    HT_WriteValue(0,3,DISP1_ZHENG);
 
-            ElectricEnergy.PosEPT = 123456789.99;
-
             DispValueEnergy(ElectricEnergy.PosEPT);
             HT_WriteUnit(TRUE,PH_ALL,0);
 			break;
@@ -4422,7 +5383,6 @@ void DispMenu_Main(void)
 		    HT_WriteValue(Line_R5,2,CHAR_NONE);
 
 		    /***********************************…œ»˝∆¡*******************************************/
-
 	        HT_ClearLeftSign(TRUE);
 		    HT_ClearRightSign(TRUE);
             HT_WriteValue(0,0,DISP1_E);
@@ -4440,7 +5400,6 @@ void DispMenu_Main(void)
 		    HT_WriteValue(Line_R5,2,CHAR_NONE);
 
 		    /***********************************…œ»˝∆¡*******************************************/
-
             HT_WriteValue(0,0,DISP1_E);
             HT_WriteValue(0,1,DISP1_q);
 		    HT_WriteValue(0,2,CHAR_NONE);
@@ -4778,6 +5737,14 @@ void DispMenu_Menu1(void) //“ªº∂ΩÁ√Ê(±∏”√)
 	        /*****************************************************************************/
 		    HT_Write4Value(0,DISP1_p,DISP1_r,DISP1_o,DISP1_G);
             break;
+        case MENUSUB_INDEX_RECO:
+		    /**************±Í«©“≥********************************************************/
+	        HT_WriteValue(Line_R5,0,DISP1_r);
+            HT_WriteValue(Line_R5,1,DISP1_E);
+	        HT_WriteValue(Line_R5,2,CHAR_NONE);
+	        /*****************************************************************************/
+			HT_Write4Value(0,DISP1_r,DISP1_E,DISP1_C,DISP1_o);
+			break;
 		default :
 			break;
 	}
@@ -4802,44 +5769,43 @@ void DispMenu_Menu2(void) //∂˛º∂ΩÁ√Ê …Ë÷√—°œÓ(4)
         HT_WriteValue(Line_R5,2,CHAR_NONE);
         /*****************************************************************************/
     }
-	switch(sg_DispSetMenu1Index)
-	{
-		case MENU1_INDEX_INPT:
-			HT_Write4Value(0,DISP1_I,DISP1_n,DISP1_p,DISP1_T);
-		    break;
-		case MENU1_INDEX_COM1:
-			HT_Write4Value(0,DISP1_C,DISP1_o,DISP1_M,DISP1_1);
-		    break;
-		case MENU1_INDEX_SYS:
-			HT_Write4Value(0,DISP1_NC,DISP1_s,DISP1_Y,DISP1_s);
-		    break;
-		case MENU1_INDEX_DO1:
-			HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_1);
-		    break;
-		case MENU1_INDEX_DO2:
-			HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_2);
-		    break;
-		case MENU1_INDEX_DO3:
-			HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_3);
-		    break;
-		case MENU1_INDEX_DO4:
-			HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_4);
-		    break;
-		case MENU1_INDEX_AO1:
-			HT_Write4Value(0,DISP1_A,DISP1_o,DISP1_FU,DISP1_1);
-		    break;
-		case MENU1_INDEX_AO2:
-			HT_Write4Value(0,DISP1_A,DISP1_o,DISP1_FU,DISP1_2);
-		    break;
-		case MENU1_INDEX_VER:
-			HT_Write4Value(0,DISP1_NC,DISP1_U,DISP1_E,DISP1_r);
-			HT_Write4Value(2,DISP_1,DISP_8,DISP_0,DISP_1);
-		    break;
-		default:
-		    break;
-	}
+    switch(sg_DispSetMenu1Index)
+    {
+        case MENU1_INDEX_INPT:
+            HT_Write4Value(0,DISP1_I,DISP1_n,DISP1_p,DISP1_T);
+            break;
+        case MENU1_INDEX_COM1:
+            HT_Write4Value(0,DISP1_C,DISP1_o,DISP1_M,DISP1_1);
+            break;
+        case MENU1_INDEX_SYS:
+            HT_Write4Value(0,DISP1_NC,DISP1_s,DISP1_Y,DISP1_s);
+            break;
+        case MENU1_INDEX_DO1:
+            HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_1);
+            break;
+        case MENU1_INDEX_DO2:
+            HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_2);
+            break;
+        case MENU1_INDEX_DO3:
+            HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_3);
+            break;
+        case MENU1_INDEX_DO4:
+            HT_Write4Value(0,DISP1_d,DISP1_o,DISP1_FU,DISP1_4);
+            break;
+        case MENU1_INDEX_AO1:
+            HT_Write4Value(0,DISP1_A,DISP1_o,DISP1_FU,DISP1_1);
+            break;
+        case MENU1_INDEX_AO2:
+            HT_Write4Value(0,DISP1_A,DISP1_o,DISP1_FU,DISP1_2);
+            break;
+        case MENU1_INDEX_VER:
+            HT_Write4Value(0,DISP1_NC,DISP1_U,DISP1_E,DISP1_r);
+            HT_Write4Value(2,DISP_1,DISP_8,DISP_0,DISP_1);
+            break;
+        default:
+            break;
+    }
 }
-
 
 void DispMenu_Menu3(void) //»˝º∂ΩÁ√Ê
 {
@@ -7746,7 +8712,7 @@ void DispMenu_Menu3(void) //»˝º∂ΩÁ√Ê
                                     HT_Write4Value(2,DISP_p,DISP_F,DISP_NC,DISP_NC);
                                     break;
                                 case AO_ITEM_F:
-                                    HT_Write4Value(2,DISP_d,DISP_3,DISP_FU,DISP_1);
+                                    HT_Write4Value(2,DISP_F,DISP_NC,DISP_NC,DISP_NC);
                                     break;
                                 default:
                                     break;
@@ -7963,7 +8929,7 @@ void DispMenu_Menu3(void) //»˝º∂ΩÁ√Ê
                                     HT_Write4Value(2,DISP_p,DISP_F,DISP_NC,DISP_NC);
                                     break;
                                 case AO_ITEM_F:
-                                    HT_Write4Value(2,DISP_d,DISP_3,DISP_FU,DISP_1);
+                                    HT_Write4Value(2,DISP_F,DISP_NC,DISP_NC,DISP_NC);
                                     break;
                                 default:
                                     break;
@@ -11160,6 +12126,429 @@ void DispMenu_MenuSave(void)
 		}
 }
 
+// »˝‘¬µÁƒ‹≤È—Øº∆À„
+u8 CalculateMonthEnergy(u8 ThisMonth)
+{
+    u8 FramTmpEnergy[FRAM_Energy_SIZE];
+    for(u16 i =0;i<FRAM_Energy_SIZE;i++)
+    {
+        FramTmpEnergy[i] = 0;
+    }
+    u8 ReturnTmp = 0;
+	u16 Size = 0;
+	u16 Crc = 0;
+    u32 TempAddrOne;
+    u32 TempAddrTwo;
+
+	u8 LastOneMonthTmp = 0;
+	u8 LastTwoMonthTmp = 0;
+	
+	switch (ThisMonth)
+    {
+        case 0x01:
+            LastOneMonthTmp = 0x12;
+            TempAddrOne = FRAM_DeceEnergy_sADDR;
+            LastTwoMonthTmp = 0x11;
+            TempAddrTwo = FRAM_NoveEnergy_sADDR;
+            break;
+        case 0x02:
+            LastOneMonthTmp = 0x01;
+            TempAddrOne = FRAM_JanuEnergy_sADDR;
+            LastTwoMonthTmp = 0x12;
+            TempAddrTwo = FRAM_DeceEnergy_sADDR;  
+            break;
+        case 0x03:
+            LastOneMonthTmp = 0x02;
+            TempAddrOne = FRAM_FebrEnergy_sADDR;
+            LastTwoMonthTmp = 0x01;
+            TempAddrTwo = FRAM_JanuEnergy_sADDR;  
+            break;  
+        case 0x04:
+            LastOneMonthTmp = 0x03;
+            TempAddrOne = FRAM_MarcEnergy_sADDR;
+            LastTwoMonthTmp = 0x02;
+            TempAddrTwo = FRAM_FebrEnergy_sADDR;  
+            break;
+        case 0x05:
+            LastOneMonthTmp = 0x04;
+            TempAddrOne = FRAM_ApriEnergy_sADDR;
+            LastTwoMonthTmp = 0x03;
+            TempAddrTwo = FRAM_MarcEnergy_sADDR;  
+            break;
+        case 0x06:
+            LastOneMonthTmp = 0x05;
+            TempAddrOne = FRAM_MayyEnergy_sADDR;
+            LastTwoMonthTmp = 0x04;
+            TempAddrTwo = FRAM_ApriEnergy_sADDR;  
+            break;
+        case 0x07:
+            LastOneMonthTmp = 0x06;
+            TempAddrOne = FRAM_JuneEnergy_sADDR;
+            LastTwoMonthTmp = 0x05;
+            TempAddrTwo = FRAM_MayyEnergy_sADDR;  
+            break; 
+        case 0x08:
+            LastOneMonthTmp = 0x07;
+            TempAddrOne = FRAM_JulyEnergy_sADDR;
+            LastTwoMonthTmp = 0x06;
+            TempAddrTwo = FRAM_JuneEnergy_sADDR;  
+            break; 
+        case 0x09:
+            LastOneMonthTmp = 0x08;
+            TempAddrOne = FRAM_AuguEnergy_sADDR;
+            LastTwoMonthTmp = 0x07;
+            TempAddrTwo = FRAM_JulyEnergy_sADDR;  
+            break;  
+        case 0x10:
+            LastOneMonthTmp = 0x09;
+            TempAddrOne = FRAM_SeptEnergy_sADDR;
+            LastTwoMonthTmp = 0x08;
+            TempAddrTwo = FRAM_AuguEnergy_sADDR;  
+            break;
+        case 0x11:
+            LastOneMonthTmp = 0x10;
+            TempAddrOne = FRAM_OctoEnergy_sADDR;
+            LastTwoMonthTmp = 0x09;
+            TempAddrTwo = FRAM_SeptEnergy_sADDR;  
+            break;
+        case 0x12:
+            LastOneMonthTmp = 0x11;
+            TempAddrOne = FRAM_NoveEnergy_sADDR;
+            LastTwoMonthTmp = 0x10;
+            TempAddrTwo = FRAM_OctoEnergy_sADDR;  
+            break;
+        default:
+            break;
+    }
+    FRAM_I2C_ReadData(TempAddrOne, FramTmpEnergy, FRAM_Energy_SIZE); 
+    Crc = FramEnergy_Crc(FramTmpEnergy);
+	if (Crc == FLIPW(&FramTmpEnergy[FRAM_Energy_SIZE-2]))  //CRC—È÷§ ∂¡»° «∑Ò≥ˆ¥Ì  …œ‘¬
+    {
+		Size = 589;//sizeof(EnergyRecordStructure)*31;
+		memcpy((u8 *)&FrontEnergyRecord[0], (u8 *)&FramTmpEnergy[0], Size);
+
+	}
+	else //  ß∞‹£¨∞—µ±«∞ ˝æ›–¥»ÎEEPROM
+	{
+		ReturnTmp |= 0x05;
+	}
+
+    for(u16 i =0;i<FRAM_Energy_SIZE;i++)
+    {
+        FramTmpEnergy[i] = 0;
+    }
+
+    FRAM_I2C_ReadData(TempAddrTwo, FramTmpEnergy, FRAM_Energy_SIZE); 
+    Crc = FramEnergy_Crc(FramTmpEnergy);
+	if (Crc == FLIPW(&FramTmpEnergy[FRAM_Energy_SIZE-2]))  //CRC—È÷§ ∂¡»° «∑Ò≥ˆ¥Ì   …œ…œ‘¬
+    {
+		Size = 589;//sizeof(EnergyRecordStructure)*31;
+		memcpy((u8 *)&RearEnergyRecord[0], (u8 *)&FramTmpEnergy[0], Size);
+
+	}
+	else //  ß∞‹£¨∞—µ±«∞ ˝æ›–¥»ÎEEPROM
+	{
+		ReturnTmp |= 0x50;
+	}
+	
+    return ReturnTmp;
+}
+
+// µÁƒ‹º«¬ºœ‡πÿœ‘ æ≥Ã–Ú
+void DispMenu_Record_1(void) // —°‘Ò≤È—Øƒ£ Ω
+{
+    Reset_Screen();
+    /**************±Í«©“≥********************************************************/
+    HT_WriteValue(Line_R5,0,DISP1_r);
+    HT_WriteValue(Line_R5,1,DISP1_E);
+    HT_WriteValue(Line_R5,2,CHAR_NONE);
+    /*****************************************************************************/
+    switch(sg_DispSetMenu1Record)
+    {
+        case MENU1_RECORD_MONTH_LOG:
+            HT_Write4Value(0,DISP1_M,DISP1_T,DISP1_H,DISP1_NC);
+            break;
+        case MENU1_RECORD_USER_DEFINED:
+            HT_Write4Value(0,DISP1_C,DISP1_U,DISP1_s,DISP1_NC);
+            break;
+        default:
+            break;
+    }
+}
+
+void DispMenu_Record_2(void) //»˝º∂ΩÁ√Ê
+{
+    Reset_Screen();
+    /**************±Í«©“≥********************************************************/
+    HT_WriteValue(Line_R5,0,DISP1_r);
+    HT_WriteValue(Line_R5,1,DISP1_E);
+    HT_WriteValue(Line_R5,2,CHAR_NONE);
+    /*****************************************************************************/
+    switch(sg_DispSetMenu1Record)
+	{
+		case MENU1_RECORD_MONTH_LOG:
+			HT_Write4Value(0,DISP1_M,DISP1_T,DISP1_H,DISP1_NC);
+			switch(sg_DispSetMenu2_1_Record)
+			{
+			    case MENU2_1_RECORD_THIS_MONTH:
+                    HT_WriteRecordSign(IndexS_yue, TRUE);
+                    HT_Write4Value(2,DISP_NC,DISP_L,DISP_0,DISP_m);
+                    break;
+				case MENU2_1_RECORD_LAST_MONTH:
+                    HT_WriteRecordSign(IndexS_shang2, TRUE);
+				    HT_WriteRecordSign(IndexS_yue, TRUE);
+					HT_Write4Value(2,DISP_NC,DISP_L,DISP_1,DISP_m);
+				    break;
+				case MENU2_1_RECORD_LAST_2_MONTH:
+				    HT_WriteRecordSign(IndexS_shang1, TRUE);
+				    HT_WriteRecordSign(IndexS_shang2, TRUE);
+				    HT_WriteRecordSign(IndexS_yue, TRUE);
+					HT_Write4Value(2,DISP_NC,DISP_L,DISP_2,DISP_m);
+				    break;
+				default:
+				    break;
+			}
+		    break;
+        case MENU1_RECORD_USER_DEFINED:
+            HT_Write4Value(0,DISP1_C,DISP1_U,DISP1_s,DISP1_NC);
+			switch(sg_DispSetMenu2_2_Record)
+			{
+			    case MENU2_2_RECORD_SA_TIME:
+			        if(setDataOneFlag == TRUE)
+                    {
+                        HT_Write4Value(2,DISP_NC,DISP_NC,DISP_d,DISP_1);
+                    }    
+                    else if (setDataOneFlag == FALSE)
+                    {
+                        if(sg_bSetFlashEnable)
+                        {
+                            HT_Write4Value(2,DISP_E,DISP_FU,DISP_d,DISP_1);
+                        }
+                        else
+                        {
+                            HT_Write4Value(2,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                        }
+                        DispErrSetTime(setDataOne);
+                    }
+                    break;
+				case MENU2_2_RECORD_SP_TIME:
+                    if(setDataTwoFlag == TRUE)
+                    {
+                        HT_Write4Value(2,DISP_NC,DISP_NC,DISP_d,DISP_2);
+                    }    
+                    else if (setDataTwoFlag == FALSE)
+                    {
+                        if(sg_bSetFlashEnable)
+                        {
+                            HT_Write4Value(2,DISP_E,DISP_FU,DISP_d,DISP_2);
+                        }
+                        else
+                        {
+                            HT_Write4Value(2,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                        }
+                        DispErrSetTime(setDataTwo);
+                    }
+                    break;
+				case MENU2_2_RECORD_Diff:
+				    HT_Write4Value(2,DISP_NC,DISP_s,DISP_U,DISP_m);
+				    break;
+				default:
+				    break;
+			}
+		    break;
+		default:
+		    break;
+		
+    }
+}
+
+void DispMenu_Record_3(void) //»˝º∂ΩÁ√Ê
+{
+    Reset_Screen();
+    /**************±Í«©“≥********************************************************/
+    HT_WriteValue(Line_R5,0,DISP1_r);
+    HT_WriteValue(Line_R5,1,DISP1_E);
+    HT_WriteValue(Line_R5,2,CHAR_NONE);
+    /*****************************************************************************/
+    switch(sg_DispSetMenu1Record)
+	{
+		case MENU1_RECORD_MONTH_LOG:
+			HT_Write4Value(0,DISP1_M,DISP1_T,DISP1_H,DISP1_NC);
+			switch(sg_DispSetMenu2_1_Record)
+			{
+			    case MENU2_1_RECORD_THIS_MONTH:
+                    HT_WriteRecordSign(IndexS_yue, TRUE);
+                    HT_Write4Value(2,DISP_NC,DISP_L,DISP_0,DISP_m);
+                    if(r_CalcThisMonthFlag== FALSE)
+                    {
+                        HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                        HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                    }
+                    else
+                    {
+                        if(L0M_Record.ePosEPt < 0)
+                        {
+                            HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                        }
+                        else
+                        {
+                            DispRecordEnergy(L0M_Record.ePosEPt);
+                        }
+                    }
+                    break;
+				case MENU2_1_RECORD_LAST_MONTH:
+                    HT_WriteRecordSign(IndexS_shang2, TRUE);
+				    HT_WriteRecordSign(IndexS_yue, TRUE);
+					HT_Write4Value(2,DISP_NC,DISP_L,DISP_1,DISP_m);
+					if(r_CalcLastMonthFlag == FALSE)
+                    {
+                        HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                        HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                    }
+                    else
+                    {
+                        if(L1M_Record.ePosEPt < 0)
+                        {
+                            HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                        }
+                        else
+                        {
+                            DispRecordEnergy(L1M_Record.ePosEPt);
+                        }
+                    }
+                    break;
+				case MENU2_1_RECORD_LAST_2_MONTH:
+				    HT_WriteRecordSign(IndexS_shang1, TRUE);
+				    HT_WriteRecordSign(IndexS_shang2, TRUE);
+				    HT_WriteRecordSign(IndexS_yue, TRUE);
+					HT_Write4Value(2,DISP_NC,DISP_L,DISP_2,DISP_m);
+					if(r_CalcLastTwoMonthFlag == FALSE)
+                    {
+                        HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                        HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                    }
+                    else
+                    {
+                        if(L2M_Record.ePosEPt < 0)
+                        {
+                            HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                        }
+                        else
+                        {
+                            DispRecordEnergy(L2M_Record.ePosEPt);
+                        }
+                    }
+                    break;
+				default:
+				    break;
+			}
+		    break;
+        case MENU1_RECORD_USER_DEFINED:
+            HT_Write4Value(0,DISP1_C,DISP1_U,DISP1_s,DISP1_NC);
+			switch(sg_DispSetMenu2_2_Record)
+			{
+			    case MENU2_2_RECORD_SA_TIME:
+                    HT_Write4Value(2,DISP_NC,DISP_NC,DISP_d,DISP_1);
+                    DispRecordSetTime(setDataOne);
+                    break;
+				case MENU2_2_RECORD_SP_TIME:
+                    HT_Write4Value(2,DISP_NC,DISP_NC,DISP_d,DISP_2);
+                    DispRecordSetTime(setDataTwo);
+				    break;
+				case MENU2_2_RECORD_Diff:
+				    HT_Write4Value(2,DISP_NC,DISP_s,DISP_U,DISP_m);
+				    if(setDataTwoFlag == FALSE | setDataOneFlag == FALSE)
+				    {
+				        if(sg_bSetFlashEnable)
+				        {
+                            HT_WriteValue(4, 0, CHAR_E);
+                            HT_WriteValue(4, 1, CHAR_R); 
+                            HT_WriteValue(4, 2, CHAR_R);
+                            HT_WriteValue(4, 3, CHAR_NONE);
+				        }
+				        else
+				        {
+                            HT_WriteValue(4, 0, CHAR_NONE);
+                            HT_WriteValue(4, 1, CHAR_NONE); 
+                            HT_WriteValue(4, 2, CHAR_NONE);
+                            HT_WriteValue(4, 3, CHAR_NONE);
+				        }
+				    }
+				    else
+				    {
+                        switch(sg_DispSetMenu3_2_Record)
+                        {
+                            case MENU3_2_RECORD_EPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_NC);
+                                if(DiffEnergy.ePosEPt < 0)
+                                {
+                                    HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(DiffEnergy.ePosEPt);
+                                }
+                                break;
+                            case MENU3_2_RECORD_NPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_FU);
+                                if(DiffEnergy.eNegEPt < 0)
+                                {
+                                    HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(DiffEnergy.eNegEPt);
+                                }
+                                break;
+                            case MENU3_2_RECORD_EQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_NC);
+                                if(DiffEnergy.ePosEQt < 0)
+                                {
+                                    HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(DiffEnergy.ePosEQt);
+                                }
+                                break;
+                            case MENU3_2_RECORD_NQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_FU);
+                                if(DiffEnergy.eNegEQt < 0)
+                                {
+                                    HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(DiffEnergy.eNegEQt);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+				    }
+				    break;
+				default:
+				    break;
+			}
+		    break;
+		default:
+		    break;
+		
+    }
+}
+
+void DispMenu_Record_4(void) //»˝º∂ΩÁ√Ê
+{
+    __nop();
+}
+
 
 const u16 cg_CharToNum[4] = {1000, 100, 10, 1};
 
@@ -11491,6 +12880,19 @@ BOOL JudgeNewParam(BOOL *pUpdataFlag, s32 *pNewValue,s32 MinValue, s32 MaxValue)
 	}
 	return *pUpdataFlag;
 }
+
+u8 JudgeNewRecordData(u8 pNewValue,u8 MinValue, u8 MaxValue)
+{
+    if (pNewValue >= MinValue && pNewValue <= MaxValue)
+	{
+        return pNewValue;
+	}
+	else
+	{
+        return 0xFF;
+	}	
+}
+
 /*-----------------------------------------------------------------------------------------------------------------*/
 /****************************************************************************************
 ** ∫Ø ˝√˚≥∆: GetSetNewValue
@@ -11978,6 +13380,10 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //∏¸–¬ ˝÷µ
     	    break;
     }
 
+    //g_SetTimeOnce.Second = 5*16 + 2;
+    //g_SetTimeOnce.Minute = 5*16 + 9;
+    //g_SetTimeOnce.Hour   = 2*16 + 3;
+
 	g_SetTimeOnce.Second = tmpData[0]*16 + tmpData[1];
     g_SetTimeOnce.Minute = tmpData[2]*16 + tmpData[3];
     g_SetTimeOnce.Hour   = tmpData[4]*16 + tmpData[5];
@@ -11985,6 +13391,85 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //∏¸–¬ ˝÷µ
     g_SetTimeOnce.Date.Day   = tmpData[6]*16 + tmpData[7];
     g_SetTimeOnce.Date.Month = tmpData[8]*16 + tmpData[9];
     g_SetTimeOnce.Date.Year  = tmpData[10]*16 + tmpData[11];
+}
+
+void SetRecordTime(TimeYMDStruct ReData, UPDATA_DIR Updata_Dir, u8 kind)  //∏¸–¬ ˝÷µ
+{
+	u16 tmpData[6] = {0};
+    u8 tmpDay;
+    u8 tmpMonth;
+    u8 tmpYear;
+
+    tmpData[0] = ReData.Day/16;
+    tmpData[1] = ReData.Day%16;
+    tmpData[2] = ReData.Month/16;
+    tmpData[3] = ReData.Month%16;
+    tmpData[4] = ReData.Year/16;
+    tmpData[5] = ReData.Year%16;
+
+    switch(Disp_FocusT.CurrentFocus)
+    {
+        case 0:                    //»’ ∏ˆŒª
+            tmpData[1] += 1;
+    		if (tmpData[1] == 10)
+    		{
+    			tmpData[1] = 0;
+    		}
+    		break;
+        case 1:                    //»’  ÆŒª
+            tmpData[0] += 1;
+    		if (tmpData[0] == 4)
+    		{
+    			tmpData[0] = 0;
+    		}
+    		break;
+    	case 2:                    //‘¬ ∏ˆŒª
+            tmpData[3] += 1;
+    		if (tmpData[3] == 10)
+    		{
+    			tmpData[3] = 0;
+    		}
+    		break;
+        case 3:                    //‘¬  ÆŒª
+            tmpData[2] += 1;
+    		if (tmpData[2] == 2)
+    		{
+    			tmpData[2] = 0;
+    		}
+    		break;
+    	case 4:                    //ƒÍ ∏ˆŒª
+            tmpData[5] += 1;
+    		if (tmpData[5] == 10)
+    		{
+    			tmpData[5] = 0;
+    		}
+    		break;
+        case 5:                    //ƒÍ  ÆŒª
+            tmpData[4] += 1;
+    		if (tmpData[4] == 10)
+    		{
+    			tmpData[4] = 0;
+    		}
+    		break;
+    	default:
+    	    break;
+    }
+
+    tmpDay = tmpData[0]*16 + tmpData[1];
+    tmpMonth = tmpData[2]*16 + tmpData[3];
+    tmpYear  = tmpData[4]*16 + tmpData[5];
+    if(kind == 0x00)
+    {
+       setDataOne.Year =  tmpYear;
+       setDataOne.Month = tmpMonth;
+       setDataOne.Day = tmpDay;
+    }
+    else if(kind == 0x01)
+    {
+        setDataTwo.Year =  tmpYear;
+        setDataTwo.Month = tmpMonth;
+        setDataTwo.Day = tmpDay;
+    }
 }
 
 void UpdataOrSetValue(SELECT_CATE Cate,UPDATA_DIR Updata_Dir)//∏¸–¬ ˝÷µ or

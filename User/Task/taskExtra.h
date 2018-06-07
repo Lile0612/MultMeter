@@ -81,7 +81,8 @@ __packed typedef struct {
     u8 DinRecordIndex;
     u8 DoutRecordIndex;
     u8 MaxIndex;
-    u16 EnergyRecordIndex;
+    u8 BackDay;
+    u8 BackMonth;
 }SOE_IndexStruct;    //12×Ö½Ú
 
 

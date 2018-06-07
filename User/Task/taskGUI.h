@@ -301,6 +301,7 @@ enum EMLCD_AO_ITEM
 #define SaveNO     0x02
 #define ReadMode   0x01
 #define ProgMode   0x02
+#define RecoMode   0x03
 
 
 #define MAX_NetMode        1	  // 接线方式最大值
@@ -372,6 +373,35 @@ enum EMLCD_AO_ITEM
 #define MAX_AO_FS      9999
 #define MIN_AO_FS         0
 
+#define FRONTMONTH     0x00
+#define REARMONTH      0x01
+
+#define MAX_Day        0x31	  // 查询日最大值
+#define MAX_Day30      0x30	  // 查询日最大值
+#define MAX_Day29      0x29  // 查询日最大值
+#define MAX_Day28      0x28  // 查询日最大值
+#define MIN_Day	       0x01   // 查询日最小值
+
+#define MAX_Month      0x12	  // 查询月最大值
+#define MIN_Month	   0x01   // 查询月最小值
+
+#define MAX_Year       0x99	  // 查询年最大值
+#define MIN_Year	   0x00   // 查询年最小值
+
+#define ReX_Day        0x00
+#define Rex_Month      0x01
+#define Rex_Year       0x02
+
+/* 电能计量 */
+typedef struct
+{ 
+    float ePosEPt;
+    float eNegEPt;
+    float ePosEQt;
+    float eNegEQt;
+    TimeDMYStruct EnergyDay;
+} EnergyRecordStructure;
+
 /* Exported functions ------------------------------------------------------- */
 extern BOOL g_AoOutEnable;
 extern BOOL g_MaxDemEnable;        //  Max Dem 计算防抖
@@ -380,6 +410,10 @@ extern u8 DispMode;
 extern u8 LEDLEVEL;
 extern volatile u8 vg_Display_Value[16]; // 显示保存缓存
 extern TimeYMDHMSStruct g_SOETime;
+extern EnergyRecordStructure FrontEnergyRecord[31];
+extern EnergyRecordStructure RearEnergyRecord[31];
+extern EnergyRecordStructure NowEnergyRecord[31];
+
 
 void Task_GUI_init(void);
 void Task_Timer_init(void);

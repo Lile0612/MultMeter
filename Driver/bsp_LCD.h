@@ -50,18 +50,20 @@
 #define CHAR_9		0x09
 #define CHAR_C	    0x0A
 #define CHAR_d	    0x0B
-#define CHAR_F		0x0C
-#define CHAR_H		0x0D
-#define CHAR_P		0x0E
-#define CHAR_q		0x0F
-#define CHAR_S		0x10
-#define CHAR_t		0x11
-#define CHAR_FU     0x12
-#define CHAR_V      0x13
-#define CHAR_O		0x14
-#define CHAR_L		0x15
-#define CHAR_U		0x16
-#define CHAR_R		0x17
+#define CHAR_E		0x0C
+#define CHAR_F		0x0D
+#define CHAR_H		0x0E
+#define CHAR_n		0x0F
+#define CHAR_P		0x10
+#define CHAR_q		0x11
+#define CHAR_S		0x12
+#define CHAR_t		0x13
+#define CHAR_FU     0x14
+#define CHAR_V      0x15
+#define CHAR_O		0x16
+#define CHAR_L		0x17
+#define CHAR_U		0x18
+#define CHAR_R		0x19
 #define CHAR_NUM	CHAR_R//数码管最大值
 #define CHAR_DOT	0x10
 #define CHAR_NONE	0xFF
@@ -259,6 +261,20 @@ enum emLCD_DISP_Max
 	IndexWarm = 0x04,
 };
 
+enum emLCD_DISP_Rexord
+{
+	IndexS_jian = 0x00,
+	IndexS_feng = 0x01,
+	IndexS_ping = 0x02,
+	IndexS_gu1 = 0x03,
+	IndexS_ji = 0x04,
+	IndexS_gu2 = 0x05,
+	IndexS_shang1 = 0x06,
+	IndexS_shang2 = 0x07,
+	IndexS_yue = 0x08,
+};
+
+
 /* Exported functions ------------------------------------------------------- */
 u8 HT_Data_Index(unsigned char data);
 void HT_LedStatus(BOOL bStatus);
@@ -289,12 +305,9 @@ void HT_Write_IO_Status(BOOL bDisp,u8 Kind,u8 Index);
 void HT_Write_Four_Quadrant(BOOL bDisp);
 void HT_ClearLeftSign(BOOL bClear);
 void HT_ClearRightSign(BOOL bClear);
-void HT_WriteLedPhase(BOOL bDisp, unsigned char LedPhase_Value);
-void HT_WriteLedAddr(BOOL bDisp, unsigned char LedAddr_Value);
-void HT_WriteCtrl(BOOL bDisp, unsigned char Ctrl_Value);
-void HT_WriteSys(BOOL bDisp, unsigned char Phase_Value, unsigned char Sys_Value);
-void HT_WriteCapStatus(BOOL bDisp);
-void HT_WriteCapType(BOOL bDisp, unsigned char CapType_Value);
+void HT_WriteRecordSign(unsigned char index,unsigned char Value);
+
+
 void HT_WriteEveryComPin(BOOL bDisp, unsigned char Com_Value, unsigned char Pin_Value);
 void Lcd_Update_screen(void);
 void LCD_Update_screen_T(BOOL Flag);

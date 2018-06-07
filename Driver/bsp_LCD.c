@@ -86,7 +86,7 @@ const unsigned char LCD_COM_Row12_Value[][2] =
 const unsigned char LCD_COM_Row3_Value[][2] =
 					{{0x70,0x70},{0x20,0x40},{0x50,0xD0},{0x60,0xD0},{0x20,0xE0},  //0 1 2 3 4
 					{0x60,0xB0},{0x70,0xB0},{0x20,0x50},{0x70,0xF0},{0x60,0xF0},   //5 6 7 8 9
-					{0x50,0x30},{0x70,0xC0},{0x10,0xB0},{0x30,0xE0},{0x10,0xF0},   //C d F h P
+					{0x50,0x30},{0x70,0xC0},{0x50,0xB0},{0x10,0xB0},{0x30,0xE0},{0x30,0x80},{0x10,0xF0},   //C d E F h n P
 					{0x20,0xF0},{0x60,0xB0},{0x50,0xA0},{0x00,0x80},{0x70,0x60},   //q s t - U
 					{0x70,0x80},{0x50,0x20},{0x70,0x00},{0x10,0x80},}; //o l u r
 
@@ -185,48 +185,10 @@ const unsigned char LCD_PIN_FourQ[] = {81,83,81,85};
 const unsigned char LCD_COM_TimeDot[PH_TH][2] = {{0x10,0x80},{0x80,0x20},{0x20,0x80}};
 const unsigned char LCD_PIN_TimeDot[PH_TH][2] = {{18,9},{8,18},{66,78}};
 
-// 分补投入指示
-const unsigned char LCD_COM_StarAON[] = {0x20,0x80,0x20,0x80,0x20,0x80,0x20,0x10,0x40,0x10};
-const unsigned char LCD_COM_StarBCON[] = {0x20,0x80,0x20,0x80,0x20,0x80,0x20,0x10,0x40,0x10};
-const unsigned char LCD_PIN_StarAON[] = {25,25,24,24,34,35,35,37,37,36};
-const unsigned char LCD_PIN_StarBON[] = {27,27,26,26,32,33,33,39,39,38};
+// 尖 峰 平 谷 脊 骨 上 上 月
+const unsigned char LCD_COM_Record[] = {0x10,0x80,0x40,0x20,0x10,0x10,0x20,0x40,0x80};
+const unsigned char LCD_PIN_Record[] = {58,59,59,59,59,61,61,61,61};
 
-
-const unsigned char LCD_PIN_Delta12_1_17_ONOFF[] = {75,73,71,69,67,65,63,61,59,57,55,53,51,49,47,45,43};
-const unsigned char LCD_PIN_Delta12_18_20_ON0FF[] = {42,44,46};
-
-// S1 COS U(V) I(A) P(kW) Q(kvar) S(kVA) Freq(Hz) HU(%) IU(%), t
-const unsigned char LCD_COM_Norm[] = {0x20,0x10,0x80,0x40,0x20,0x10,0x10,0x20,0x10,0x20, 0x10};
-const unsigned char LCD_PIN_Norm[] = {0,0,1,1,1,1,19,19,21,21,83};
-// CT PT 投切延时 投入门限 切除门限  电压保护 电流保护 谐波保护 温度保护
-const unsigned char LCD_COM_Set[] = {0x20,0x40,0x40,0x80,0x40,0x80,0x40,0x20,0x10};
-const unsigned char LCD_PIN_Set[] = {83,83,0,0,82,80,80,80,80};
-// S3 S4 不平衡 投入 切除  过电压  欠电压 过电流 欠电流 谐波越限 缺相
-const unsigned char LCD_COM_Prt[] = {0x40,0x20,0x80,0x10,0x20,0x40,0x80,0x80,0x40,0x20,0x10};
-const unsigned char LCD_PIN_Prt[] = {21,23,21,20,20,20,20,50,50,50,50};
-// S15 S16 S17 S18 S19 S20
-const unsigned char LCD_COM_UIHL12[] = {0x80,0x40,0x20,0x20,0x40,0x80};
-const unsigned char LCD_PIN_UIHL12[] = {81,81,81,79,79,77};
-
-// 电容状态指示
-const unsigned char LCD_COM_CapStatus = 0x10;
-const unsigned char LCD_PIN_CapStatus = 23;
-// 电容状态指示分补相位 A相 B相 C相
-const unsigned char LCD_COM_LedPhase[] = {0x10,0x10,0x10};
-const unsigned char LCD_PIN_LedPhase[] = {25,27,29};
-// 电容状态指示序号 1-30
-const unsigned char LCD_COM_LedAddr[] = {0x40,0x80,0x10,0x20,0x40,0x80,0x80,0x40,0x20,0x10,0x40,
-											0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x20,0x80,0x40,0x80,0x40,0x80,0x40};
-const unsigned char LCD_PIN_LedAddr[] = {23,23,22,22,22,22,48,48,48,48,77,74,72,70,68,66,64,62,60,58,56,54,52,52,36,36,38,38,40,40};
-// 设置 手动 自动 闭锁 调试
-const unsigned char LCD_COM_Ctrl[] = {0x10,0x20,0x20,0x20,0x20};
-const unsigned char LCD_PIN_Ctrl[] = {76,76,70,64,58};
-// 感性 容性
-const unsigned char LCD_COM_Sys[PH_TH][2] = {{0x40,0x80},{0x40,0x80},{0x80,0x40}};
-const unsigned char LCD_PIN_Sys[PH_TH][2] = {{19,19},{18,18},{52,52}};
-// 机号 序号 三角形 星形
-const unsigned char LCD_COM_CapType[] = {0x10,0x20,0x40,0x80};
-const unsigned char LCD_PIN_CapType[] = {82,78,78,79};
 
 // 显存
 unsigned char g_Display_Data[DISPNUM];
@@ -720,261 +682,6 @@ void HT_WriteTimeDot(BOOL bDisp, unsigned char Row_Value)
 	}
 }
 
-
-/**
-  * @brief  写S1 COS U(V) I(A) P(kW) Q(kvar) S(kVA) Freq(Hz) HU(%) IU(%) t
-  * @param  unsigned char Norm_Value:0-9
-  * @retval None
-  */
-void HT_WriteNorm(BOOL bDisp, unsigned char Norm_Value)
-{
-	u8 Index = 0;
-	if (bDisp)
-	{
-		if (Norm_Value != DISP_NORM_S1) // 除了通信标志 其它只允许同时出现一个
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		g_Display_Data[LCD_PIN_Norm[Norm_Value]] |= LCD_COM_Norm[Norm_Value];
-	}
-	else
-	{
-		if (Norm_Value == DISP_NORM_NULL)
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Norm_Value]], LCD_COM_Norm[Norm_Value]);
-		}
-	}
-	if (bDisp)
-	{
-		if (Norm_Value != DISP_NORM_S1) // 除了通信标志 其它只允许同时出现一个
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		g_Display_Data[LCD_PIN_Norm[Norm_Value]] |= LCD_COM_Norm[Norm_Value];
-	}
-	else
-	{
-		if (Norm_Value == DISP_NORM_NULL)
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Norm_Value]], LCD_COM_Norm[Norm_Value]);
-		}
-	}
-}
-
-void HT_WriteNorm_Delta(BOOL bDisp, unsigned char Norm_Value1, unsigned char Norm_Value2, unsigned char Norm_Value3)
-{
-	u8 Index = 0;
-	if (bDisp)
-	{
-		if (Norm_Value1 != DISP_NORM_S1 && Norm_Value2 != DISP_NORM_S1 && Norm_Value3 != DISP_NORM_S1) // 除了通信标志 其它只允许同时出现3个
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		if (Norm_Value1 != DISP_NORM_NULL)
-		{
-			g_Display_Data[LCD_PIN_Norm[Norm_Value1]] |= LCD_COM_Norm[Norm_Value1];
-		}
-		if (Norm_Value2 != DISP_NORM_NULL)
-		{
-			g_Display_Data[LCD_PIN_Norm[Norm_Value2]] |= LCD_COM_Norm[Norm_Value2];
-		}
-		if (Norm_Value3 != DISP_NORM_NULL)
-		{
-			g_Display_Data[LCD_PIN_Norm[Norm_Value3]] |= LCD_COM_Norm[Norm_Value3];
-		}
-	}
-	else
-	{
-		if (Norm_Value1 == DISP_NORM_NULL && Norm_Value2 == DISP_NORM_NULL && Norm_Value3 == DISP_NORM_NULL)
-		{
-			for (Index = DISP_NORM_COS; Index <= DISP_NORM_T; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Index]], LCD_COM_Norm[Index]);
-			}
-		}
-		else
-		{
-			if (Norm_Value1 != DISP_NORM_NULL)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Norm_Value1]], LCD_COM_Norm[Norm_Value1]);
-			}
-			if (Norm_Value2 != DISP_NORM_NULL)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Norm_Value2]], LCD_COM_Norm[Norm_Value2]);
-			}
-			if (Norm_Value3 != DISP_NORM_NULL)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Norm[Norm_Value3]], LCD_COM_Norm[Norm_Value3]);
-			}
-		}
-	}
-}
-
-/**
-  * @brief  写CT PT 投切延时 投入门限 切除门限  电压保护 电流保护 谐波保护 温度保护
-  * @param  unsigned char Set_Value:0-8
-  * @retval None
-  */
-void HT_WriteSet(BOOL bDisp, BOOL bOnlyOne, unsigned char Set_Value)
-{
-	u8 Index = 0;
-
-	if (Set_Value == DISP_SET_ALL)
-	{
-		if (bDisp)
-		{
-			for (Index = DISP_SET_CT; Index < DISP_SET_ALL; Index++)
-			{
-				g_Display_Data[LCD_PIN_Set[Set_Value]] |= LCD_COM_Set[Set_Value];
-			}
-		}
-		else
-		{
-			for (Index = DISP_SET_CT; Index < DISP_SET_ALL; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_Set[Index]], LCD_COM_Set[Index]);
-			}
-		}
-		return;
-	}
-	if (bDisp)
-	{
-		if (bOnlyOne)
-		{
-			for (Index = DISP_SET_CT; Index <= DISP_SET_TP; Index++)
-			{
-				if (Set_Value != Index)
-				{
-					MODIFY_BIT(g_Display_Data[LCD_PIN_Set[Index]], LCD_PIN_Set[Index]);
-
-				}
-				else
-				{
-					g_Display_Data[LCD_PIN_Set[Set_Value]] |= LCD_COM_Set[Set_Value];
-				}
-			}
-		}
-		else
-		{
-			g_Display_Data[LCD_PIN_Set[Set_Value]] |= LCD_COM_Set[Set_Value];
-		}
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_Set[Set_Value]], LCD_COM_Set[Set_Value]);
-	}
-}
-
-/**
-  * @brief  写S3 S4 不平衡 投入 切除  过电压  欠电压 过电流 欠电流 谐波越限 缺相
-  * @param  unsigned char Prt_Value:0-8
-  * @retval None
-  */
-void HT_WritePrt(BOOL bDisp, unsigned char Prt_Value)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_Prt[Prt_Value]] |= LCD_COM_Prt[Prt_Value];
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_Prt[Prt_Value]], LCD_COM_Prt[Prt_Value]);
-	}
-}
-
-/**
-  * @brief  写S15 S16 S17 S18 S19 S20
-  * @param  unsigned char UIHL12_Value:0-8
-  * @retval None
-  */
-void HT_WriteUIHL12(BOOL bDisp, BOOL Flag_U, BOOL Flag_I,
-				BOOL Flag_H, BOOL Flag_L, BOOL Flag_1, BOOL Flag_2)
-{
-	if (bDisp)
-	{
-		if (Flag_U)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_U]] |= LCD_COM_UIHL12[DISP_UIHL12_U];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_U]], LCD_COM_UIHL12[DISP_UIHL12_U]);
-		}
-		if (Flag_I)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_I]] |= LCD_COM_UIHL12[DISP_UIHL12_I];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_I]], LCD_COM_UIHL12[DISP_UIHL12_I]);
-		}
-		if (Flag_H)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_H]] |= LCD_COM_UIHL12[DISP_UIHL12_H];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_H]], LCD_COM_UIHL12[DISP_UIHL12_H]);
-		}
-		if (Flag_L)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_L]] |= LCD_COM_UIHL12[DISP_UIHL12_L];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_L]], LCD_COM_UIHL12[DISP_UIHL12_L]);
-		}
-		if (Flag_1)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_1]] |= LCD_COM_UIHL12[DISP_UIHL12_1];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_1]], LCD_COM_UIHL12[DISP_UIHL12_1]);
-		}
-		if (Flag_2)
-		{
-			g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_2]] |= LCD_COM_UIHL12[DISP_UIHL12_2];
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_2]], LCD_COM_UIHL12[DISP_UIHL12_2]);
-		}
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_U]], LCD_COM_UIHL12[DISP_UIHL12_U]);
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_I]], LCD_COM_UIHL12[DISP_UIHL12_I]);
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_H]], LCD_COM_UIHL12[DISP_UIHL12_H]);
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_L]], LCD_COM_UIHL12[DISP_UIHL12_L]);
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_1]], LCD_COM_UIHL12[DISP_UIHL12_1]);
-		MODIFY_BIT(g_Display_Data[LCD_PIN_UIHL12[DISP_UIHL12_2]], LCD_COM_UIHL12[DISP_UIHL12_2]);
-	}
-}
-
 /**
   * @brief  写A相 B相 C相
   * @param  unsigned char Phase_Value:0-2
@@ -1309,122 +1016,85 @@ void HT_ClearRightSign(BOOL bClear)
 	}
 }
 
+void HT_WriteRecordSign(unsigned char index,unsigned char Value)
+{
+    if (Value == CHAR_NONE)
+	{
+        switch (index)
+        {
+            case IndexS_jian:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_jian]] , LCD_COM_Record[IndexS_jian]);
+                break;
+            case IndexS_feng:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_feng]] , LCD_COM_Record[IndexS_feng]);
+                break;
+            case IndexS_ping:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_ping]] , LCD_COM_Record[IndexS_ping]);
+                break;
+            case IndexS_gu1:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_gu1]] , LCD_COM_Record[IndexS_gu1]);
+                break;
+            case IndexS_ji:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_ji]] , LCD_COM_Record[IndexS_ji]);
+                break;
+            case IndexS_gu2:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_gu2]] , LCD_COM_Record[IndexS_gu2]);
+                break;
+            case IndexS_shang1:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_shang1]] , LCD_COM_Record[IndexS_shang1]);
+                break;
+            case IndexS_shang2:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_shang1]] , LCD_COM_Record[IndexS_shang2]);
+                break;
+            case IndexS_yue:
+                MODIFY_BIT(g_Display_Data[LCD_PIN_Record[IndexS_yue]] , LCD_COM_Record[IndexS_yue]);
+                break;
+            default:
+                break;
+        }
+	}
+	else
+	{
+        switch (index)
+        {
+            case IndexS_jian:
+                g_Display_Data[LCD_PIN_Record[IndexS_jian]] |= LCD_COM_Record[IndexS_jian];
+                break;
+            case IndexS_feng:
+                g_Display_Data[LCD_PIN_Record[IndexS_feng]] |= LCD_COM_Record[IndexS_feng];
+                break;
+            case IndexS_ping:
+                g_Display_Data[LCD_PIN_Record[IndexS_ping]] |= LCD_COM_Record[IndexS_ping];
+                break;
+            case IndexS_gu1:
+                g_Display_Data[LCD_PIN_Record[IndexS_gu1]] |= LCD_COM_Record[IndexS_gu1];
+                break;
+            case IndexS_ji:
+                g_Display_Data[LCD_PIN_Record[IndexS_ji]] |= LCD_COM_Record[IndexS_ji];
+                break;
+            case IndexS_gu2:
+                g_Display_Data[LCD_PIN_Record[IndexS_gu2]] |= LCD_COM_Record[IndexS_gu2];
+                break;
+            case IndexS_shang1:
+                g_Display_Data[LCD_PIN_Record[IndexS_shang1]] |= LCD_COM_Record[IndexS_shang1];
+                break;
+            case IndexS_shang2:
+                g_Display_Data[LCD_PIN_Record[IndexS_shang2]] |= LCD_COM_Record[IndexS_shang2];
+                break;
+            case IndexS_yue:
+                g_Display_Data[LCD_PIN_Record[IndexS_yue]] |= LCD_COM_Record[IndexS_yue];
+                break;
+            default:
+                break;
+        }
+	}
+}
+
+
 /*test*/
 void HT_TEST(void)
 {
    g_Display_Data[33] |= 0x80;
-}
-/**
-  * @brief  写A相 B相 C相
-  * @param  unsigned char LedPhase_Value:0-2
-  * @retval None
-  */
-void HT_WriteLedPhase(BOOL bDisp, unsigned char LedPhase_Value)
-{
-	u8 Index = 0;
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_LedPhase[LedPhase_Value]] |= LCD_COM_LedPhase[LedPhase_Value];
-	}
-	else
-	{
-		if (LedPhase_Value == PH_TH)
-		{
-			for (Index = PH_A; Index < PH_TH; Index++)
-			{
-				MODIFY_BIT(g_Display_Data[LCD_PIN_LedPhase[Index]], LCD_COM_LedPhase[Index]);
-			}
-		}
-		else
-		{
-			MODIFY_BIT(g_Display_Data[LCD_PIN_LedPhase[LedPhase_Value]], LCD_COM_LedPhase[LedPhase_Value]);
-		}
-	}
-}
-
-/**
-  * @brief  写1-30的序号
-  * @param  unsigned char LedAddr_Value:0-29
-  * @retval None
-  */
-void HT_WriteLedAddr(BOOL bDisp, unsigned char LedAddr_Value)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_LedAddr[LedAddr_Value]] |= LCD_COM_LedAddr[LedAddr_Value];
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_LedAddr[LedAddr_Value]], LCD_COM_LedAddr[LedAddr_Value]);
-	}
-}
-
-/**
-  * @brief  写 设置 手动 自动 闭锁 调试
-  * @param  unsigned char Ctrl_Value:0-4
-  * @retval None
-  */
-void HT_WriteCtrl(BOOL bDisp, unsigned char Ctrl_Value)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_Ctrl[Ctrl_Value]] |= LCD_COM_Ctrl[Ctrl_Value];
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_Ctrl[Ctrl_Value]], LCD_COM_Ctrl[Ctrl_Value]);
-	}
-}
-
-/**
-  * @brief  写 感性 容性
-  * @param  unsigned char Sys_Value:0-29
-  * @retval None
-  */
-void HT_WriteSys(BOOL bDisp, unsigned char Phase_Value, unsigned char Sys_Value)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_Sys[Phase_Value][Sys_Value]] |= LCD_COM_Sys[Phase_Value][Sys_Value];
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_Sys[Phase_Value][Sys_Value]], LCD_COM_Sys[Phase_Value][Sys_Value]);
-	}
-}
-
-/**
-  * @brief  写 电容状态指示
-  * @param  None
-  * @retval None
-  */
-void HT_WriteCapStatus(BOOL bDisp)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_CapStatus] |= LCD_COM_CapStatus;
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_CapStatus], LCD_COM_CapStatus);
-	}
-}
-
-/**
-  * @brief  写 机号 序号 三角形 星形
-  * @param  unsigned char CapType_Value:0-4
-  * @retval None
-  */
-void HT_WriteCapType(BOOL bDisp, unsigned char CapType_Value)
-{
-	if (bDisp)
-	{
-		g_Display_Data[LCD_PIN_CapType[CapType_Value]] |= LCD_COM_CapType[CapType_Value];
-	}
-	else
-	{
-		MODIFY_BIT(g_Display_Data[LCD_PIN_CapType[CapType_Value]], LCD_COM_CapType[CapType_Value]);
-	}
 }
 
 /**

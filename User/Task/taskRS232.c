@@ -1112,8 +1112,6 @@ void vModeBusRtu_Analysis(void)
 	u8 CtrlType = rtu_RxPack.RR_Func;    // 读取 or 写入
 	u8 i;
 	u8 tmpD;
-//	u8 CmdType = sg_RxPack.Cmd;              // 数据种类 系数 数据 参数
-//	u8 *pData = &sg_RxPack.Data[8];
 
     if( rtu_RxPack.RR_Addr == ADDR_ALL || rtu_RxPack.RR_Addr == g_tParam.CtrlParam.Addr485\
       || rtu_RxPack.RR_Addr == ADDR_PC )    // 仪表地址 判断地址
