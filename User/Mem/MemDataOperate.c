@@ -55,6 +55,49 @@ BOOL MemData_Write_To_Flash(u32 Addr, u8 *pInData, u16 Count)  //Flash 写入
         return FALSE;
     }
 }
+
+BOOL MemEnergy_Write_To_Flash(u32 Addr, u8 *pInData, u16 Count)  //Flash 写入
+{
+    u16 Counter = 0;
+    u32 dwRegRealAddress = Addr;
+    BOOL MemoryProgramStatus = TRUE;
+
+    if (Count <= MEM_Energy_SIZE)
+    {
+        FLASH_Unlock();
+
+        FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR );
+
+        FLASH_ErasePage(dwRegRealAddress);
+
+        for (Counter = 0; Counter < MEM_Energy_SIZE / 4; Counter++)
+        {
+            if (FLASH_ProgramWord(dwRegRealAddress, *(vu32*) (pInData+Counter*4)) == FLASH_COMPLETE) // 写完成
+            {
+                if((*(vu32*) dwRegRealAddress) != *(vu32*)(pInData+Counter*4)) // 内容检查
+                {
+                    MemoryProgramStatus = FALSE;
+                    break;
+                }
+                dwRegRealAddress += 4;
+            }
+            else
+            {
+                MemoryProgramStatus = FALSE;
+                break;
+            }
+        }
+        FLASH_Lock();
+
+        return MemoryProgramStatus;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
+
 void MemData_WriteCalib(u8 *pScrData, u16 Count)
 {
 	MemData_Write_To_Flash(CALIB_STARTADDR, pScrData, Count);
@@ -297,6 +340,19 @@ u16 MemData_Crc(u8 *pData)
 	return Crc;
 }
 
+u16 MEMEnergy_Crc(u8 *pData)
+{
+	u32 Crc = 0;
+	u16 Counter = 0;
+	for (Counter = 0; Counter < MEM_Energy_SIZE-2; Counter++)
+	{
+		Crc += *(pData+Counter);
+	}
+    Crc = Crc & 0xff;
+	return Crc;
+}
+
+
 // 计算参数
 void MemData_CalcParam(void)
 {
@@ -391,6 +447,65 @@ void MemData_InitPowerVal(void) //电能量初始化
     vg_Power_Val.Freq = 5000;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+// 电能测试
+//===================================================================
+// 电能记录写入
+void MEM_EnergyRecordWrite(void)
+{
+	u8 FramWriteEnergy[MEM_Energy_SIZE];
+	u16 CrcSum = 0;
+	u8 *pData;
+	u16 EnergySize = 0;
+	u32 TempAddr;
+	
+	memset((u8 *)&FramWriteEnergy, 0xFF, MEM_Energy_SIZE);
+	EnergySize = sizeof(EnergyRecordStructure)*31;
+	memcpy((u8 *)&FramWriteEnergy, (u8 *)&NowEnergyRecord[0], EnergySize);
+
+	pData = (u8 *)&FramWriteEnergy[0];
+	CrcSum= MEMEnergy_Crc(pData);
+	pData += (MEM_Energy_SIZE-2);
+	memcpy(pData, (u8 *)&CrcSum, 2);
+	
+    switch (SoeIndex.BackMonth)
+    {
+        case 0x01:
+            MemEnergy_Write_To_Flash(MEM_JanEn_sADDR, FramWriteEnergy, MEM_Energy_SIZE);
+            break;
+        default:
+            break;
+    }
+    __nop();
+}
+void MEM_EnergyRecordRead(void)
+{
+    u8 FramReadEnergy[MEM_Energy_SIZE];
+    for(u16 i =0; i<MEM_Energy_SIZE; i++)
+    {
+        FramReadEnergy[i] = 0;
+    }
+	u16 Size = 0;
+	u16 Crc = 0;
+	
+    memcpy(FramReadEnergy, (u8 *)MEM_JanEn_sADDR, MEM_Energy_SIZE);
+    
+	Crc = MEMEnergy_Crc(FramReadEnergy);
+	if (Crc == FLIPW(&FramReadEnergy[MEM_Energy_SIZE-2]))  //CRC验证 读取是否出错
+    {
+		Size = sizeof(EnergyRecordStructure)*31;
+		memcpy((u8 *)&NowEnergyRecord[0], (u8 *)&FramReadEnergy[0], Size);
+	}
+	else // 失败，把当前数据写入EEPROM
+	{
+		//Size = sizeof(Energy_Memory);
+		//memcpy((u8 *)&ElectricEnergy, (u8 *)&FramReadData[0], Size);
+	}
+	__nop();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 // 数据初始化
 void MemData_Init(void)

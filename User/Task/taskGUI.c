@@ -298,6 +298,17 @@ enum emMENU_Record_2_2_INDEX
 };
 
 // Record_MENU3_2²Ëµ¥Ë÷Òý
+enum emMENU_Record_3_1_INDEX
+{
+	MENU3_1_RECORD_EPT   = 0x00, 
+    MENU3_1_RECORD_MIN	= MENU3_1_RECORD_EPT,
+    MENU3_1_RECORD_NPT   = 0x01, 
+    MENU3_1_RECORD_EQT = 0x02, 
+    MENU3_1_RECORD_NQT = 0x03, 
+	MENU3_1_RECORD_MAX	= MENU3_1_RECORD_NQT,
+};
+
+// Record_MENU3_2²Ëµ¥Ë÷Òý
 enum emMENU_Record_3_2_INDEX
 {
 	MENU3_2_RECORD_EPT   = 0x00, 
@@ -307,8 +318,6 @@ enum emMENU_Record_3_2_INDEX
     MENU3_2_RECORD_NQT = 0x03, 
 	MENU3_2_RECORD_MAX	= MENU3_2_RECORD_NQT,
 };
-
-
 
 // MENU2_3²Ëµ¥Ë÷Òý
 enum emMENU_SETMENU2_3_INDEX
@@ -513,6 +522,7 @@ static u8 sg_DispSetMenu2_9_Index = MENU2_9_INDEX_MODE;		// ÒªÏÔÊ¾µÄ2-9²Ëµ¥Ë÷Òýº
 static u8 sg_DispSetMenu1Record = MENU1_RECORD_MIN;                // µçÄÜ¼ÇÂ¼²éÑ¯Ò»¼¶  ²Ëµ¥
 static u8 sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;             // µçÄÜ¼ÇÂ¼²éÑ¯¶þ¼¶ 1²Ëµ¥
 static u8 sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;             // µçÄÜ¼ÇÂ¼²éÑ¯¶þ¼¶ 2²Ëµ¥
+static u8 sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;             // µçÄÜ¼ÇÂ¼²éÑ¯Èý¼¶ °´ÔÂ²éÑ¯²Ëµ¥
 static u8 sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;             // µçÄÜ¼ÇÂ¼²éÑ¯Èý¼¶ ×Ô¶¨Òå1²Ëµ¥
 
 
@@ -668,9 +678,9 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
     g_SOETime.Minute    = g_ReadTime.Minute;
     g_SOETime.Second    = g_ReadTime.Second;
 
-    g_SetTimeOnce = g_ReadTime;
     // ²âÊÔ³ÌÐò
-    /* if(g_SOETime.Second == 0x09)
+    /*g_SetTimeOnce = g_ReadTime;
+    if(g_SOETime.Second == 0x06)
     {
         UpdataSetTimeValue(UPDATA_ADD);
         Write8025TDateTime(g_SetTimeOnce);
@@ -691,10 +701,10 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
 	WeekBack = g_DispReadTime.Date.Week;
 
 	// ²âÊÔÄÚÈÝ
-	ElectricEnergy.PosEPT = g_ReadTime.Date.Month*1000 + 100 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16; //TEST
-	ElectricEnergy.NegEPT = g_ReadTime.Date.Month*1000 + 200 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
-	ElectricEnergy.PosEQT = g_ReadTime.Date.Month*1000 + 300 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
-	ElectricEnergy.NegEQT = g_ReadTime.Date.Month*1000 + 400 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+	ElectricEnergy.PosEPT = g_ReadTime.Date.Year*10000 + g_ReadTime.Date.Month*1000 + 100 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16; //TEST
+	ElectricEnergy.NegEPT = g_ReadTime.Date.Year*10000 + g_ReadTime.Date.Month*1000 + 200 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+	ElectricEnergy.PosEQT = g_ReadTime.Date.Year*10000 + g_ReadTime.Date.Month*1000 + 300 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
+	ElectricEnergy.NegEQT = g_ReadTime.Date.Year*10000 + g_ReadTime.Date.Month*1000 + 400 + g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16;
 
 	if(HourBack != g_DispReadTime.Hour)
 	{
@@ -724,7 +734,14 @@ void Gb_SetSysTime(SysTimeStruct ReadTime)
             }
             SoeIndex.BackMonth = g_DispReadTime.Date.Month;
             FRAM_IndexWrite();
-            FRAM_EnergyRecordWrite();
+            if(SoeIndex.BackMonth == 0x01)
+            {
+                MEM_EnergyRecordWrite();
+            }
+            else
+            {
+                FRAM_EnergyRecordWrite();
+            }  
         }
 	}
 	HourBack = g_DispReadTime.Hour;
@@ -1246,7 +1263,7 @@ void GUI_Timer_On(void)
                 MaxFramWriteEnble = TRUE;
             }
             // Max
-            if(RealTimeDemQ > vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q)
+            if(RealTimeDemQ > vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q)   
             {
                 vg_DemMax_Val[SoeIndex.MaxIndex].Dem_Q = RealTimeDemQ;
                 vg_DemMax_Val[SoeIndex.MaxIndex].mDemQTime = g_SOETime;
@@ -1381,11 +1398,15 @@ void GUI_Key_Menu(void)     //²Ëµ¥¼ü²Ù×÷
     	case KEYFUNC_Record_2:
             KeyFuncIndex = KEYFUNC_Record_1;           
             sg_DispSetMenu2_1_Record = MENU2_1_RECORD_MIN;             
-            sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;      
+            sg_DispSetMenu2_2_Record = MENU2_2_RECORD_MIN;
+            sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;
+            sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;
     	    break;
     	case KEYFUNC_Record_3:
     	    Disp_FocusT.CurrentFocus = 0;
             KeyFuncIndex = KEYFUNC_Record_2;
+            sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;
+            sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;
     	    break;
     	case KEYFUNC_Record_4:
             KeyFuncIndex = KEYFUNC_Record_3;      
@@ -1407,6 +1428,7 @@ void GUI_Key_Ok(void)
     u8 LastTwoMonthDay = 0;
     u8 calcDay1;
     u8 calcDay2;
+    u8 tmpDay;
 	switch (KeyFuncIndex)
 	{
 		case KEYFUNC_MAIN:
@@ -1521,11 +1543,14 @@ void GUI_Key_Ok(void)
             DispMode = ReadMode;
 		    break;
 		case KEYFUNC_Record_1:
-		    
+		    r_CalcThisMonthFlag = TRUE;
+		    r_CalcLastTwoMonthFlag = TRUE;
+		    r_CalcLastTwoMonthFlag = TRUE;
   		    ReadReEnergyFlag = 0x00;
 		    KeyFuncIndex = KEYFUNC_Record_2;        //¶ÁÈ¡Èý¸öÔÂ¼ÇÂ¼
 		    if(sg_DispSetMenu1Record == MENU1_RECORD_MONTH_LOG)
 		    {
+		        ReadReEnergyFlag = CalculateMonthEnergy(g_ReadTime.Date.Month);
                 for(u8 i = 0; i<31; i++)
                 {
                     if(NowEnergyRecord[i].EnergyDay.Day == 0)
@@ -1537,8 +1562,9 @@ void GUI_Key_Ok(void)
                         break;
                     }
                 }
-                ThisMonthDay2 = g_ReadTime.Date.Day;
-                for(u8 j = g_ReadTime.Date.Day; j>0; j--)
+                tmpDay = g_ReadTime.Date.Day/16*10 + g_ReadTime.Date.Day%16 - 1;
+                ThisMonthDay2 = tmpDay;
+                for(u8 j = tmpDay; j>0; j--)
                 {
                     if(NowEnergyRecord[j].EnergyDay.Day == 0)
                     {
@@ -1564,9 +1590,35 @@ void GUI_Key_Ok(void)
                         L0M_Record.ePosEPt = 0;
                         r_CalcThisMonthFlag = FALSE;
                     }
+                    if(NowEnergyRecord[ThisMonthDay2].eNegEPt >= NowEnergyRecord[ThisMonthDay1].eNegEPt)
+                    {
+                        L0M_Record.eNegEPt = NowEnergyRecord[ThisMonthDay2].eNegEPt - NowEnergyRecord[ThisMonthDay1].eNegEPt;
+                    }
+                    else
+                    {
+                        L0M_Record.eNegEPt = 0;
+                        r_CalcThisMonthFlag = FALSE;
+                    }
+                    if(NowEnergyRecord[ThisMonthDay2].ePosEQt >= NowEnergyRecord[ThisMonthDay1].ePosEQt)
+                    {
+                        L0M_Record.ePosEQt = NowEnergyRecord[ThisMonthDay2].ePosEQt - NowEnergyRecord[ThisMonthDay1].ePosEQt;
+                    }
+                    else
+                    {
+                        L0M_Record.ePosEQt = 0;
+                        r_CalcThisMonthFlag = FALSE;
+                    }
+                    if(NowEnergyRecord[ThisMonthDay2].eNegEQt >= NowEnergyRecord[ThisMonthDay1].eNegEQt)
+                    {
+                        L0M_Record.eNegEQt = NowEnergyRecord[ThisMonthDay2].eNegEQt - NowEnergyRecord[ThisMonthDay1].eNegEQt;
+                    }
+                    else
+                    {
+                        L0M_Record.eNegEQt = 0;
+                        r_CalcThisMonthFlag = FALSE;
+                    }
                 }
 
-                ReadReEnergyFlag = CalculateMonthEnergy(g_ReadTime.Date.Month);
                 if(ReadReEnergyFlag   & 0x05) // ¼ÆËãÉÏÔÂ µçÄÜ
                 {
                     L1M_Record.ePosEPt = 0;
@@ -1603,6 +1655,33 @@ void GUI_Key_Ok(void)
                             else
                             {
                                 L1M_Record.ePosEPt = 0;
+                                r_CalcLastMonthFlag = FALSE;
+                            }
+                            if(NowEnergyRecord[ThisMonthDay1].eNegEPt >= FrontEnergyRecord[LastOneMonthDay].eNegEPt)
+                            {
+                                L1M_Record.eNegEPt = NowEnergyRecord[ThisMonthDay1].eNegEPt - FrontEnergyRecord[LastOneMonthDay].eNegEPt;
+                            }
+                            else
+                            {
+                                L1M_Record.eNegEPt = 0;
+                                r_CalcLastMonthFlag = FALSE;
+                            }
+                            if(NowEnergyRecord[ThisMonthDay1].ePosEQt >= FrontEnergyRecord[LastOneMonthDay].ePosEQt)
+                            {
+                                L1M_Record.ePosEQt = NowEnergyRecord[ThisMonthDay1].ePosEQt - FrontEnergyRecord[LastOneMonthDay].ePosEQt;
+                            }
+                            else
+                            {
+                                L1M_Record.ePosEQt = 0;
+                                r_CalcLastMonthFlag = FALSE;
+                            }
+                            if(NowEnergyRecord[ThisMonthDay1].eNegEQt >= FrontEnergyRecord[LastOneMonthDay].eNegEQt)
+                            {
+                                L1M_Record.eNegEQt = NowEnergyRecord[ThisMonthDay1].eNegEQt - FrontEnergyRecord[LastOneMonthDay].eNegEQt;
+                            }
+                            else
+                            {
+                                L1M_Record.eNegEQt = 0;
                                 r_CalcLastMonthFlag = FALSE;
                             }
                         }
@@ -1645,6 +1724,33 @@ void GUI_Key_Ok(void)
                             else
                             {
                                 L2M_Record.ePosEPt = 0;
+                                r_CalcLastTwoMonthFlag = FALSE;
+                            }
+                            if(FrontEnergyRecord[LastOneMonthDay].eNegEPt >= RearEnergyRecord[LastTwoMonthDay].eNegEPt)
+                            {
+                                L2M_Record.eNegEPt = FrontEnergyRecord[LastOneMonthDay].eNegEPt - RearEnergyRecord[LastTwoMonthDay].eNegEPt;
+                            }
+                            else
+                            {
+                                L2M_Record.eNegEPt = 0;
+                                r_CalcLastTwoMonthFlag = FALSE;
+                            }
+                            if(FrontEnergyRecord[LastOneMonthDay].ePosEQt >= RearEnergyRecord[LastTwoMonthDay].ePosEQt)
+                            {
+                                L2M_Record.ePosEQt = FrontEnergyRecord[LastOneMonthDay].ePosEQt - RearEnergyRecord[LastTwoMonthDay].ePosEQt;
+                            }
+                            else
+                            {
+                                L2M_Record.ePosEQt = 0;
+                                r_CalcLastTwoMonthFlag = FALSE;
+                            }
+                            if(FrontEnergyRecord[LastOneMonthDay].eNegEQt >= RearEnergyRecord[LastTwoMonthDay].eNegEQt)
+                            {
+                                L2M_Record.eNegEQt = FrontEnergyRecord[LastOneMonthDay].eNegEQt - RearEnergyRecord[LastTwoMonthDay].eNegEQt;
+                            }
+                            else
+                            {
+                                L2M_Record.eNegEQt = 0;
                                 r_CalcLastTwoMonthFlag = FALSE;
                             }
                         }
@@ -2600,10 +2706,25 @@ void GUI_Key_Up(void)       //×ó°´¼ü ÊµÖÊ:¼õÈ¥
         			switch(sg_DispSetMenu2_1_Record)
         			{
         			    case MENU2_1_RECORD_THIS_MONTH:
+        			        sg_DispSetMenu3_1_Record--;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MAX;
+                			}
                             break;
         				case MENU2_1_RECORD_LAST_MONTH:
+        				    sg_DispSetMenu3_1_Record--;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MAX;
+                			}
         				    break;
         				case MENU2_1_RECORD_LAST_2_MONTH:
+                            sg_DispSetMenu3_1_Record--;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MAX;
+                			}
         				    break;
         				default:
         				    break;
@@ -3163,17 +3284,58 @@ void GUI_Key_Down(void)  //ÓÒ°´¼ü
 			}
             break;
         case KEYFUNC_Record_3:
-            if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_SA_TIME)
-                SetRecordTime(setDataOne,UPDATA_ADD,0x00);
-            else if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_SP_TIME)
-                SetRecordTime(setDataTwo,UPDATA_ADD,0x01);
-            else if(sg_DispSetMenu2_2_Record == MENU2_2_RECORD_Diff)
+            switch(sg_DispSetMenu1Record)
             {
-                sg_DispSetMenu3_2_Record++;
-    			if(sg_DispSetMenu3_2_Record > MENU3_2_RECORD_MAX)
-    			{
-    			    sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;
-    			}
+                case MENU1_RECORD_MONTH_LOG:
+                    switch(sg_DispSetMenu2_1_Record)
+                    {
+                        case MENU2_1_RECORD_THIS_MONTH:
+                            sg_DispSetMenu3_1_Record++;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;
+                			}
+                            break;
+                        case MENU2_1_RECORD_LAST_MONTH:
+                            sg_DispSetMenu3_1_Record++;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;
+                			}
+                            break;
+                        case MENU2_1_RECORD_LAST_2_MONTH:
+                            sg_DispSetMenu3_1_Record++;
+                			if(sg_DispSetMenu3_1_Record > MENU3_1_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_1_Record = MENU3_1_RECORD_MIN;
+                			}
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case MENU1_RECORD_USER_DEFINED:
+                    switch(sg_DispSetMenu2_2_Record)
+                    {
+                        case MENU2_2_RECORD_SA_TIME:
+                            SetRecordTime(setDataOne,UPDATA_ADD,0x00);
+                            break;
+                        case MENU2_2_RECORD_SP_TIME:
+                            SetRecordTime(setDataTwo,UPDATA_ADD,0x01);
+                            break;
+                        case MENU2_2_RECORD_Diff:
+                            sg_DispSetMenu3_2_Record++;
+                			if(sg_DispSetMenu3_2_Record > MENU3_2_RECORD_MAX)
+                			{
+                			    sg_DispSetMenu3_2_Record = MENU3_2_RECORD_MIN;
+                			}
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
             }
             break;
         default: //°´¼ü´íÎóµÄ´¦Àí
@@ -12153,7 +12315,7 @@ u8 CalculateMonthEnergy(u8 ThisMonth)
             break;
         case 0x02:
             LastOneMonthTmp = 0x01;
-            TempAddrOne = FRAM_JanuEnergy_sADDR;
+            TempAddrOne = MEM_JanEn_sADDR;
             LastTwoMonthTmp = 0x12;
             TempAddrTwo = FRAM_DeceEnergy_sADDR;  
             break;
@@ -12161,7 +12323,7 @@ u8 CalculateMonthEnergy(u8 ThisMonth)
             LastOneMonthTmp = 0x02;
             TempAddrOne = FRAM_FebrEnergy_sADDR;
             LastTwoMonthTmp = 0x01;
-            TempAddrTwo = FRAM_JanuEnergy_sADDR;  
+            TempAddrTwo = MEM_JanEn_sADDR;  
             break;  
         case 0x04:
             LastOneMonthTmp = 0x03;
@@ -12220,11 +12382,20 @@ u8 CalculateMonthEnergy(u8 ThisMonth)
         default:
             break;
     }
-    FRAM_I2C_ReadData(TempAddrOne, FramTmpEnergy, FRAM_Energy_SIZE); 
+
+    /*----------------------------------------ÉÏÔÂ----------------------------------------*/
+    if(LastOneMonthTmp == 0x01)
+    {
+        memcpy(FramTmpEnergy, (u8 *)MEM_JanEn_sADDR, MEM_Energy_SIZE);
+    }
+    else
+    {
+        FRAM_I2C_ReadData(TempAddrOne, FramTmpEnergy, FRAM_Energy_SIZE);
+    }
     Crc = FramEnergy_Crc(FramTmpEnergy);
 	if (Crc == FLIPW(&FramTmpEnergy[FRAM_Energy_SIZE-2]))  //CRCÑéÖ¤ ¶ÁÈ¡ÊÇ·ñ³ö´í  ÉÏÔÂ
     {
-		Size = 589;//sizeof(EnergyRecordStructure)*31;
+		Size = sizeof(EnergyRecordStructure)*31;
 		memcpy((u8 *)&FrontEnergyRecord[0], (u8 *)&FramTmpEnergy[0], Size);
 
 	}
@@ -12233,16 +12404,24 @@ u8 CalculateMonthEnergy(u8 ThisMonth)
 		ReturnTmp |= 0x05;
 	}
 
+    /*---------------------------------------ÉÏÉÏÔÂ----------------------------------------*/
     for(u16 i =0;i<FRAM_Energy_SIZE;i++)
     {
         FramTmpEnergy[i] = 0;
     }
 
-    FRAM_I2C_ReadData(TempAddrTwo, FramTmpEnergy, FRAM_Energy_SIZE); 
+    if(LastTwoMonthTmp == 0x01)
+    {
+        memcpy(FramTmpEnergy, (u8 *)MEM_JanEn_sADDR, MEM_Energy_SIZE);
+    }
+    else
+    {
+        FRAM_I2C_ReadData(TempAddrTwo, FramTmpEnergy, FRAM_Energy_SIZE); 
+    }
     Crc = FramEnergy_Crc(FramTmpEnergy);
 	if (Crc == FLIPW(&FramTmpEnergy[FRAM_Energy_SIZE-2]))  //CRCÑéÖ¤ ¶ÁÈ¡ÊÇ·ñ³ö´í   ÉÏÉÏÔÂ
     {
-		Size = 589;//sizeof(EnergyRecordStructure)*31;
+		Size = sizeof(EnergyRecordStructure)*31;
 		memcpy((u8 *)&RearEnergyRecord[0], (u8 *)&FramTmpEnergy[0], Size);
 
 	}
@@ -12386,15 +12565,60 @@ void DispMenu_Record_3(void) //Èý¼¶½çÃæ
                     }
                     else
                     {
-                        if(L0M_Record.ePosEPt < 0)
+                        switch(sg_DispSetMenu3_1_Record)
                         {
-                            HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
-                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                            case MENU3_1_RECORD_EPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_NC);
+                                if(L0M_Record.ePosEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L0M_Record.ePosEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_FU);
+                                if(L0M_Record.eNegEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L0M_Record.eNegEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_EQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_NC);
+                                if(L0M_Record.ePosEQt < 0)
+                                {  
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L0M_Record.ePosEQt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_FU);
+                                if(L0M_Record.eNegEQt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L0M_Record.eNegEQt);
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        else
-                        {
-                            DispRecordEnergy(L0M_Record.ePosEPt);
-                        }
+                        
                     }
                     break;
 				case MENU2_1_RECORD_LAST_MONTH:
@@ -12408,14 +12632,58 @@ void DispMenu_Record_3(void) //Èý¼¶½çÃæ
                     }
                     else
                     {
-                        if(L1M_Record.ePosEPt < 0)
+                        switch(sg_DispSetMenu3_1_Record)
                         {
-                            HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
-                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
-                        }
-                        else
-                        {
-                            DispRecordEnergy(L1M_Record.ePosEPt);
+                            case MENU3_1_RECORD_EPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_NC);
+                                if(L1M_Record.ePosEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L1M_Record.ePosEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_FU);
+                                if(L1M_Record.eNegEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L1M_Record.eNegEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_EQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_NC);
+                                if(L1M_Record.ePosEQt < 0)
+                                {  
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L1M_Record.ePosEQt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_FU);
+                                if(L1M_Record.eNegEQt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L1M_Record.eNegEQt);
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;
@@ -12431,14 +12699,58 @@ void DispMenu_Record_3(void) //Èý¼¶½çÃæ
                     }
                     else
                     {
-                        if(L2M_Record.ePosEPt < 0)
+                        switch(sg_DispSetMenu3_1_Record)
                         {
-                            HT_Write4Value(3,CHAR_NONE,CHAR_NONE,CHAR_NONE,CHAR_NONE);
-                            HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
-                        }
-                        else
-                        {
-                            DispRecordEnergy(L2M_Record.ePosEPt);
+                            case MENU3_1_RECORD_EPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_NC);
+                                if(L2M_Record.ePosEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L2M_Record.ePosEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NPT:
+                                HT_Write4Value(1,DISP_E,DISP_p,DISP_NC,DISP_FU);
+                                if(L2M_Record.eNegEPt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L2M_Record.eNegEPt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_EQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_NC);
+                                if(L2M_Record.ePosEQt < 0)
+                                {  
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L2M_Record.ePosEQt);
+                                }
+                                break;
+                            case MENU3_1_RECORD_NQT:
+                                HT_Write4Value(1,DISP_E,DISP_q,DISP_NC,DISP_FU);
+                                if(L2M_Record.eNegEQt < 0)
+                                {
+                                    HT_Write4Value(3,DISP_NC,DISP_NC,DISP_NC,DISP_NC);
+                                    HT_Write4Value(4,CHAR_n,CHAR_U,CHAR_L,CHAR_L);
+                                }
+                                else
+                                {
+                                    DispRecordEnergy(L2M_Record.eNegEQt);
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;
@@ -13380,9 +13692,9 @@ void UpdataSetTimeValue(UPDATA_DIR Updata_Dir)  //¸üÐÂÊýÖµ
     	    break;
     }
 
-    //g_SetTimeOnce.Second = 5*16 + 2;
-    //g_SetTimeOnce.Minute = 5*16 + 9;
-    //g_SetTimeOnce.Hour   = 2*16 + 3;
+    /*g_SetTimeOnce.Second = 5*16 + 5;
+    g_SetTimeOnce.Minute = 5*16 + 9;
+    g_SetTimeOnce.Hour   = 2*16 + 3;*/
 
 	g_SetTimeOnce.Second = tmpData[0]*16 + tmpData[1];
     g_SetTimeOnce.Minute = tmpData[2]*16 + tmpData[3];

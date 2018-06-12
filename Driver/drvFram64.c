@@ -161,34 +161,6 @@ u8 MyI2C_ReceiveByte(u8 last_char)
 //////////////////////////////////////////////////////////////////////////////////
 // 以下为铁电读写操作
 
-/* Private macro -------------------------------------------------------------*/
-#define FRAM_SIZE 2048
-#define FRAM_SECTOR_SIZE 32
-#define FRAM_R 1
-#define FRAM_W 0
-
-// Addr:8位设备码 16位地址码
-#define FRAM_MSBADDRESS(Addr) ((Addr & 0xFF00) >> 8)
-#define FRAM_LSBADDRESS(Addr) (Addr & 0xFF)
-/********************************************************/
-// 地址分配
-#define FRAM_STARTADDR      (0x00000000) 
-#define FRAM_DATA_SIZE	              32    // 最大参数长度
-
-#define FRAM_Index_ADDR      (0x00000020)    // Di  标签
-#define FRAM_INDEX_SIZE	              10    // 最大参数长度 标签页
-
-#define FRAM_RECORD_ADDR      (0x00000030)      // DI 记录值地址
-#define FRAM_RECORD_SIZE	             364    // 最大参数长度        0x0000 019C  
-
-#define FRAM_DO_RECORD_ADDR      (0x000001A0)      // DO 记录值地址 +364       0x0000 030c
-
-#define FRAM_MaxDem_ADDR      (0x00000310)      // 最大值记录地址
-#define FRAM_MaxDem_SIZE	             292    // 最大值参数长度 0x0000 0434
-
-
-
-
 /********************************************************/
 
 u16 FramData_Crc(u8 *pData)
@@ -596,7 +568,7 @@ void FRAM_EnergyRecordWrite(void)
 	u16 EnergySize = 0;
 	u32 TempAddr;
 	memset((u8 *)&FramWriteEnergy, 0xFF, FRAM_Energy_SIZE);
-	EnergySize = 589;//sizeof(EnergyRecordStructure);
+	EnergySize = sizeof(EnergyRecordStructure)*31;
 	memcpy((u8 *)&FramWriteEnergy, (u8 *)&NowEnergyRecord[0], EnergySize);
 
 	pData = (u8 *)&FramWriteEnergy[0];
@@ -605,9 +577,6 @@ void FRAM_EnergyRecordWrite(void)
 	memcpy(pData, (u8 *)&CrcSum, 2);
     switch (SoeIndex.BackMonth)
     {
-        case 0x01:
-            TempAddr = FRAM_JanuEnergy_sADDR;  
-            break;
         case 0x02:
             TempAddr = FRAM_FebrEnergy_sADDR;  
             break;
@@ -659,9 +628,6 @@ void FRAM_EnergyRecordRead(void)
 	
 	switch (SoeIndex.BackMonth)
     {
-        case 0x01:
-            FRAM_I2C_ReadData(FRAM_JanuEnergy_sADDR, FramReadEnergy, FRAM_Energy_SIZE);
-            break;
         case 0x02:
             FRAM_I2C_ReadData(FRAM_FebrEnergy_sADDR, FramReadEnergy, FRAM_Energy_SIZE);
             break;
@@ -701,7 +667,7 @@ void FRAM_EnergyRecordRead(void)
 	Crc = FramEnergy_Crc(FramReadEnergy);
 	if (Crc == FLIPW(&FramReadEnergy[FRAM_Energy_SIZE-2]))  //CRC验证 读取是否出错
     {
-		Size = 589;//sizeof(EnergyRecordStructure)*31;
+		Size = sizeof(EnergyRecordStructure)*31;
 		memcpy((u8 *)&NowEnergyRecord[0], (u8 *)&FramReadEnergy[0], Size);
 
 	}
@@ -725,7 +691,7 @@ void FRAM_EnergyRecordSeek(u8 RefKind,u8 RefMonth)
 	switch (RefMonth)
     {
         case 0x01:
-            FRAM_I2C_ReadData(FRAM_JanuEnergy_sADDR, FramReadEnergy, FRAM_Energy_SIZE);
+            memcpy(FramReadEnergy, (u8 *)MEM_JanEn_sADDR, MEM_Energy_SIZE);
             break;
         case 0x02:
             FRAM_I2C_ReadData(FRAM_FebrEnergy_sADDR, FramReadEnergy, FRAM_Energy_SIZE);
@@ -766,7 +732,7 @@ void FRAM_EnergyRecordSeek(u8 RefKind,u8 RefMonth)
 	Crc = FramEnergy_Crc(FramReadEnergy);
 	if (Crc == FLIPW(&FramReadEnergy[FRAM_Energy_SIZE-2]))  //CRC验证 读取是否出错
     {
-		Size = 589; //sizeof(EnergyRecordStructure)*31;
+		Size = sizeof(EnergyRecordStructure)*31;
 		if(RefKind == FRONTMONTH)
 		{
             memcpy((u8 *)&FrontEnergyRecord[0], (u8 *)&FramReadEnergy[0], Size);
@@ -831,6 +797,13 @@ void FramInit(void)
     FRAM_DoRecordRead();
     FRAM_IndexRead();
     FRAM_MaxDemRead();
-    FRAM_EnergyRecordRead();
+    if(SoeIndex.BackMonth == 0x01)
+    {
+        MEM_EnergyRecordRead();
+    }
+    else
+    {
+        FRAM_EnergyRecordRead();
+    } 
 }
 

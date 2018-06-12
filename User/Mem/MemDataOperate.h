@@ -9,12 +9,20 @@
 
 #define  ApplicationAddress     (0x8000000+0x0000)  //应用程序开始地址
 #define  BootLoaderAddress      (0x8000000+0xD800)
-#define CONFIG_STARTADDR  (0x0801FC00) // 第127k
-#define CALIB_STARTADDR   (0x0801F800) // 第126k
+#define CONFIG_STARTADDR        (0x0801FC00) // 第127k
+#define CALIB_STARTADDR         (0x0801F800) // 第126k
 #define FLASH_PARAM_SIZE	    256	            // 最大参数长度
+
+#define MEM_JanEn_sADDR      (0x0801F000)      // 1月记录地址       124k
+#define MEM_Energy_SIZE	            624    // 最大值参数长度 31*20+4（校验位）
+
+
 
 
 // ===========================================================
+void MEM_EnergyRecordWrite(void);
+void MEM_EnergyRecordRead(void);
+BOOL MemEnergy_Write_To_Flash(u32 Addr, u8 *pInData, u16 Count);
 
 /* Exported functions ------------------------------------------------------- */
 void MemData_Init(void);
